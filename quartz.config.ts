@@ -65,6 +65,7 @@ const config: QuartzConfig = {
           textHighlight: "#b3aa0288",
         },
       },
+      defaultMode: "light" // This is the key setting!
     },
   },
   plugins: {
