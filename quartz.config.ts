@@ -8,15 +8,15 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Quartz 4",
-    pageTitleSuffix: "",
+    pageTitle: "Yet Another AI Blog",
+    pageTitleSuffix: "Yep!",
     enableSPA: true,
     enablePopovers: true,
     analytics: {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz",
+    baseUrl: "http://www.dlai.dev",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
     theme: {
@@ -29,13 +29,27 @@ const config: QuartzConfig = {
       },
       colors: {
         lightMode: {
-          light: "#faf8f8",
+// :root {
+//   --theme:       #f7f2e6;
+//   --entry:       #e9e0cc;
+//   --primary:     #5b4636;
+//   --secondary:   #a58c6f;
+//   --tertiary:    #e4d8c4;
+//   --content:     #3b2f2f;
+//   --code-block-bg: #363024;
+//   --code-bg:     #f7f2e6;
+//   --border:      #e4d8c4;
+//   --link:         #8b5e3c;
+//   --link-hover:   #5a3923;
+//   --hljs-bg:      #f4e8d4;
+// }
+          light:        "#f7f2e6", // main sepia
           lightgray: "#e5e5e5",
           gray: "#b8b8b8",
           darkgray: "#4e4e4e",
-          dark: "#2b2b2b",
-          secondary: "#284b63",
-          tertiary: "#84a59d",
+          dark: "#3b2f2f",
+          secondary: "3b2f2f",
+          tertiary: "#363024",
           highlight: "rgba(143, 159, 169, 0.15)",
           textHighlight: "#fff23688",
         },

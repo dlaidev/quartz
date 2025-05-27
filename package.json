@@ -1,15 +1,14 @@
 {
-  "name": "@jackyzha0/quartz",
-  "description": "🌱 publish your digital garden and notes as a website",
+  "name": "@dlaidev/quartz",
+  "title": "Deep Learning AI Dev",
   "private": true,
   "version": "4.5.0",
   "type": "module",
-  "author": "jackyzha0 <j.zhao2k19@gmail.com>",
-  "license": "MIT",
-  "homepage": "https://quartz.jzhao.xyz",
+  "author": "mail@dlai.dev",
+  "homepage": "https://www.dlai.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jackyzha0/quartz.git"
+    "url": "https://github.com/dlaidev/quartz.git"
   },
   "scripts": {
     "quartz": "./quartz/bootstrap-cli.mjs",
