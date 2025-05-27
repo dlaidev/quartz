@@ -7,7 +7,7 @@ TocOpen: false
 
 ## Who I Am
 
-I'm Kai, an AI Engineering specialist focusing on inference compilers and performance optimization.
+I'm Manoj, an AI Engineer focusing on inference compilers and performance optimization.
 With expertise in CUDA programming, hardware acceleration, and deep learning systems, I help bridge the gap.
 
 Reach me: mail at domain name
