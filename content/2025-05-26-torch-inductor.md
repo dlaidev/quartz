@@ -176,9 +176,9 @@ def foo(x):
 foo(torch.randn([8192, 8192], device='cuda'))
 ```
 
-    /home/manoj/software/jsr_gdm/.venv/lib/python3.13/site-packages/torch/utils/_config_module.py:342: UserWarning: Skipping serialization of skipfiles_inline_module_allowlist value {}
+    /home/mlaidev/software/jsr_gdm/.venv/lib/python3.13/site-packages/torch/utils/_config_module.py:342: UserWarning: Skipping serialization of skipfiles_inline_module_allowlist value {}
       warnings.warn(
-    W0526 09:03:48.447000 189635 /home/manoj/old_home/home_backup/software/jsr_gdm/.venv/lib/python3.13/site-packages/torch/_inductor/debug.py:435] [1/0] model__1_inference_1 debug trace: /home/manoj/old_home/home_backup/software/jsr_gdm/pytorch_backend/torch_compile_debug/run_2025_05_26_09_03_06_493183-pid_189635/torchinductor/model__1_inference_1.1
+    W0526 09:03:48.447000 189635 /home/mlaidev/old_home/home_backup/software/jsr_gdm/.venv/lib/python3.13/site-packages/torch/_inductor/debug.py:435] [1/0] model__1_inference_1 debug trace: /home/mlaidev/old_home/home_backup/software/jsr_gdm/pytorch_backend/torch_compile_debug/run_2025_05_26_09_03_06_493183-pid_189635/torchinductor/model__1_inference_1.1
 
 
 
@@ -205,7 +205,7 @@ foo(torch.randn([8192, 8192], device='cuda'))
 
 
 ```python
-!ls  /home/manoj/old_home/home_backup/software/jsr_gdm/pytorch_backend/torch_compile_debug/run_2025_05_26_09_03_06_493183-pid_189635/torchinductor/model__1_inference_1.1
+!ls  /home/mlaidev/old_home/home_backup/software/jsr_gdm/pytorch_backend/torch_compile_debug/run_2025_05_26_09_03_06_493183-pid_189635/torchinductor/model__1_inference_1.1
 ```
 
     fx_graph_readable.py  fx_graph_transformed.py  ir_pre_fusion.txt
