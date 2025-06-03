@@ -15,6 +15,7 @@ draft: false
 
 # PyTorch 2.x and Backends (WIP, come back in a couple of days)
 
+**Disclaimer**: Human "generated" text as a labor of love.
 
 ## The Great ML Framework Debate
 Centuries ago (2020), I contributed to PyTorch library, specifically, TorchServe which used to be the default model serving library for PyTorch Models.
@@ -97,7 +98,6 @@ import torch
 def my_compiler(gm: torch.fx.GraphModule,
                 sample_inputs: List[torch.Tensor]):
     print("my_compiler() called with FX graph:")
-    print(sample_inputs)
     gm.graph.print_tabular()
     return gm # returns a callable
 
@@ -112,45 +112,55 @@ for _ in range(1000):
     toy_example(torch.randn(10), torch.randn(10))
 ```
 
-    my_compiler() called with FX graph:
-    [tensor([-2.1680,  0.4435, -0.0737, -0.3575,  0.8433, -1.6781, -0.0721,  0.1983,
-             0.5263,  0.5925]), tensor([-2.4917, -1.2580,  0.0694,  0.9675,  1.1763, -0.0489, -0.1826,  0.1616,
-            -0.2252, -0.2286])]
-    opcode         name    target                                                  args         kwargs
-    -------------  ------  ------------------------------------------------------  -----------  --------
-    placeholder    l_a_    L_a_                                                    ()           {}
-    placeholder    l_b_    L_b_                                                    ()           {}
-    call_function  abs_1   <built-in method abs of type object at 0x7f31d5840f60>  (l_a_,)      {}
-    call_function  add     <built-in function add>                                 (abs_1, 1)   {}
-    call_function  x       <built-in function truediv>                             (l_a_, add)  {}
-    call_method    sum_1   sum                                                     (l_b_,)      {}
-    call_function  lt      <built-in function lt>                                  (sum_1, 0)   {}
-    output         output  output                                                  ((x, lt),)   {}
+```
+my_compiler() called with FX graph:
+opcode         name    target                                                  args         kwargs
+-------------  ------  ------------------------------------------------------  -----------  --------
+placeholder    l_a_    L_a_                                                    ()           {}
+placeholder    l_b_    L_b_                                                    ()           {}
+call_function  abs_1   <built-in method abs of type object at 0x7fdce4beff00>  (l_a_,)      {}
+call_function  add     <built-in function add>                                 (abs_1, 1)   {}
+call_function  x       <built-in function truediv>                             (l_a_, add)  {}
+call_method    sum_1   sum                                                     (l_b_,)      {}
+call_function  lt      <built-in function lt>                                  (sum_1, 0)   {}
+output         output  output                                                  ((x, lt),)   {}
 
 
-    my_compiler() called with FX graph:
-    [tensor([-2.4917, -1.2580,  0.0694,  0.9675,  1.1763, -0.0489, -0.1826,  0.1616,
-            -0.2252, -0.2286]), tensor([-0.6843,  0.3072, -0.0686, -0.2634,  0.4575, -0.6266, -0.0673,  0.1655,
-             0.3448,  0.3721])]
-    opcode         name    target                   args         kwargs
-    -------------  ------  -----------------------  -----------  --------
-    placeholder    l_b_    L_b_                     ()           {}
-    placeholder    l_x_    L_x_                     ()           {}
-    call_function  b       <built-in function mul>  (l_b_, -1)   {}
-    call_function  mul_1   <built-in function mul>  (l_x_, b)    {}
-    output         output  output                   ((mul_1,),)  {}
+my_compiler() called with FX graph:
+opcode         name    target                   args         kwargs
+-------------  ------  -----------------------  -----------  --------
+placeholder    l_b_    L_b_                     ()           {}
+placeholder    l_x_    L_x_                     ()           {}
+call_function  b       <built-in function mul>  (l_b_, -1)   {}
+call_function  mul_1   <built-in function mul>  (l_x_, b)    {}
+output         output  output                   ((mul_1,),)  {}
 
 
-    my_compiler() called with FX graph:
-    [tensor([-0.6439,  0.5361, -0.4712, -0.6726,  0.5754,  0.6488,  0.5697, -0.4072,
-             0.6667, -0.5185]), tensor([-0.1262,  2.2186,  2.0345, -1.5315, -0.3242,  0.9406,  0.3423, -0.8444,
-             0.7782,  0.0613])]
-    opcode         name    target                   args          kwargs
-    -------------  ------  -----------------------  ------------  --------
-    placeholder    l_x_    L_x_                     ()            {}
-    placeholder    l_b_    L_b_                     ()            {}
-    call_function  mul     <built-in function mul>  (l_x_, l_b_)  {}
-    output         output  output                   ((mul,),)     {}
+my_compiler() called with FX graph:
+opcode         name    target                   args          kwargs
+-------------  ------  -----------------------  ------------  --------
+placeholder    l_x_    L_x_                     ()            {}
+placeholder    l_b_    L_b_                     ()            {}
+call_function  mul     <built-in function mul>  (l_x_, l_b_)  {}
+output         output  output                   ((mul,),)     {}
+```
+
+Let's break this down:
+
+Our `toy_example` function is basically being run with of two tensors of 10 random values each. The function as simple as it is, can be broadly divided into three parts:
+
+```
+COMPUTE 1
+
+IF COND:
+    COMPUTE 2
+
+COMPUTE 3
+```
+
+The three graphs printed in tabular form are actually just these `COMPUTE1, COMPUTE2, COMPUTE3`.
+
+![](./images/torch_inductor.png)
 
 
 ```python
@@ -178,7 +188,7 @@ foo(torch.randn([8192, 8192], device='cuda'))
 
     /home/mlaidev/software/jsr_gdm/.venv/lib/python3.13/site-packages/torch/utils/_config_module.py:342: UserWarning: Skipping serialization of skipfiles_inline_module_allowlist value {}
       warnings.warn(
-    W0526 09:03:48.447000 189635 /home/mlaidev/old_home/home_backup/software/jsr_gdm/.venv/lib/python3.13/site-packages/torch/_inductor/debug.py:435] [1/0] model__1_inference_1 debug trace: /home/mlaidev/old_home/home_backup/software/jsr_gdm/pytorch_backend/torch_compile_debug/run_2025_05_26_09_03_06_493183-pid_189635/torchinductor/model__1_inference_1.1
+    W0526 09:03:48.447000 189635 /home/mlaidev/software/jsr_gdm/.venv/lib/python3.13/site-packages/torch/_inductor/debug.py:435] [1/0] model__1_inference_1 debug trace: /home/mlaidev/software/jsr_gdm/pytorch_backend/torch_compile_debug/run_2025_05_26_09_03_06_493183-pid_189635/torchinductor/model__1_inference_1.1
 
 
 
@@ -205,7 +215,7 @@ foo(torch.randn([8192, 8192], device='cuda'))
 
 
 ```python
-!ls  /home/mlaidev/old_home/home_backup/software/jsr_gdm/pytorch_backend/torch_compile_debug/run_2025_05_26_09_03_06_493183-pid_189635/torchinductor/model__1_inference_1.1
+!ls  /home/mlaidev/software/jsr_gdm/pytorch_backend/torch_compile_debug/run_2025_05_26_09_03_06_493183-pid_189635/torchinductor/model__1_inference_1.1
 ```
 
     fx_graph_readable.py  fx_graph_transformed.py  ir_pre_fusion.txt
