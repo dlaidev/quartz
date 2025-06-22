@@ -7,7 +7,7 @@ tags:
   - Interactive-Tools
   - Thread-Patterns
   - Visualization
-draft: true
+draft: false
 ---
 
 # CUDA Thread/Block Visualizer
