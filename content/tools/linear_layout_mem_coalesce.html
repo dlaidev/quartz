@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPU Memory Access Patterns: Coalescing & Bank Conflicts</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        h1, h2 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .memory-grid {
+            display: grid;
+            gap: 2px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        .memory-cell {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .thread-0 { background-color: #ff6b6b; }
+        .thread-1 { background-color: #4ecdc4; }
+        .thread-2 { background-color: #45b7d1; }
+        .thread-3 { background-color: #96ceb4; }
+        .thread-4 { background-color: #feca57; }
+        .thread-5 { background-color: #ff9ff3; }
+        .thread-6 { background-color: #54a0ff; }
+        .thread-7 { background-color: #5f27cd; }
+        .coalesced { border: 3px solid #4CAF50; }
+        .non-coalesced { border: 3px solid #f44336; }
+        .bank-0 { background-color: #ffebee; }
+        .bank-1 { background-color: #e8f5e8; }
+        .bank-2 { background-color: #e3f2fd; }
+        .bank-3 { background-color: #fff3e0; }
+        .conflict { background-color: #ff5252 !important; animation: pulse 1s infinite; }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+        }
+        .warp-threads {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 5px;
+            margin: 20px 0;
+        }
+        .thread {
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+        }
+        .arrow {
+            font-size: 24px;
+            color: #4CAF50;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .good { border-left: 5px solid #4CAF50; }
+        .bad { border-left: 5px solid #f44336; }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .highlight {
+            background: #4CAF50;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .padded-cell {
+            background: #666 !important;
+            color: white;
+        }
+        .swizzled {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 GPU Memory Access Patterns: From Graphics to AI Inference</h1>
+        
+        <div class="section">
+            <h2>🎯 The Graphics Era Legacy</h2>
+            <p>GPU memory systems were originally designed for graphics where <strong>consecutive threads processing consecutive pixels</strong> was natural. This heritage continues to influence modern AI workloads:</p>
+            
+            <div class="warp-threads">
+                <div class="thread thread-0">T0<br>Pixel(0,0)</div>
+                <div class="thread thread-1">T1<br>Pixel(0,1)</div>
+                <div class="thread thread-2">T2<br>Pixel(0,2)</div>
+                <div class="thread thread-3">T3<br>Pixel(0,3)</div>
+                <div class="thread thread-4">T4<br>Pixel(1,0)</div>
+                <div class="thread thread-5">T5<br>Pixel(1,1)</div>
+                <div class="thread thread-6">T6<br>Pixel(1,2)</div>
+                <div class="thread thread-7">T7<br>Pixel(1,3)</div>
+            </div>
+            
+            <p>Each thread naturally accessed consecutive memory locations → Perfect for coalescing!</p>
+        </div>
+
+        <div class="section">
+            <h2>🔄 Global Memory Coalescing</h2>
+            <p><strong>Key Principle:</strong> When threads in a warp access consecutive memory addresses, the hardware combines these into fewer transactions.</p>
+            
+            <div class="comparison">
+                <div class="good">
+                    <h3>✅ Coalesced Access (Good)</h3>
+                    <p>Threads access consecutive elements</p>
+                    <div class="memory-grid" style="grid-template-columns: repeat(8, 1fr);">
+                        <div class="memory-cell thread-0 coalesced">T0→0</div>
+                        <div class="memory-cell thread-1 coalesced">T1→1</div>
+                        <div class="memory-cell thread-2 coalesced">T2→2</div>
+                        <div class="memory-cell thread-3 coalesced">T3→3</div>
+                        <div class="memory-cell thread-4 coalesced">T4→4</div>
+                        <div class="memory-cell thread-5 coalesced">T5→5</div>
+                        <div class="memory-cell thread-6 coalesced">T6→6</div>
+                        <div class="memory-cell thread-7 coalesced">T7→7</div>
+                    </div>
+                    <p><strong>Result:</strong> 1 memory transaction for 8 elements</p>
+                </div>
+                
+                <div class="bad">
+                    <h3>❌ Strided Access (Bad)</h3>
+                    <p>Threads access with stride = 8</p>
+                    <div class="memory-grid" style="grid-template-columns: repeat(8, 1fr);">
+                        <div class="memory-cell thread-0 non-coalesced">T0→0</div>
+                        <div class="memory-cell">1</div>
+                        <div class="memory-cell">2</div>
+                        <div class="memory-cell">3</div>
+                        <div class="memory-cell">4</div>
+                        <div class="memory-cell">5</div>
+                        <div class="memory-cell">6</div>
+                        <div class="memory-cell">7</div>
+                    </div>
+                    <div class="memory-grid" style="grid-template-columns: repeat(8, 1fr);">
+                        <div class="memory-cell thread-1 non-coalesced">T1→8</div>
+                        <div class="memory-cell">9</div>
+                        <div class="memory-cell">10</div>
+                        <div class="memory-cell">11</div>
+                        <div class="memory-cell">12</div>
+                        <div class="memory-cell">13</div>
+                        <div class="memory-cell">14</div>
+                        <div class="memory-cell">15</div>
+                    </div>
+                    <p><strong>Result:</strong> 8 separate memory transactions</p>
+                </div>
+            </div>
+            
+            <div class="code-block">
+// Good: Coalesced access pattern
+for (int i = threadIdx.x; i < N; i += blockDim.x) {
+    data[i] = compute(i);  // Each thread accesses consecutive elements
+}
+
+// Bad: Strided access pattern  
+for (int i = 0; i < N; i++) {
+    data[i * blockDim.x + threadIdx.x] = compute(i);  // Large strides
+}
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🏦 Shared Memory Bank Conflicts</h2>
+            <p><strong>Shared memory is divided into 32 banks</strong>. Bank conflicts occur when multiple threads access different addresses in the same bank simultaneously.</p>
+            
+            <h3>Memory Banking Layout (32 banks, 4-byte words)</h3>
+            <div class="memory-grid" style="grid-template-columns: repeat(8, 1fr);">
+                <div class="memory-cell bank-0">Bank 0<br>Addr 0</div>
+                <div class="memory-cell bank-1">Bank 1<br>Addr 4</div>
+                <div class="memory-cell bank-2">Bank 2<br>Addr 8</div>
+                <div class="memory-cell bank-3">Bank 3<br>Addr 12</div>
+                <div class="memory-cell bank-0">Bank 4<br>Addr 16</div>
+                <div class="memory-cell bank-1">Bank 5<br>Addr 20</div>
+                <div class="memory-cell bank-2">Bank 6<br>Addr 24</div>
+                <div class="memory-cell bank-3">Bank 7<br>Addr 28</div>
+            </div>
+            <div class="memory-grid" style="grid-template-columns: repeat(8, 1fr);">
+                <div class="memory-cell bank-0">Bank 8<br>Addr 32</div>
+                <div class="memory-cell bank-1">Bank 9<br>Addr 36</div>
+                <div class="memory-cell bank-2">Bank 10<br>Addr 40</div>
+                <div class="memory-cell bank-3">Bank 11<br>Addr 44</div>
+                <div class="memory-cell bank-0">Bank 12<br>Addr 48</div>
+                <div class="memory-cell bank-1">Bank 13<br>Addr 52</div>
+                <div class="memory-cell bank-2">Bank 14<br>Addr 56</div>
+                <div class="memory-cell bank-3">Bank 15<br>Addr 60</div>
+            </div>
+            
+            <div class="comparison">
+                <div class="bad">
+                    <h3>❌ Bank Conflict Example</h3>
+                    <p>Matrix transpose: Column access</p>
+                    <div class="memory-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="memory-cell conflict">T0→[0][0]<br>Bank 0</div>
+                        <div class="memory-cell">T1→[1][0]</div>
+                        <div class="memory-cell">T2→[2][0]</div>
+                        <div class="memory-cell">T3→[3][0]</div>
+                    </div>
+                    <div class="memory-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="memory-cell conflict">T4→[4][0]<br>Bank 0</div>
+                        <div class="memory-cell">T5→[5][0]</div>
+                        <div class="memory-cell">T6→[6][0]</div>
+                        <div class="memory-cell">T7→[7][0]</div>
+                    </div>
+                    <p><strong>Problem:</strong> T0 and T4 both access Bank 0!</p>
+                </div>
+                
+                <div class="good">
+                    <h3>✅ No Bank Conflict</h3>
+                    <p>Row access pattern</p>
+                    <div class="memory-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="memory-cell bank-0">T0→[0][0]<br>Bank 0</div>
+                        <div class="memory-cell bank-1">T1→[0][1]<br>Bank 1</div>
+                        <div class="memory-cell bank-2">T2→[0][2]<br>Bank 2</div>
+                        <div class="memory-cell bank-3">T3→[0][3]<br>Bank 3</div>
+                    </div>
+                    <div class="memory-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="memory-cell bank-0">T4→[1][0]<br>Bank 4</div>
+                        <div class="memory-cell bank-1">T5→[1][1]<br>Bank 5</div>
+                        <div class="memory-cell bank-2">T6→[1][2]<br>Bank 6</div>
+                        <div class="memory-cell bank-3">T7→[1][3]<br>Bank 7</div>
+                    </div>
+                    <p><strong>Success:</strong> Each thread accesses different bank!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Bank Conflict Solutions</h2>
+            
+            <h3>Solution 1: Padding</h3>
+            <p>Add extra columns to shift bank alignments</p>
+            <div class="comparison">
+                <div class="bad">
+                    <h4>Original 32×32 Matrix</h4>
+                    <div class="memory-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="memory-cell conflict">[0][0]<br>Bank 0</div>
+                        <div class="memory-cell">[0][1]<br>Bank 1</div>
+                        <div class="memory-cell">[0][2]<br>Bank 2</div>
+                        <div class="memory-cell">[0][3]<br>Bank 3</div>
+                    </div>
+                    <div class="memory-grid" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="memory-cell conflict">[1][0]<br>Bank 0</div>
+                        <div class="memory-cell">[1][1]<br>Bank 1</div>
+                        <div class="memory-cell">[1][2]<br>Bank 2</div>
+                        <div class="memory-cell">[1][3]<br>Bank 3</div>
+                    </div>
+                    <p>Both rows start at Bank 0 → Conflict!</p>
+                </div>
+                
+                <div class="good">
+                    <h4>Padded 32×33 Matrix</h4>
+                    <div class="memory-grid" style="grid-template-columns: repeat(5, 1fr);">
+                        <div class="memory-cell bank-0">[0][0]<br>Bank 0</div>
+                        <div class="memory-cell bank-1">[0][1]<br>Bank 1</div>
+                        <div class="memory-cell bank-2">[0][2]<br>Bank 2</div>
+                        <div class="memory-cell bank-3">[0][3]<br>Bank 3</div>
+                        <div class="memory-cell padded">PAD</div>
+                    </div>
+                    <div class="memory-grid" style="grid-template-columns: repeat(5, 1fr);">
+                        <div class="memory-cell bank-1">[1][0]<br>Bank 1</div>
+                        <div class="memory-cell bank-2">[1][1]<br>Bank 2</div>
+                        <div class="memory-cell bank-3">[1][2]<br>Bank 3</div>
+                        <div class="memory-cell bank-0">[1][3]<br>Bank 4</div>
+                        <div class="memory-cell padded">PAD</div>
+                    </div>
+                    <p>Rows start at different banks → No conflict!</p>
+                </div>
+            </div>
+            
+            <h3>Solution 2: Swizzling</h3>
+            <p>Rearrange memory mapping without wasting space</p>
+            <div class="memory-grid" style="grid-template-columns: repeat(8, 1fr);">
+                <div class="memory-cell swizzled">Swizzled Layout</div>
+                <div class="memory-cell swizzled">More Complex</div>
+                <div class="memory-cell swizzled">But Efficient</div>
+                <div class="memory-cell swizzled">No Wasted Space</div>
+                <div class="memory-cell swizzled">Bank-Conflict Free</div>
+                <div class="memory-cell swizzled">Used in Triton</div>
+                <div class="memory-cell swizzled">And CUTLASS</div>
+                <div class="memory-cell swizzled">CuTe Library</div>
+            </div>
+            
+            <div class="code-block">
+__shared__ float smem[32][33];  // Padding approach
+// vs
+__shared__ float smem[32][32];  // Swizzling approach
+// Access with swizzled indices: smem[row][col ^ (row % 4)]
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Modern Developments: Tensor Memory Accelerator (TMA)</h2>
+            <p>New specialized hardware units are emerging to handle complex memory patterns:</p>
+            
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3>🚀 TMA Features</h3>
+                <ul>
+                    <li><strong>Asynchronous Memory Copy:</strong> Between global and shared memory</li>
+                    <li><strong>Built-in Swizzling:</strong> Hardware handles bank conflict avoidance</li>
+                    <li><strong>Multicast Support:</strong> Efficient data distribution to multiple blocks</li>
+                    <li><strong>Tensor-Aware:</strong> Understands multidimensional access patterns</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📝 Triton's Linear Layout Approach</h2>
+            <p>Triton abstracts these complexities with its <code class="highlight">LinearLayout</code> system:</p>
+            
+            <div class="code-block">
+# Triton handles this automatically:
+# - Memory coalescing optimization
+# - Bank conflict avoidance via swizzling  
+# - Layout transformations
+# - Efficient tensor operations
+
+@triton.jit
+def kernel(input_ptr, output_ptr, M, N):
+    # Triton automatically optimizes memory access patterns
+    # No manual coalescing or swizzling needed!
+    pass
+            </div>
+            
+            <div style="background: #e8f5e8; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <p><strong>Key Insight:</strong> Modern frameworks like Triton and libraries like CUTLASS (CuTe) abstract the low-level memory optimization complexities, but understanding the underlying principles helps you:</p>
+                <ul>
+                    <li>Debug performance issues</li>
+                    <li>Write more efficient custom kernels</li>
+                    <li>Choose appropriate data layouts</li>
+                    <li>Understand compiler optimizations</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color thread-0"></div>
+                <span>Thread 0-7 (Different colors)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color coalesced"></div>
+                <span>Coalesced Access (Good)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color non-coalesced"></div>
+                <span>Non-Coalesced Access (Bad)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color conflict"></div>
+                <span>Bank Conflict (Animated)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color padded"></div>
+                <span>Padding (Wasted Space)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color swizzled"></div>
+                <span>Swizzled Layout</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
