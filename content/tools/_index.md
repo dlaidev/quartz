@@ -16,6 +16,12 @@ Experiment with different CUDA thread and block configurations to visualize exec
 - Block size trade-offs
 - Grid configuration impact
 
+### [Triton Linear Layout Visualizer](/tools/linear-layout/)
+Explore Triton's linear layouts and their impact on memory access patterns. This tool helps you:
+- Visualize how data is laid out in memory
+- Understand the relationship between logical tensors and physical memory
+- Analyze memory access patterns for optimization
+
 ## Coming Soon
 
 - **Memory Access Pattern Analyzer** - Visualize memory coalescing and bank conflicts
