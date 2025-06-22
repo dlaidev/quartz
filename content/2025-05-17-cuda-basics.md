@@ -20,14 +20,7 @@ TocOpen: true
 
 Before diving into the technical details, try out our interactive CUDA visualizer to get a hands-on understanding of thread and block patterns:
 
-**[→ Interactive CUDA Thread/Block Visualizer](tools/cuda-visualizer)**
-
-<div id="cuda-visualization"></div>
-
-<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<script src="tools/cuda-visualizer.js"></script>
-
+**[→ Visit Interactive CUDA Thread/Block Visualizer](tools/cuda-visualizer)**
 
 
 ## CUDA Architecture Overview
