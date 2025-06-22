@@ -14,7 +14,7 @@ draft: false
 
 This interactive tool helps you understand how different thread and block configurations affect GPU execution patterns.
 
-<div id="cuda-visualizer-root"></div>
+<div id="cuda-visualization"></div>
 
 <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
