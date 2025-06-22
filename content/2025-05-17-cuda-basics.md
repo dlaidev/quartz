@@ -259,7 +259,7 @@ Thread3 → Bank1  [34] ⚠️ Conflict!
 
 To solidify your understanding of these concepts, experiment with our interactive visualizer:
 
-**[→ Try Different Configurations](/tools/cuda-visualizer/)**
+**[→ Try Different Configurations](/tools/cuda-visualizer)**
 
 Observe how different grid and block sizes affect:
 - Thread utilization efficiency
