@@ -18,9 +18,9 @@ This interactive tool helps you understand how different thread and block config
 
 <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"-E-R-R-O-R-S-P-A-N-E-></script>
 
-<script type="text/babel">
+<script type="text/babel"-E-R-R-O-R-S-P-A-N-E->
 const { useState } = React;
 
 // CUDA Visualization Component
