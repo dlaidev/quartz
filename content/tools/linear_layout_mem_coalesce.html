@@ -207,18 +207,17 @@
                 </div>
             </div>
             
-            <div class="code-block">
-// Good: Coalesced access pattern
-for (int i = threadIdx.x; i < N; i += blockDim.x) {
-    data[i] = compute(i);  // Each thread accesses consecutive elements
-}
+            <pre class="code-block"><code>
+            // Good: Coalesced access pattern
+            for (int i = threadIdx.x; i &lt; N; i += blockDim.x) {
+                data[i] = compute(i);  // Each thread accesses consecutive elements
+            }
 
-// Bad: Strided access pattern  
-for (int i = 0; i < N; i++) {
-    data[i * blockDim.x + threadIdx.x] = compute(i);  // Large strides
-}
-            </div>
-        </div>
+            // Bad: Strided access pattern  
+            for (int i = 0; i &lt; N; i++) {
+                data[i * blockDim.x + threadIdx.x] = compute(i);  // Large strides
+            }
+            </code></pre>
 
         <div class="section">
             <h2>🏦 Shared Memory Bank Conflicts</h2>
@@ -341,12 +340,12 @@ for (int i = 0; i < N; i++) {
                 <div class="memory-cell swizzled">CuTe Library</div>
             </div>
             
-            <div class="code-block">
+            <pre class="code-block"><code>
 __shared__ float smem[32][33];  // Padding approach
 // vs
 __shared__ float smem[32][32];  // Swizzling approach
 // Access with swizzled indices: smem[row][col ^ (row % 4)]
-            </div>
+            </code></pre>
         </div>
 
         <div class="section">
