@@ -45,7 +45,7 @@ So you take the entire input space of the problem and map it to blocks that can 
 
 The Triton compiler is designed to optimize the execution of these kernels by analyzing the data access patterns and memory usage. It can automatically generate efficient code for different GPU architectures, taking advantage of the specific features and capabilities of each architecture. This automatic optimization process includes selecting the best block size, memory layout, and data access patterns for the given kernel function.
 
-<iframe src="tools/linear_layout_mem_coalesce.html" width="100%" height="600" style="border:none;"></iframe>
+<iframe src="tools/linear_layout_mem_coalesce" width="100%" height="600" style="border:none;"></iframe>
 
 ## Triton Linear Layouts
 
