@@ -50,4 +50,14 @@ The Triton compiler is designed to optimize the execution of these kernels by an
 ## Triton Linear Layouts
 
 In this article http://mlai.blog/2025-05-10-cute-basics#composed-layout-c--abi we saw how layouts can be composed in CuTe. Triton takes this a step further by introducing the concept of linear layouts, which are designed to work seamlessly with Triton's programming model.
+
+#### Layout A (4x3, stride=(3,1))
+![Layout A](/images/layout_a.png)
+
+#### Layout B (6x2, stride=(2,1))
+![Layout B](/images/layout_b.png) 
+
+#### Composed Layout C = A(B(i))
+![Composed Layout](/images/layout_composed.png)
+
 So what's "Linear" about these Layouts? CuTe provides an “algebra of Layouts.” Layouts can be combined and manipulated to construct more complicated layouts and to tile layouts across other layouts. This can help users do things like partition layouts of data over layouts of threads.
