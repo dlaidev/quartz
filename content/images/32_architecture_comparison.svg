@@ -1,0 +1,196 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850">
+  <defs>
+    <marker id="arrowhead7" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C15F3C"/>
+    </marker>
+    <marker id="arrowheadPurple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#8B5CF6"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="850" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="30" font-weight="bold" fill="#C15F3C" text-anchor="middle">Architecture: Game-Playing RL vs LLM-Guided Evolution</text>
+  <text x="600" y="80" font-family="Georgia, serif" font-size="16" fill="#5a4a3a" text-anchor="middle">How intelligence is structured differently in AlphaTensor vs AlphaEvolve</text>
+
+  <!-- AlphaTensor Architecture -->
+  <g transform="translate(50, 100)">
+    <rect x="0" y="0" width="520" height="350" fill="#fff" stroke="#8B5CF6" stroke-width="3" rx="15"/>
+    <text x="260" y="35" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#8B5CF6" text-anchor="middle">AlphaTensor Architecture</text>
+    <text x="260" y="55" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">"Intelligence learned through training"</text>
+
+    <!-- Neural Network (trained from scratch) -->
+    <g transform="translate(30, 80)">
+      <rect x="0" y="0" width="180" height="100" fill="#e8d4ec" stroke="#8B5CF6" stroke-width="2" rx="10"/>
+      <text x="90" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#8B5CF6" text-anchor="middle">Neural Network</text>
+      <text x="90" y="45" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">(trained from scratch)</text>
+
+      <!-- Simple NN diagram -->
+      <circle cx="40" cy="70" r="8" fill="#8B5CF6"/>
+      <circle cx="40" cy="90" r="8" fill="#8B5CF6"/>
+      <circle cx="90" cy="80" r="8" fill="#8B5CF6"/>
+      <circle cx="140" cy="70" r="8" fill="#8B5CF6"/>
+      <circle cx="140" cy="90" r="8" fill="#8B5CF6"/>
+      <line x1="48" y1="70" x2="82" y2="80" stroke="#8B5CF6" stroke-width="1"/>
+      <line x1="48" y1="90" x2="82" y2="80" stroke="#8B5CF6" stroke-width="1"/>
+      <line x1="98" y1="80" x2="132" y2="70" stroke="#8B5CF6" stroke-width="1"/>
+      <line x1="98" y1="80" x2="132" y2="90" stroke="#8B5CF6" stroke-width="1"/>
+    </g>
+
+    <!-- Arrow -->
+    <line x1="220" y1="130" x2="270" y2="130" stroke="#8B5CF6" stroke-width="2" marker-end="url(#arrowheadPurple)"/>
+
+    <!-- MCTS -->
+    <g transform="translate(280, 80)">
+      <rect x="0" y="0" width="200" height="100" fill="#e8d4ec" stroke="#8B5CF6" stroke-width="2" rx="10"/>
+      <text x="100" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#8B5CF6" text-anchor="middle">MCTS Search</text>
+      <text x="100" y="45" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">(Monte Carlo Tree)</text>
+
+      <!-- Tree diagram -->
+      <circle cx="100" cy="65" r="6" fill="#8B5CF6"/>
+      <circle cx="70" cy="85" r="5" fill="#8B5CF6" opacity="0.7"/>
+      <circle cx="100" cy="85" r="5" fill="#8B5CF6" opacity="0.7"/>
+      <circle cx="130" cy="85" r="5" fill="#8B5CF6" opacity="0.7"/>
+      <line x1="100" y1="71" x2="70" y2="80" stroke="#8B5CF6" stroke-width="1"/>
+      <line x1="100" y1="71" x2="100" y2="80" stroke="#8B5CF6" stroke-width="1"/>
+      <line x1="100" y1="71" x2="130" y2="80" stroke="#8B5CF6" stroke-width="1"/>
+    </g>
+
+    <!-- Game State -->
+    <g transform="translate(150, 200)">
+      <rect x="0" y="0" width="220" height="80" fill="#e8e4dc" stroke="#8B5CF6" stroke-width="2" rx="10"/>
+      <text x="110" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#8B5CF6" text-anchor="middle">TensorGame State</text>
+      <text x="110" y="45" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Current tensor + moves history</text>
+      <text x="110" y="65" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Fixed action space per size</text>
+    </g>
+
+    <!-- Feedback loop arrows -->
+    <path d="M260,180 L260,195" fill="none" stroke="#8B5CF6" stroke-width="2" marker-end="url(#arrowheadPurple)"/>
+    <path d="M260,280 L260,295 L400,295 L400,130 L390,130" fill="none" stroke="#8B5CF6" stroke-width="2" marker-end="url(#arrowheadPurple)"/>
+
+    <!-- Key characteristic -->
+    <rect x="30" y="295" width="460" height="40" fill="#fce4e4" stroke="#8a2a2a" stroke-width="1" rx="5"/>
+    <text x="260" y="320" font-family="Georgia, serif" font-size="13" fill="#8a2a2a" text-anchor="middle">Must retrain entire network for each problem size / type</text>
+  </g>
+
+  <!-- AlphaEvolve Architecture -->
+  <g transform="translate(630, 100)">
+    <rect x="0" y="0" width="520" height="350" fill="#fff" stroke="#C15F3C" stroke-width="3" rx="15"/>
+    <text x="260" y="35" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#C15F3C" text-anchor="middle">AlphaEvolve Architecture</text>
+    <text x="260" y="55" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">"Intelligence from pre-trained LLM"</text>
+
+    <!-- LLM Ensemble (pre-trained) -->
+    <g transform="translate(30, 80)">
+      <rect x="0" y="0" width="180" height="100" fill="#fce4d4" stroke="#C15F3C" stroke-width="2" rx="10"/>
+      <text x="90" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">LLM Ensemble</text>
+      <text x="90" y="45" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">(pre-trained Gemini)</text>
+
+      <!-- LLM icons -->
+      <rect x="20" y="55" width="60" height="35" fill="#C15F3C" opacity="0.3" rx="5"/>
+      <text x="50" y="78" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">Flash</text>
+      <rect x="100" y="55" width="60" height="35" fill="#C15F3C" opacity="0.5" rx="5"/>
+      <text x="130" y="78" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">Pro</text>
+    </g>
+
+    <!-- Arrow -->
+    <line x1="220" y1="130" x2="270" y2="130" stroke="#C15F3C" stroke-width="2" marker-end="url(#arrowhead7)"/>
+
+    <!-- Evolutionary Loop -->
+    <g transform="translate(280, 80)">
+      <rect x="0" y="0" width="200" height="100" fill="#fce4d4" stroke="#C15F3C" stroke-width="2" rx="10"/>
+      <text x="100" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">Evolutionary Loop</text>
+      <text x="100" y="45" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">(simple selection)</text>
+
+      <!-- Loop diagram -->
+      <ellipse cx="100" cy="75" rx="40" ry="15" fill="none" stroke="#C15F3C" stroke-width="2"/>
+      <polygon points="140,75 135,70 135,80" fill="#C15F3C"/>
+    </g>
+
+    <!-- Program Database -->
+    <g transform="translate(150, 200)">
+      <rect x="0" y="0" width="220" height="80" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="10"/>
+      <text x="110" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a" text-anchor="middle">Program Database</text>
+      <text x="110" y="45" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Executable code + fitness scores</text>
+      <text x="110" y="65" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Works with any code!</text>
+    </g>
+
+    <!-- Feedback loop arrows -->
+    <path d="M260,180 L260,195" fill="none" stroke="#C15F3C" stroke-width="2" marker-end="url(#arrowhead7)"/>
+    <path d="M260,280 L260,295 L400,295 L400,130 L390,130" fill="none" stroke="#C15F3C" stroke-width="2" marker-end="url(#arrowhead7)"/>
+
+    <!-- Key characteristic -->
+    <rect x="30" y="295" width="460" height="40" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="1" rx="5"/>
+    <text x="260" y="320" font-family="Georgia, serif" font-size="13" fill="#2a8a2a" text-anchor="middle">Same LLM works on any problem - just change the prompt!</text>
+  </g>
+
+  <!-- Bottom comparison -->
+  <g transform="translate(50, 480)">
+    <rect x="0" y="0" width="1100" height="340" fill="#d4c4b0" stroke="#C15F3C" stroke-width="3" rx="15"/>
+    <text x="550" y="35" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#C15F3C" text-anchor="middle">Key Differences in Where Intelligence Lives</text>
+
+    <!-- Comparison table -->
+    <g transform="translate(50, 60)">
+      <!-- Headers -->
+      <rect x="0" y="0" width="300" height="40" fill="#e8e4dc" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="150" y="27" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5a4a3a" text-anchor="middle">Aspect</text>
+
+      <rect x="300" y="0" width="350" height="40" fill="#e8d4ec" stroke="#8B5CF6" stroke-width="2"/>
+      <text x="475" y="27" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#8B5CF6" text-anchor="middle">AlphaTensor</text>
+
+      <rect x="650" y="0" width="350" height="40" fill="#fce4d4" stroke="#C15F3C" stroke-width="2"/>
+      <text x="825" y="27" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">AlphaEvolve</text>
+
+      <!-- Row 1: Intelligence Source -->
+      <rect x="0" y="40" width="300" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="150" y="68" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Intelligence Source</text>
+
+      <rect x="300" y="40" width="350" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="475" y="68" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Learned from scratch via RL training</text>
+
+      <rect x="650" y="40" width="350" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="825" y="68" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Pre-trained LLM (Gemini)</text>
+
+      <!-- Row 2: Search Method -->
+      <rect x="0" y="85" width="300" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="150" y="113" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Search Method</text>
+
+      <rect x="300" y="85" width="350" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="475" y="113" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Monte Carlo Tree Search (millions)</text>
+
+      <rect x="650" y="85" width="350" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="825" y="113" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">LLM-guided evolution (~16K)</text>
+
+      <!-- Row 3: Action Space -->
+      <rect x="0" y="130" width="300" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="150" y="158" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Action Space</text>
+
+      <rect x="300" y="130" width="350" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="475" y="158" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Fixed: tensor factor elements</text>
+
+      <rect x="650" y="130" width="350" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="825" y="158" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Unbounded: any code diff</text>
+
+      <!-- Row 4: Generalization -->
+      <rect x="0" y="175" width="300" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="150" y="203" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Generalization</text>
+
+      <rect x="300" y="175" width="350" height="45" fill="#fce4e4" stroke="#8a2a2a" stroke-width="1"/>
+      <text x="475" y="203" font-family="Georgia, serif" font-size="12" fill="#8a2a2a" text-anchor="middle">None - new training per problem</text>
+
+      <rect x="650" y="175" width="350" height="45" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="1"/>
+      <text x="825" y="203" font-family="Georgia, serif" font-size="12" fill="#2a8a2a" text-anchor="middle">Full - same system, any problem</text>
+
+      <!-- Row 5: Output -->
+      <rect x="0" y="220" width="300" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="150" y="248" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Output Format</text>
+
+      <rect x="300" y="220" width="350" height="45" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+      <text x="475" y="248" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Mathematical factors (U, V, W)</text>
+
+      <rect x="650" y="220" width="350" height="45" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="1"/>
+      <text x="825" y="248" font-family="Georgia, serif" font-size="12" fill="#2a8a2a" text-anchor="middle">Executable code (Python, JAX)</text>
+    </g>
+  </g>
+</svg>

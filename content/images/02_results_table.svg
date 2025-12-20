@@ -1,0 +1,113 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="700" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="50" font-family="Georgia, serif" font-size="36" font-weight="400" fill="#1A1612" text-anchor="middle">Benchmark Results</text>
+  <text x="600" y="85" font-family="Georgia, serif" font-size="18" fill="#5C534A" text-anchor="middle" font-style="italic">Speedup vs PyTorch SDPA on NVIDIA B200</text>
+
+  <!-- Decorative line -->
+  <line x1="400" y1="105" x2="800" y2="105" stroke="#E5E2DC" stroke-width="1"/>
+
+  <!-- Table -->
+  <g transform="translate(100, 130)">
+    <!-- Header row -->
+    <rect x="0" y="0" width="1000" height="50" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <line x1="200" y1="0" x2="200" y2="50" stroke="#E5E2DC" stroke-width="1"/>
+    <line x1="360" y1="0" x2="360" y2="50" stroke="#E5E2DC" stroke-width="1"/>
+    <line x1="520" y1="0" x2="520" y2="50" stroke="#E5E2DC" stroke-width="1"/>
+    <line x1="680" y1="0" x2="680" y2="50" stroke="#E5E2DC" stroke-width="1"/>
+    <line x1="840" y1="0" x2="840" y2="50" stroke="#E5E2DC" stroke-width="1"/>
+
+    <text x="100" y="32" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612" text-anchor="middle">Model</text>
+    <text x="280" y="32" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612" text-anchor="middle">512</text>
+    <text x="440" y="32" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612" text-anchor="middle">1024</text>
+    <text x="600" y="32" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612" text-anchor="middle">2048</text>
+    <text x="760" y="32" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612" text-anchor="middle">4096</text>
+    <text x="920" y="32" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612" text-anchor="middle">Average</text>
+
+    <!-- Row 1: Qwen2-0.5B (highlighted) -->
+    <rect x="0" y="50" width="1000" height="45" fill="#FBF7F4" stroke="#C15F3C" stroke-width="2"/>
+    <text x="100" y="78" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#1A1612" text-anchor="middle">Qwen2-0.5B</text>
+    <text x="280" y="78" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">1.05×</text>
+    <text x="440" y="78" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">1.09×</text>
+    <text x="600" y="78" font-family="Georgia, serif" font-size="13" fill="#C15F3C" text-anchor="middle">1.20×</text>
+    <rect x="710" y="58" width="100" height="28" rx="2" fill="#C15F3C"/>
+    <text x="760" y="78" font-family="Georgia, serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">1.27×</text>
+    <text x="920" y="78" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#C15F3C" text-anchor="middle">1.15×</text>
+
+    <!-- Row 2: Llama-3.2-1B -->
+    <rect x="0" y="95" width="1000" height="45" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="100" y="123" font-family="Georgia, serif" font-size="13" fill="#1A1612" text-anchor="middle">Llama-3.2-1B</text>
+    <text x="280" y="123" font-family="Georgia, serif" font-size="13" fill="#8C8279" text-anchor="middle">1.03×</text>
+    <text x="440" y="123" font-family="Georgia, serif" font-size="13" fill="#8C8279" text-anchor="middle">1.06×</text>
+    <text x="600" y="123" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">1.09×</text>
+    <text x="760" y="123" font-family="Georgia, serif" font-size="13" fill="#C15F3C" text-anchor="middle">1.19×</text>
+    <text x="920" y="123" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">1.09×</text>
+
+    <!-- Row 3: Llama-3.2-3B -->
+    <rect x="0" y="140" width="1000" height="45" fill="#FAFAF8" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="100" y="168" font-family="Georgia, serif" font-size="13" fill="#1A1612" text-anchor="middle">Llama-3.2-3B</text>
+    <text x="280" y="168" font-family="Georgia, serif" font-size="13" fill="#8C8279" text-anchor="middle">1.02×</text>
+    <text x="440" y="168" font-family="Georgia, serif" font-size="13" fill="#8C8279" text-anchor="middle">1.05×</text>
+    <text x="600" y="168" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">1.08×</text>
+    <text x="760" y="168" font-family="Georgia, serif" font-size="13" fill="#C15F3C" text-anchor="middle">1.15×</text>
+    <text x="920" y="168" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">1.07×</text>
+
+    <!-- Row 4: Phi-3-mini -->
+    <rect x="0" y="185" width="1000" height="45" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="100" y="213" font-family="Georgia, serif" font-size="13" fill="#1A1612" text-anchor="middle">Phi-3-mini</text>
+    <text x="280" y="213" font-family="Georgia, serif" font-size="13" fill="#8C8279" text-anchor="middle">1.02×</text>
+    <text x="440" y="213" font-family="Georgia, serif" font-size="13" fill="#8C8279" text-anchor="middle">1.05×</text>
+    <text x="600" y="213" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">1.08×</text>
+    <text x="760" y="213" font-family="Georgia, serif" font-size="13" fill="#C15F3C" text-anchor="middle">1.15×</text>
+    <text x="920" y="213" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">1.07×</text>
+
+    <!-- Row 5: SmolLM-360M -->
+    <rect x="0" y="230" width="1000" height="45" fill="#FAFAF8" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="100" y="258" font-family="Georgia, serif" font-size="13" fill="#1A1612" text-anchor="middle">SmolLM-360M</text>
+    <text x="280" y="258" font-family="Georgia, serif" font-size="13" fill="#8C8279" text-anchor="middle">1.04×</text>
+    <text x="440" y="258" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">1.08×</text>
+    <text x="600" y="258" font-family="Georgia, serif" font-size="13" fill="#C15F3C" text-anchor="middle">1.18×</text>
+    <text x="760" y="258" font-family="Georgia, serif" font-size="13" fill="#C15F3C" text-anchor="middle">1.24×</text>
+    <text x="920" y="258" font-family="Georgia, serif" font-size="13" fill="#C15F3C" text-anchor="middle">1.14×</text>
+
+    <!-- Row 6: SmolLM-135M -->
+    <rect x="0" y="275" width="1000" height="45" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="100" y="303" font-family="Georgia, serif" font-size="13" fill="#1A1612" text-anchor="middle">SmolLM-135M</text>
+    <text x="280" y="303" font-family="Georgia, serif" font-size="13" fill="#8C8279" text-anchor="middle">1.03×</text>
+    <text x="440" y="303" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">1.07×</text>
+    <text x="600" y="303" font-family="Georgia, serif" font-size="13" fill="#C15F3C" text-anchor="middle">1.16×</text>
+    <text x="760" y="303" font-family="Georgia, serif" font-size="13" fill="#C15F3C" text-anchor="middle">1.22×</text>
+    <text x="920" y="303" font-family="Georgia, serif" font-size="13" fill="#C15F3C" text-anchor="middle">1.12×</text>
+  </g>
+
+  <!-- Key takeaways -->
+  <g transform="translate(100, 480)">
+    <rect x="0" y="0" width="310" height="85" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="155" y="30" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#1A1612" text-anchor="middle">Never Slower</text>
+    <text x="155" y="55" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">Selection pressure eliminates</text>
+    <text x="155" y="73" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">slow configurations</text>
+
+    <rect x="340" y="0" width="310" height="85" rx="4" fill="#FBF7F4" stroke="#C15F3C" stroke-width="1"/>
+    <text x="495" y="30" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#C15F3C" text-anchor="middle">Up to 1.27×</text>
+    <text x="495" y="55" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">27% faster attention</text>
+    <text x="495" y="73" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">on production models</text>
+
+    <rect x="680" y="0" width="310" height="85" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="835" y="30" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#1A1612" text-anchor="middle">Scales with Length</text>
+    <text x="835" y="55" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">Longer sequences benefit</text>
+    <text x="835" y="73" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">more from optimization</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(100, 590)">
+    <circle cx="8" cy="8" r="6" fill="#C15F3C"/>
+    <text x="25" y="13" font-family="Georgia, serif" font-size="12" fill="#5C534A">&gt;1.10× speedup</text>
+    <circle cx="158" cy="8" r="6" fill="#8C8279"/>
+    <text x="175" y="13" font-family="Georgia, serif" font-size="12" fill="#5C534A">1.00×–1.10× speedup</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="600" y="660" font-family="Georgia, serif" font-size="13" fill="#8C8279" text-anchor="middle" font-style="italic">Tested on 10 production models · NVIDIA B200 · vs PyTorch SDPA baseline</text>
+</svg>

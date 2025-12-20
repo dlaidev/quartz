@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <defs>
+    <marker id="arrowhead4" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C15F3C"/>
+    </marker>
+    <marker id="arrowheadGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2a8a2a"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="900" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="30" font-weight="bold" fill="#C15F3C" text-anchor="middle">LLM-Guided Heuristic Evolution</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5a4a3a" text-anchor="middle">How AlphaEvolve iteratively refines tiling heuristics through intelligent mutations</text>
+
+  <!-- Generation 0: Starting Point -->
+  <g transform="translate(50, 100)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#C15F3C">Generation 0: Expert Baseline</text>
+
+    <rect x="0" y="20" width="350" height="150" fill="#2d2d2d" stroke="#C15F3C" stroke-width="2" rx="8"/>
+    <text x="20" y="50" font-family="monospace" font-size="11" fill="#c678dd">def</text>
+    <text x="50" y="50" font-family="monospace" font-size="11" fill="#61afef"> get_tile_config</text>
+    <text x="165" y="50" font-family="monospace" font-size="11" fill="#e5c07b">(M, N, K, dtype):</text>
+    <text x="20" y="75" font-family="monospace" font-size="11" fill="#7f848e">  # Simple fixed tiling</text>
+    <text x="20" y="100" font-family="monospace" font-size="11" fill="#c678dd">  return</text>
+    <text x="75" y="100" font-family="monospace" font-size="11" fill="#e5c07b"> TileConfig(</text>
+    <text x="30" y="125" font-family="monospace" font-size="11" fill="#98c379">    block_m=128, block_n=128, block_k=32</text>
+    <text x="20" y="150" font-family="monospace" font-size="11" fill="#e5c07b">  )</text>
+
+    <!-- Fitness score -->
+    <rect x="370" y="60" width="100" height="70" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="8"/>
+    <text x="420" y="90" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5a4a3a" text-anchor="middle">Fitness</text>
+    <text x="420" y="115" font-family="Georgia, serif" font-size="18" fill="#C15F3C" text-anchor="middle">1.00x</text>
+  </g>
+
+  <!-- LLM Mutation Process -->
+  <g transform="translate(520, 100)">
+    <rect x="0" y="0" width="630" height="170" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <text x="315" y="30" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#C15F3C" text-anchor="middle">LLM Reasoning: "How can I improve this?"</text>
+
+    <!-- LLM thought bubbles -->
+    <rect x="20" y="50" width="180" height="100" fill="#fff" stroke="#C15F3C" stroke-width="1" rx="8"/>
+    <text x="110" y="75" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">"Large M needs bigger</text>
+    <text x="110" y="90" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">block_m for parallelism"</text>
+    <text x="110" y="115" font-family="Georgia, serif" font-size="10" fill="#C15F3C" text-anchor="middle">→ if M &gt; 4096: block_m=256</text>
+    <text x="110" y="140" font-family="Georgia, serif" font-size="9" fill="#7f848e" text-anchor="middle">Mutation #1</text>
+
+    <rect x="220" y="50" width="180" height="100" fill="#fff" stroke="#C15F3C" stroke-width="1" rx="8"/>
+    <text x="310" y="75" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">"Small K can use full</text>
+    <text x="310" y="90" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">reduction in one pass"</text>
+    <text x="310" y="115" font-family="Georgia, serif" font-size="10" fill="#C15F3C" text-anchor="middle">→ if K ≤ 64: block_k=K</text>
+    <text x="310" y="140" font-family="Georgia, serif" font-size="9" fill="#7f848e" text-anchor="middle">Mutation #2</text>
+
+    <rect x="420" y="50" width="190" height="100" fill="#fff" stroke="#C15F3C" stroke-width="1" rx="8"/>
+    <text x="515" y="75" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">"Power-of-2 dims align</text>
+    <text x="515" y="90" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">better with TPU layout"</text>
+    <text x="515" y="115" font-family="Georgia, serif" font-size="10" fill="#C15F3C" text-anchor="middle">→ round_to_power_of_2()</text>
+    <text x="515" y="140" font-family="Georgia, serif" font-size="9" fill="#7f848e" text-anchor="middle">Mutation #3</text>
+  </g>
+
+  <!-- Arrow down -->
+  <line x1="600" y1="285" x2="600" y2="320" stroke="#C15F3C" stroke-width="3" marker-end="url(#arrowhead4)"/>
+
+  <!-- Generation 1: Mutated candidates -->
+  <g transform="translate(50, 340)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#C15F3C">Generation 1: Parallel Evaluation</text>
+
+    <!-- Candidate 1 -->
+    <rect x="0" y="25" width="260" height="130" fill="#2d2d2d" stroke="#C15F3C" stroke-width="2" rx="8"/>
+    <text x="130" y="50" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#98c379" text-anchor="middle">Candidate A (Mutation #1)</text>
+    <text x="15" y="75" font-family="monospace" font-size="9" fill="#c678dd">if</text>
+    <text x="30" y="75" font-family="monospace" font-size="9" fill="#e5c07b"> M &gt; 4096:</text>
+    <text x="15" y="95" font-family="monospace" font-size="9" fill="#61afef">  block_m = 256</text>
+    <text x="15" y="115" font-family="monospace" font-size="9" fill="#c678dd">else:</text>
+    <text x="15" y="135" font-family="monospace" font-size="9" fill="#61afef">  block_m = 128</text>
+
+    <rect x="275" y="55" width="70" height="50" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="5"/>
+    <text x="310" y="80" font-family="Georgia, serif" font-size="11" fill="#2a8a2a" text-anchor="middle">1.15x</text>
+    <text x="310" y="95" font-family="Georgia, serif" font-size="10" fill="#2a8a2a" text-anchor="middle">↑ Better!</text>
+
+    <!-- Candidate 2 -->
+    <rect x="380" y="25" width="260" height="130" fill="#2d2d2d" stroke="#C15F3C" stroke-width="2" rx="8"/>
+    <text x="510" y="50" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#98c379" text-anchor="middle">Candidate B (Mutation #2)</text>
+    <text x="395" y="75" font-family="monospace" font-size="9" fill="#c678dd">if</text>
+    <text x="410" y="75" font-family="monospace" font-size="9" fill="#e5c07b"> K &lt;= 64:</text>
+    <text x="395" y="95" font-family="monospace" font-size="9" fill="#61afef">  block_k = K</text>
+    <text x="395" y="115" font-family="monospace" font-size="9" fill="#c678dd">else:</text>
+    <text x="395" y="135" font-family="monospace" font-size="9" fill="#61afef">  block_k = 32</text>
+
+    <rect x="655" y="55" width="70" height="50" fill="#fce4e4" stroke="#8a2a2a" stroke-width="2" rx="5"/>
+    <text x="690" y="80" font-family="Georgia, serif" font-size="11" fill="#8a2a2a" text-anchor="middle">0.95x</text>
+    <text x="690" y="95" font-family="Georgia, serif" font-size="10" fill="#8a2a2a" text-anchor="middle">↓ Worse</text>
+
+    <!-- Candidate 3 -->
+    <rect x="760" y="25" width="260" height="130" fill="#2d2d2d" stroke="#C15F3C" stroke-width="2" rx="8"/>
+    <text x="890" y="50" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#98c379" text-anchor="middle">Candidate C (Mutation #3)</text>
+    <text x="775" y="75" font-family="monospace" font-size="9" fill="#c678dd">def</text>
+    <text x="800" y="75" font-family="monospace" font-size="9" fill="#61afef"> round_pow2</text>
+    <text x="880" y="75" font-family="monospace" font-size="9" fill="#e5c07b">(x):</text>
+    <text x="775" y="95" font-family="monospace" font-size="9" fill="#61afef">  return 2**ceil(log2(x))</text>
+    <text x="775" y="115" font-family="monospace" font-size="9" fill="#7f848e"># Apply to all dims</text>
+
+    <rect x="1035" y="55" width="70" height="50" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="5"/>
+    <text x="1070" y="80" font-family="Georgia, serif" font-size="11" fill="#2a8a2a" text-anchor="middle">1.08x</text>
+    <text x="1070" y="95" font-family="Georgia, serif" font-size="10" fill="#2a8a2a" text-anchor="middle">↑ Better!</text>
+  </g>
+
+  <!-- Selection arrow -->
+  <g transform="translate(50, 510)">
+    <rect x="0" y="0" width="1100" height="50" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="8"/>
+    <text x="550" y="32" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">Selection: Keep best (A: 1.15x), discard worse (B: 0.95x) → Add to population</text>
+  </g>
+
+  <!-- Generation N: Evolved Result -->
+  <g transform="translate(50, 580)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#C15F3C">Generation N: After Many Iterations</text>
+
+    <rect x="0" y="20" width="550" height="200" fill="#2d2d2d" stroke="#2a8a2a" stroke-width="3" rx="8"/>
+    <text x="275" y="50" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#98c379" text-anchor="middle">Evolved Heuristic (Discovered by AlphaEvolve)</text>
+    <text x="15" y="80" font-family="monospace" font-size="10" fill="#c678dd">def</text>
+    <text x="40" y="80" font-family="monospace" font-size="10" fill="#61afef"> get_tile_config</text>
+    <text x="150" y="80" font-family="monospace" font-size="10" fill="#e5c07b">(M, N, K, dtype):</text>
+    <text x="15" y="100" font-family="monospace" font-size="10" fill="#7f848e">  # Learned: large M benefits from more parallelism</text>
+    <text x="15" y="120" font-family="monospace" font-size="10" fill="#c678dd">  if</text>
+    <text x="35" y="120" font-family="monospace" font-size="10" fill="#e5c07b"> M * N &gt; 8_000_000 and K &lt; 512:</text>
+    <text x="25" y="140" font-family="monospace" font-size="10" fill="#61afef">    return TileConfig(256, 64, max(K//4, 32))</text>
+    <text x="15" y="160" font-family="monospace" font-size="10" fill="#c678dd">  elif</text>
+    <text x="50" y="160" font-family="monospace" font-size="10" fill="#e5c07b"> is_power_of_2(K) and dtype == bf16:</text>
+    <text x="25" y="180" font-family="monospace" font-size="10" fill="#61afef">    return TileConfig(128, 128, min(K, 64))</text>
+    <text x="15" y="200" font-family="monospace" font-size="10" fill="#7f848e">  # ... 20+ more learned rules ...</text>
+
+    <!-- Final fitness -->
+    <rect x="580" y="70" width="150" height="100" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="3" rx="10"/>
+    <text x="655" y="100" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a" text-anchor="middle">Final Fitness</text>
+    <text x="655" y="135" font-family="Georgia, serif" font-size="32" font-weight="bold" fill="#2a8a2a" text-anchor="middle">1.23x</text>
+    <text x="655" y="160" font-family="Georgia, serif" font-size="12" fill="#2a8a2a" text-anchor="middle">23% faster!</text>
+  </g>
+
+  <!-- Key Differences Box -->
+  <g transform="translate(780, 580)">
+    <rect x="0" y="20" width="370" height="200" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <text x="185" y="50" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">Why LLM Mutations Work</text>
+
+    <text x="20" y="80" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">✓ Understands hardware semantics</text>
+    <text x="20" y="105" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">✓ Reasons about memory hierarchy</text>
+    <text x="20" y="130" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">✓ Combines multiple improvements</text>
+    <text x="20" y="155" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">✓ Preserves working code patterns</text>
+    <text x="20" y="180" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">✓ Learns from evaluation feedback</text>
+    <text x="20" y="205" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">✓ Explores non-obvious strategies</text>
+  </g>
+
+  <!-- Bottom: Timeline comparison -->
+  <rect x="50" y="810" width="1100" height="70" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+  <text x="600" y="840" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">Convergence: ~100 generations vs 10,000+ random mutations</text>
+  <text x="600" y="865" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">LLM guidance dramatically reduces the search space by proposing semantically meaningful changes</text>
+</svg>

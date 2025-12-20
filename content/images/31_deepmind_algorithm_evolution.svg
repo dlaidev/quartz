@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <defs>
+    <marker id="arrowhead6" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C15F3C"/>
+    </marker>
+    <linearGradient id="timelineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#C15F3C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a8a2a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="30" font-weight="bold" fill="#C15F3C" text-anchor="middle">DeepMind's Journey: From Game-Playing to LLM-Guided Discovery</text>
+  <text x="600" y="80" font-family="Georgia, serif" font-size="16" fill="#5a4a3a" text-anchor="middle">The evolution of AI systems for algorithm discovery (2022-2025)</text>
+
+  <!-- Timeline bar -->
+  <rect x="100" y="110" width="1000" height="8" fill="url(#timelineGrad)" rx="4"/>
+
+  <!-- Year markers -->
+  <text x="100" y="140" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">2022</text>
+  <text x="433" y="140" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">2023</text>
+  <text x="766" y="140" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">2024</text>
+  <text x="1100" y="140" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">2025</text>
+
+  <!-- Vertical lines for years -->
+  <line x1="100" y1="95" x2="100" y2="130" stroke="#5a4a3a" stroke-width="2"/>
+  <line x1="433" y1="95" x2="433" y2="130" stroke="#5a4a3a" stroke-width="2"/>
+  <line x1="766" y1="95" x2="766" y2="130" stroke="#5a4a3a" stroke-width="2"/>
+  <line x1="1100" y1="95" x2="1100" y2="130" stroke="#5a4a3a" stroke-width="2"/>
+
+  <!-- AlphaTensor (2022) -->
+  <g transform="translate(50, 160)">
+    <rect x="0" y="0" width="280" height="250" fill="#fff" stroke="#8B5CF6" stroke-width="3" rx="12"/>
+    <rect x="0" y="0" width="280" height="45" fill="#8B5CF6" rx="12"/>
+    <rect x="0" y="35" width="280" height="10" fill="#8B5CF6"/>
+    <text x="140" y="32" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#fff" text-anchor="middle">AlphaTensor</text>
+
+    <!-- Icon: Game controller -->
+    <g transform="translate(20, 60)">
+      <rect x="0" y="0" width="50" height="30" fill="#8B5CF6" opacity="0.2" rx="5"/>
+      <text x="25" y="22" font-family="Georgia, serif" font-size="18" fill="#8B5CF6" text-anchor="middle">🎮</text>
+    </g>
+    <text x="80" y="80" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#8B5CF6">Game-Playing AI</text>
+
+    <text x="20" y="110" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Approach: AlphaZero + MCTS</text>
+    <text x="20" y="130" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Domain: Matrix multiplication only</text>
+    <text x="20" y="150" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Output: Tensor factors</text>
+    <text x="20" y="170" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Training: Per problem size</text>
+
+    <rect x="20" y="185" width="240" height="50" fill="#e8d4ec" stroke="#8B5CF6" stroke-width="1" rx="5"/>
+    <text x="140" y="205" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Result: 4×4 binary → 47 mults</text>
+    <text x="140" y="222" font-family="Georgia, serif" font-size="11" fill="#8B5CF6" text-anchor="middle">(first improvement since 1969!)</text>
+  </g>
+
+  <!-- Arrow 1 -->
+  <g transform="translate(340, 280)">
+    <line x1="0" y1="0" x2="50" y2="0" stroke="#C15F3C" stroke-width="3" marker-end="url(#arrowhead6)"/>
+  </g>
+
+  <!-- AlphaDev (2023) -->
+  <g transform="translate(400, 160)">
+    <rect x="0" y="0" width="280" height="250" fill="#fff" stroke="#C15F3C" stroke-width="3" rx="12"/>
+    <rect x="0" y="0" width="280" height="45" fill="#C15F3C" rx="12"/>
+    <rect x="0" y="35" width="280" height="10" fill="#C15F3C"/>
+    <text x="140" y="32" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#fff" text-anchor="middle">AlphaDev</text>
+
+    <!-- Icon: CPU -->
+    <g transform="translate(20, 60)">
+      <rect x="0" y="0" width="50" height="30" fill="#C15F3C" opacity="0.2" rx="5"/>
+      <text x="25" y="22" font-family="Georgia, serif" font-size="18" fill="#C15F3C" text-anchor="middle">🔧</text>
+    </g>
+    <text x="80" y="80" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C">Assembly-Level RL</text>
+
+    <text x="20" y="110" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Approach: RL for assembly code</text>
+    <text x="20" y="130" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Domain: Sorting algorithms</text>
+    <text x="20" y="150" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Output: Assembly instructions</text>
+    <text x="20" y="170" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Training: Per algorithm type</text>
+
+    <rect x="20" y="185" width="240" height="50" fill="#fce4d4" stroke="#C15F3C" stroke-width="1" rx="5"/>
+    <text x="140" y="205" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Result: Faster sorting in C++ STL</text>
+    <text x="140" y="222" font-family="Georgia, serif" font-size="11" fill="#C15F3C" text-anchor="middle">(deployed in production!)</text>
+  </g>
+
+  <!-- Arrow 2 -->
+  <g transform="translate(690, 280)">
+    <line x1="0" y1="0" x2="50" y2="0" stroke="#C15F3C" stroke-width="3" marker-end="url(#arrowhead6)"/>
+  </g>
+
+  <!-- FunSearch (2024) -->
+  <g transform="translate(750, 160)">
+    <rect x="0" y="0" width="280" height="250" fill="#fff" stroke="#2a8a2a" stroke-width="3" rx="12"/>
+    <rect x="0" y="0" width="280" height="45" fill="#2a8a2a" rx="12"/>
+    <rect x="0" y="35" width="280" height="10" fill="#2a8a2a"/>
+    <text x="140" y="32" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#fff" text-anchor="middle">FunSearch</text>
+
+    <!-- Icon: LLM -->
+    <g transform="translate(20, 60)">
+      <rect x="0" y="0" width="50" height="30" fill="#2a8a2a" opacity="0.2" rx="5"/>
+      <text x="25" y="22" font-family="Georgia, serif" font-size="18" fill="#2a8a2a" text-anchor="middle">🤖</text>
+    </g>
+    <text x="80" y="80" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a">LLM + Evolution</text>
+
+    <text x="20" y="110" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Approach: LLM generates functions</text>
+    <text x="20" y="130" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Domain: Math problems (cap set)</text>
+    <text x="20" y="150" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Output: Python functions</text>
+    <text x="20" y="170" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Training: Same LLM, any problem</text>
+
+    <rect x="20" y="185" width="240" height="50" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="1" rx="5"/>
+    <text x="140" y="205" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Result: New cap set constructions</text>
+    <text x="140" y="222" font-family="Georgia, serif" font-size="11" fill="#2a8a2a" text-anchor="middle">(first LLM-based discovery!)</text>
+  </g>
+
+  <!-- Arrow down to AlphaEvolve -->
+  <g transform="translate(600, 420)">
+    <line x1="0" y1="0" x2="0" y2="50" stroke="#C15F3C" stroke-width="3" marker-end="url(#arrowhead6)"/>
+    <text x="0" y="35" font-family="Georgia, serif" font-size="12" fill="#C15F3C" text-anchor="middle">   combines &amp;</text>
+    <text x="0" y="50" font-family="Georgia, serif" font-size="12" fill="#C15F3C" text-anchor="middle">   generalizes</text>
+  </g>
+
+  <!-- AlphaEvolve (2025) - Full width -->
+  <g transform="translate(200, 490)">
+    <rect x="0" y="0" width="800" height="280" fill="#fff" stroke="#C15F3C" stroke-width="4" rx="15"/>
+    <rect x="0" y="0" width="800" height="55" fill="#C15F3C" rx="15"/>
+    <rect x="0" y="40" width="800" height="15" fill="#C15F3C"/>
+    <text x="400" y="38" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#fff" text-anchor="middle">AlphaEvolve (2025)</text>
+
+    <!-- Three pillars -->
+    <g transform="translate(30, 75)">
+      <rect x="0" y="0" width="230" height="90" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="8"/>
+      <text x="115" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">LLM Ensemble</text>
+      <text x="115" y="48" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Gemini Flash (breadth)</text>
+      <text x="115" y="65" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Gemini Pro (depth)</text>
+      <text x="115" y="82" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Intelligent mutations</text>
+    </g>
+
+    <g transform="translate(285, 75)">
+      <rect x="0" y="0" width="230" height="90" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="8"/>
+      <text x="115" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">Evolutionary Loop</text>
+      <text x="115" y="48" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Program database</text>
+      <text x="115" y="65" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Fitness evaluation</text>
+      <text x="115" y="82" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Selection pressure</text>
+    </g>
+
+    <g transform="translate(540, 75)">
+      <rect x="0" y="0" width="230" height="90" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="8"/>
+      <text x="115" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a" text-anchor="middle">General Purpose</text>
+      <text x="115" y="48" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Any algorithmic domain</text>
+      <text x="115" y="65" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Executable code output</text>
+      <text x="115" y="82" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">No retraining needed</text>
+    </g>
+
+    <!-- Results summary -->
+    <g transform="translate(30, 180)">
+      <rect x="0" y="0" width="740" height="80" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="8"/>
+      <text x="370" y="25" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">Combined Results: Better Than All Predecessors</text>
+      <text x="120" y="50" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Matrix mult: 48 mults</text>
+      <text x="120" y="68" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">(beats AlphaTensor)</text>
+      <text x="370" y="50" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Kernel optimization: 23%</text>
+      <text x="370" y="68" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">(production deployed)</text>
+      <text x="620" y="50" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Compute savings: 0.7%</text>
+      <text x="620" y="68" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">(Google-wide)</text>
+    </g>
+  </g>
+</svg>

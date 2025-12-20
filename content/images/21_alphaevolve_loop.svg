@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="#1A1612" text-anchor="middle">The AlphaEvolve Evolutionary Loop</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">How LLM-guided evolution discovers better algorithms</text>
+
+  <!-- Central circular loop -->
+  <!-- Draw the circular path -->
+  <circle cx="600" cy="420" r="220" fill="none" stroke="#E5E2DC" stroke-width="4"/>
+
+  <!-- Step 1: Sample Parents (top) -->
+  <circle cx="600" cy="200" r="70" fill="#5C8A9B" stroke="#FFFFFF" stroke-width="3"/>
+  <text x="600" y="195" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">1. Sample</text>
+  <text x="600" y="215" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Parents</text>
+
+  <!-- Step 2: Build Prompts (top right) -->
+  <circle cx="780" cy="290" r="70" fill="#9B7DC1" stroke="#FFFFFF" stroke-width="3"/>
+  <text x="780" y="285" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">2. Build</text>
+  <text x="780" y="305" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Prompts</text>
+
+  <!-- Step 3: LLM Generates (right) -->
+  <circle cx="820" cy="450" r="70" fill="#C15F3C" stroke="#FFFFFF" stroke-width="3"/>
+  <text x="820" y="445" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">3. LLM</text>
+  <text x="820" y="465" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Generates</text>
+
+  <!-- Step 4: Apply Diffs (bottom right) -->
+  <circle cx="720" cy="590" r="70" fill="#C15F3C" fill-opacity="0.7" stroke="#FFFFFF" stroke-width="3"/>
+  <text x="720" y="585" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">4. Apply</text>
+  <text x="720" y="605" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Diffs</text>
+
+  <!-- Step 5: Evaluate (bottom) -->
+  <circle cx="520" cy="620" r="70" fill="#7D9B76" stroke="#FFFFFF" stroke-width="3"/>
+  <text x="520" y="615" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">5. Evaluate</text>
+  <text x="520" y="635" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">on Hardware</text>
+
+  <!-- Step 6: Select & Store (left) -->
+  <circle cx="380" cy="480" r="70" fill="#5C8A9B" stroke="#FFFFFF" stroke-width="3"/>
+  <text x="380" y="475" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">6. Select</text>
+  <text x="380" y="495" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Winners</text>
+
+  <!-- Arrows between steps -->
+  <!-- 1 to 2 -->
+  <path d="M660,230 Q720,240 750,270" fill="none" stroke="#1A1612" stroke-width="3"/>
+  <polygon points="750,270 742,262 752,258" fill="#1A1612"/>
+
+  <!-- 2 to 3 -->
+  <path d="M820,340 Q840,380 830,400" fill="none" stroke="#1A1612" stroke-width="3"/>
+  <polygon points="830,400 838,392 826,390" fill="#1A1612"/>
+
+  <!-- 3 to 4 -->
+  <path d="M800,510 Q780,540 760,560" fill="none" stroke="#1A1612" stroke-width="3"/>
+  <polygon points="760,560 770,556 766,566" fill="#1A1612"/>
+
+  <!-- 4 to 5 -->
+  <path d="M660,610 Q620,620 580,620" fill="none" stroke="#1A1612" stroke-width="3"/>
+  <polygon points="580,620 590,614 590,626" fill="#1A1612"/>
+
+  <!-- 5 to 6 -->
+  <path d="M460,590 Q420,560 400,540" fill="none" stroke="#1A1612" stroke-width="3"/>
+  <polygon points="400,540 406,550 394,548" fill="#1A1612"/>
+
+  <!-- 6 back to 1 -->
+  <path d="M400,420 Q400,300 540,220" fill="none" stroke="#1A1612" stroke-width="3" stroke-dasharray="8,4"/>
+  <polygon points="540,220 530,224 534,214" fill="#1A1612"/>
+
+  <!-- Detail boxes around the loop -->
+
+  <!-- Sample Parents detail -->
+  <rect x="30" y="120" width="200" height="100" rx="4" fill="#FFFFFF" stroke="#5C8A9B" stroke-width="1"/>
+  <text x="130" y="145" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C8A9B" text-anchor="middle">From Program DB:</text>
+  <text x="45" y="170" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Top performers</text>
+  <text x="45" y="188" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Diverse solutions</text>
+  <text x="45" y="206" font-family="Georgia, serif" font-size="11" fill="#5C534A">• "Inspiration" code</text>
+  <line x1="230" y1="170" x2="530" y2="200" stroke="#5C8A9B" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <!-- Build Prompts detail -->
+  <rect x="900" y="180" width="200" height="100" rx="4" fill="#FFFFFF" stroke="#9B7DC1" stroke-width="1"/>
+  <text x="1000" y="205" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#9B7DC1" text-anchor="middle">Prompt contains:</text>
+  <text x="915" y="230" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Problem description</text>
+  <text x="915" y="248" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Parent code</text>
+  <text x="915" y="266" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Past feedback</text>
+  <line x1="850" y1="290" x2="900" y2="260" stroke="#9B7DC1" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <!-- LLM Generates detail -->
+  <rect x="930" y="400" width="220" height="120" rx="4" fill="#FFFFFF" stroke="#C15F3C" stroke-width="1"/>
+  <text x="1040" y="425" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#C15F3C" text-anchor="middle">Intelligent Mutation:</text>
+  <text x="945" y="450" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Understands code semantics</text>
+  <text x="945" y="468" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Reasons about improvements</text>
+  <text x="945" y="486" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Outputs targeted diffs</text>
+  <text x="945" y="508" font-family="Georgia, serif" font-size="11" fill="#C15F3C" font-style="italic">Not random changes!</text>
+  <line x1="890" y1="450" x2="930" y2="460" stroke="#C15F3C" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <!-- Evaluate detail -->
+  <rect x="400" y="700" width="240" height="80" rx="4" fill="#FFFFFF" stroke="#7D9B76" stroke-width="1"/>
+  <text x="520" y="725" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#7D9B76" text-anchor="middle">Ground Truth Execution:</text>
+  <text x="415" y="750" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Run on real hardware</text>
+  <text x="415" y="768" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Measure actual performance</text>
+  <line x1="520" y1="690" x2="520" y2="700" stroke="#7D9B76" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <!-- Select Winners detail -->
+  <rect x="30" y="450" width="200" height="100" rx="4" fill="#FFFFFF" stroke="#5C8A9B" stroke-width="1"/>
+  <text x="130" y="475" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5C8A9B" text-anchor="middle">Selection Pressure:</text>
+  <text x="45" y="500" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Keep best performers</text>
+  <text x="45" y="518" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Prune weak variants</text>
+  <text x="45" y="536" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Add to program DB</text>
+  <line x1="230" y1="500" x2="320" y2="480" stroke="#5C8A9B" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <!-- Center label -->
+  <rect x="520" y="380" width="160" height="80" rx="8" fill="#1A1612"/>
+  <text x="600" y="415" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Continuous</text>
+  <text x="600" y="440" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Evolution</text>
+
+  <!-- Key insight at bottom -->
+  <rect x="100" y="730" width="350" height="50" rx="4" fill="#C15F3C"/>
+  <text x="275" y="760" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">LLM = Intelligent Mutation Operator</text>
+
+  <rect x="480" y="730" width="350" height="50" rx="4" fill="#7D9B76"/>
+  <text x="655" y="760" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Hardware = Ground Truth Fitness</text>
+
+  <rect x="860" y="730" width="250" height="50" rx="4" fill="#5C8A9B"/>
+  <text x="985" y="760" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Evolution = Structure</text>
+</svg>

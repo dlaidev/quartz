@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="32" font-weight="bold" fill="#C15F3C" text-anchor="middle">AlphaEvolve GEMM: Results &amp; Impact</text>
+  <text x="600" y="80" font-family="Georgia, serif" font-size="18" fill="#5a4a3a" text-anchor="middle">Deployed in production, enhancing Gemini's training efficiency</text>
+
+  <!-- Performance Results Section -->
+  <g transform="translate(50, 110)">
+    <rect x="0" y="0" width="530" height="280" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="15"/>
+    <text x="265" y="35" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#C15F3C" text-anchor="middle">Performance Improvements</text>
+
+    <!-- Bar chart: Expert vs AlphaEvolve -->
+    <g transform="translate(40, 60)">
+      <!-- Expert baseline bar -->
+      <rect x="0" y="0" width="200" height="60" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="5"/>
+      <text x="100" y="38" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#5a4a3a" text-anchor="middle">Expert Heuristic</text>
+      <text x="220" y="38" font-family="Georgia, serif" font-size="18" fill="#5a4a3a">1.00x</text>
+
+      <!-- AlphaEvolve bar -->
+      <rect x="0" y="80" width="246" height="60" fill="#d4c4b0" stroke="#C15F3C" stroke-width="3" rx="5"/>
+      <text x="123" y="118" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">AlphaEvolve Heuristic</text>
+      <text x="266" y="118" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#2a8a2a">1.23x</text>
+
+      <!-- Improvement callout -->
+      <rect x="300" y="65" width="180" height="90" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="10"/>
+      <text x="390" y="100" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="#2a8a2a" text-anchor="middle">+23%</text>
+      <text x="390" y="125" font-family="Georgia, serif" font-size="14" fill="#2a8a2a" text-anchor="middle">Kernel Speedup</text>
+      <text x="390" y="145" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">(average across all kernels)</text>
+    </g>
+
+    <!-- Training time impact -->
+    <rect x="40" y="200" width="450" height="60" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="8"/>
+    <text x="265" y="225" font-family="Georgia, serif" font-size="16" fill="#5a4a3a" text-anchor="middle">Overall Gemini Training Time:</text>
+    <text x="265" y="250" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#C15F3C" text-anchor="middle">1% Reduction → Significant Cost Savings</text>
+  </g>
+
+  <!-- Engineering Time Section -->
+  <g transform="translate(620, 110)">
+    <rect x="0" y="0" width="530" height="280" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="15"/>
+    <text x="265" y="35" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#C15F3C" text-anchor="middle">Engineering Velocity</text>
+
+    <!-- Timeline comparison -->
+    <g transform="translate(40, 60)">
+      <!-- Before: Months -->
+      <rect x="0" y="0" width="450" height="45" fill="#fce4e4" stroke="#8a2a2a" stroke-width="2" rx="5"/>
+      <text x="20" y="30" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#8a2a2a">Before: Manual Engineering</text>
+      <text x="380" y="30" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#8a2a2a">MONTHS</text>
+
+      <!-- Calendar icons for months -->
+      <g transform="translate(200, 8)">
+        <rect x="0" y="0" width="20" height="25" fill="#8a2a2a" rx="2"/>
+        <rect x="25" y="0" width="20" height="25" fill="#8a2a2a" rx="2"/>
+        <rect x="50" y="0" width="20" height="25" fill="#8a2a2a" rx="2"/>
+        <text x="75" y="17" font-family="Georgia, serif" font-size="14" fill="#8a2a2a">...</text>
+      </g>
+
+      <!-- After: Days -->
+      <rect x="0" y="65" width="80" height="45" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="5"/>
+      <text x="20" y="95" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a">After:</text>
+
+      <rect x="90" y="65" width="360" height="45" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" stroke-dasharray="5,3" rx="5"/>
+      <text x="270" y="95" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">AlphaEvolve Automated Search</text>
+      <text x="430" y="95" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#2a8a2a">DAYS</text>
+
+      <!-- Improvement callout -->
+      <rect x="130" y="130" width="200" height="60" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="10"/>
+      <text x="230" y="160" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#2a8a2a" text-anchor="middle">~100x Faster</text>
+      <text x="230" y="180" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Development Cycle</text>
+    </g>
+
+    <!-- Engineer benefit -->
+    <rect x="40" y="200" width="450" height="60" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="8"/>
+    <text x="265" y="225" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">Kernel engineers can now focus on:</text>
+    <text x="265" y="250" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">Strategic, Higher-Level Optimization Problems</text>
+  </g>
+
+  <!-- Self-Improvement Loop Section -->
+  <g transform="translate(50, 420)">
+    <rect x="0" y="0" width="1100" height="180" fill="#d4c4b0" stroke="#C15F3C" stroke-width="3" rx="15"/>
+    <text x="550" y="35" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#C15F3C" text-anchor="middle">Historic Milestone: Gemini Optimizes Its Own Training</text>
+
+    <!-- The loop diagram -->
+    <g transform="translate(100, 60)">
+      <!-- Gemini box -->
+      <rect x="0" y="0" width="180" height="90" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+      <text x="90" y="35" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#C15F3C" text-anchor="middle">Gemini</text>
+      <text x="90" y="55" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Training on TPUs</text>
+      <text x="90" y="75" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">(uses Pallas kernels)</text>
+
+      <!-- Arrow to AlphaEvolve -->
+      <path d="M190,45 L290,45" fill="none" stroke="#C15F3C" stroke-width="3"/>
+      <polygon points="290,45 280,40 280,50" fill="#C15F3C"/>
+      <text x="240" y="35" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">powers</text>
+
+      <!-- AlphaEvolve box -->
+      <rect x="300" y="0" width="200" height="90" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+      <text x="400" y="35" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#C15F3C" text-anchor="middle">AlphaEvolve</text>
+      <text x="400" y="55" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Gemini Flash + Pro</text>
+      <text x="400" y="75" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">(evolves heuristics)</text>
+
+      <!-- Arrow to optimized kernels -->
+      <path d="M510,45 L610,45" fill="none" stroke="#C15F3C" stroke-width="3"/>
+      <polygon points="610,45 600,40 600,50" fill="#C15F3C"/>
+      <text x="560" y="35" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">discovers</text>
+
+      <!-- Optimized kernels box -->
+      <rect x="620" y="0" width="200" height="90" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="10"/>
+      <text x="720" y="35" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#2a8a2a" text-anchor="middle">Optimized</text>
+      <text x="720" y="55" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#2a8a2a" text-anchor="middle">Heuristics</text>
+      <text x="720" y="75" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">(23% faster kernels)</text>
+
+      <!-- Feedback loop arrow -->
+      <path d="M720,95 L720,120 L90,120 L90,95" fill="none" stroke="#2a8a2a" stroke-width="3"/>
+      <polygon points="90,95 85,105 95,105" fill="#2a8a2a"/>
+      <text x="400" y="140" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a" text-anchor="middle">Deployed back to improve Gemini training!</text>
+    </g>
+  </g>
+
+  <!-- Bottom: Impact Summary -->
+  <g transform="translate(50, 630)">
+    <rect x="0" y="0" width="1100" height="150" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="15"/>
+    <text x="550" y="35" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#C15F3C" text-anchor="middle">Impact Summary</text>
+
+    <!-- Three pillars -->
+    <g transform="translate(50, 55)">
+      <rect x="0" y="0" width="300" height="75" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="8"/>
+      <text x="150" y="28" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">Research Velocity</text>
+      <text x="150" y="50" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">No more tuning interruptions</text>
+      <text x="150" y="68" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Faster model iteration cycles</text>
+    </g>
+
+    <g transform="translate(400, 55)">
+      <rect x="0" y="0" width="300" height="75" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="8"/>
+      <text x="150" y="28" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">Cost Efficiency</text>
+      <text x="150" y="50" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">1% training time = millions saved</text>
+      <text x="150" y="68" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">At Google scale, this is huge</text>
+    </g>
+
+    <g transform="translate(750, 55)">
+      <rect x="0" y="0" width="300" height="75" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="8"/>
+      <text x="150" y="28" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">Ergonomics</text>
+      <text x="150" y="50" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Works for any input shape</text>
+      <text x="150" y="68" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Model developers just use it</text>
+    </g>
+  </g>
+</svg>

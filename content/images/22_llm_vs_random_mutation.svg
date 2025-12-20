@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="#1A1612" text-anchor="middle">LLM-Guided vs Traditional Mutation</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">Why intelligent mutations find better solutions faster</text>
+
+  <!-- LEFT: Traditional Random Mutation -->
+  <rect x="50" y="110" width="500" height="350" rx="8" fill="#FFFFFF" stroke="#5C534A" stroke-width="2"/>
+  <rect x="50" y="110" width="500" height="45" rx="8" fill="#5C534A"/>
+  <rect x="50" y="147" width="500" height="8" fill="#5C534A"/>
+  <text x="300" y="142" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Traditional Genetic Programming</text>
+
+  <!-- Random mutation visualization -->
+  <rect x="80" y="175" width="440" height="130" rx="4" fill="#F4F3EE"/>
+  <text x="300" y="200" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C534A" text-anchor="middle">Random Mutation Operators</text>
+
+  <!-- Code block -->
+  <rect x="100" y="215" width="180" height="70" rx="4" fill="#FFFFFF" stroke="#E5E2DC"/>
+  <text x="110" y="235" font-family="Monaco, monospace" font-size="10" fill="#5C534A">block_size = 64</text>
+  <text x="110" y="252" font-family="Monaco, monospace" font-size="10" fill="#5C534A">num_warps = 4</text>
+  <text x="110" y="269" font-family="Monaco, monospace" font-size="10" fill="#5C534A">num_stages = 2</text>
+
+  <!-- Random changes -->
+  <text x="300" y="250" font-family="Georgia, serif" font-size="20" fill="#5C534A">→</text>
+  <text x="330" y="230" font-family="Georgia, serif" font-size="10" fill="#8C8279">flip random bit</text>
+  <text x="330" y="245" font-family="Georgia, serif" font-size="10" fill="#8C8279">swap values</text>
+  <text x="330" y="260" font-family="Georgia, serif" font-size="10" fill="#8C8279">random ±1</text>
+
+  <!-- Result -->
+  <rect x="300" y="215" width="180" height="70" rx="4" fill="#FFFFFF" stroke="#E5E2DC"/>
+  <text x="310" y="235" font-family="Monaco, monospace" font-size="10" fill="#C15F3C">block_size = 65</text>
+  <text x="310" y="252" font-family="Monaco, monospace" font-size="10" fill="#5C534A">num_warps = 4</text>
+  <text x="310" y="269" font-family="Monaco, monospace" font-size="10" fill="#5C534A">num_stages = 2</text>
+  <text x="390" y="280" font-family="Georgia, serif" font-size="9" fill="#C15F3C">← invalid!</text>
+
+  <!-- Problems list -->
+  <text x="80" y="330" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#5C534A">Problems:</text>
+  <text x="80" y="355" font-family="Georgia, serif" font-size="12" fill="#C15F3C">✗ No understanding of code semantics</text>
+  <text x="80" y="375" font-family="Georgia, serif" font-size="12" fill="#C15F3C">✗ Most mutations produce invalid code</text>
+  <text x="80" y="395" font-family="Georgia, serif" font-size="12" fill="#C15F3C">✗ Can't reason about WHY something failed</text>
+  <text x="80" y="415" font-family="Georgia, serif" font-size="12" fill="#C15F3C">✗ Wastes evaluations on nonsense</text>
+  <text x="80" y="435" font-family="Georgia, serif" font-size="12" fill="#C15F3C">✗ Slow convergence</text>
+
+  <!-- RIGHT: LLM-Guided Mutation -->
+  <rect x="600" y="110" width="550" height="350" rx="8" fill="#FFFFFF" stroke="#C15F3C" stroke-width="3"/>
+  <rect x="600" y="110" width="550" height="45" rx="8" fill="#C15F3C"/>
+  <rect x="600" y="147" width="550" height="8" fill="#C15F3C"/>
+  <text x="875" y="142" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#FFFFFF" text-anchor="middle">LLM-Guided Evolution (AlphaEvolve)</text>
+
+  <!-- LLM mutation visualization -->
+  <rect x="630" y="175" width="490" height="175" rx="4" fill="#F4F3EE"/>
+  <text x="875" y="198" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#C15F3C" text-anchor="middle">Intelligent Mutation with Context</text>
+
+  <!-- LLM prompt -->
+  <rect x="650" y="210" width="200" height="125" rx="4" fill="#FFFFFF" stroke="#E5E2DC"/>
+  <text x="660" y="228" font-family="Georgia, serif" font-size="10" fill="#8C8279">LLM sees:</text>
+  <text x="660" y="245" font-family="Monaco, monospace" font-size="9" fill="#5C534A">block_size=64 → 78 TFLOPS</text>
+  <text x="660" y="260" font-family="Monaco, monospace" font-size="9" fill="#5C534A">block_size=128 → 82 TFLOPS</text>
+  <text x="660" y="275" font-family="Monaco, monospace" font-size="9" fill="#5C534A">warps=8 → 78 TFLOPS (fail)</text>
+  <text x="660" y="295" font-family="Georgia, serif" font-size="10" fill="#8C8279" font-style="italic">LLM reasons:</text>
+  <text x="660" y="310" font-family="Georgia, serif" font-size="9" fill="#1A1612">"Larger blocks help.</text>
+  <text x="660" y="323" font-family="Georgia, serif" font-size="9" fill="#1A1612">More warps didn't. Try 256."</text>
+
+  <!-- Arrow -->
+  <text x="870" y="280" font-family="Georgia, serif" font-size="24" fill="#C15F3C">→</text>
+
+  <!-- Result -->
+  <rect x="910" y="210" width="200" height="125" rx="4" fill="#FFFFFF" stroke="#7D9B76" stroke-width="2"/>
+  <text x="920" y="228" font-family="Georgia, serif" font-size="10" fill="#7D9B76" font-weight="bold">Suggested mutation:</text>
+  <text x="920" y="250" font-family="Monaco, monospace" font-size="10" fill="#7D9B76">block_size = 256</text>
+  <text x="920" y="267" font-family="Monaco, monospace" font-size="10" fill="#5C534A">num_warps = 4</text>
+  <text x="920" y="284" font-family="Monaco, monospace" font-size="10" fill="#5C534A">num_stages = 3</text>
+  <text x="920" y="310" font-family="Georgia, serif" font-size="11" fill="#7D9B76" font-weight="bold">Result: 94 TFLOPS!</text>
+  <text x="920" y="327" font-family="Georgia, serif" font-size="10" fill="#7D9B76">+19% improvement</text>
+
+  <!-- Benefits list -->
+  <text x="630" y="370" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#7D9B76">Benefits:</text>
+  <text x="630" y="395" font-family="Georgia, serif" font-size="12" fill="#7D9B76">✓ Understands code structure and constraints</text>
+  <text x="630" y="415" font-family="Georgia, serif" font-size="12" fill="#7D9B76">✓ Mutations are semantically valid</text>
+  <text x="630" y="435" font-family="Georgia, serif" font-size="12" fill="#7D9B76">✓ Learns from failed attempts</text>
+  <text x="630" y="455" font-family="Georgia, serif" font-size="12" fill="#7D9B76">✓ Every evaluation is meaningful</text>
+
+  <!-- BOTTOM: Comparison metrics -->
+  <rect x="50" y="490" width="1100" height="180" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+  <text x="600" y="520" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#1A1612" text-anchor="middle">Convergence Comparison</text>
+
+  <!-- Bar chart comparison -->
+  <text x="150" y="560" font-family="Georgia, serif" font-size="12" fill="#5C534A">Evaluations to find optimal:</text>
+
+  <!-- Random bar -->
+  <rect x="350" y="545" width="600" height="30" rx="4" fill="#5C534A"/>
+  <text x="660" y="565" font-family="Georgia, serif" font-size="12" fill="#FFFFFF">Random mutation: ~10,000+ evaluations</text>
+
+  <!-- LLM bar -->
+  <rect x="350" y="585" width="150" height="30" rx="4" fill="#C15F3C"/>
+  <text x="520" y="605" font-family="Georgia, serif" font-size="12" fill="#1A1612">LLM-guided: ~100 evaluations</text>
+
+  <text x="150" y="640" font-family="Georgia, serif" font-size="12" fill="#5C534A">Valid mutation rate:</text>
+
+  <!-- Random validity -->
+  <rect x="350" y="625" width="50" height="25" rx="4" fill="#5C534A"/>
+  <text x="410" y="643" font-family="Georgia, serif" font-size="11" fill="#5C534A">Random: ~5%</text>
+
+  <!-- LLM validity -->
+  <rect x="530" y="625" width="350" height="25" rx="4" fill="#C15F3C"/>
+  <text x="720" y="643" font-family="Georgia, serif" font-size="11" fill="#FFFFFF">LLM-guided: ~85%</text>
+
+  <!-- Key takeaway -->
+  <rect x="100" y="700" width="1000" height="75" rx="6" fill="#C15F3C" fill-opacity="0.1" stroke="#C15F3C" stroke-width="2"/>
+  <text x="600" y="730" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#1A1612" text-anchor="middle">The Core Insight</text>
+  <text x="600" y="758" font-family="Georgia, serif" font-size="14" fill="#5C534A" text-anchor="middle">LLMs can't generate optimal code directly, but they CAN make intelligent decisions about which directions to explore.</text>
+</svg>

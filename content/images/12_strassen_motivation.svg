@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="600" fill="#1A1612" text-anchor="middle">Why Multiplications Matter More Than Additions</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">The insight that led to Strassen's breakthrough (1969)</text>
+
+  <!-- LEFT: Standard 2x2 Matrix Multiplication -->
+  <g transform="translate(50, 110)">
+    <rect x="0" y="0" width="520" height="320" rx="6" fill="#FFFFFF" stroke="#5C534A" stroke-width="2"/>
+    <rect x="0" y="0" width="520" height="40" rx="6" fill="#5C534A"/>
+    <rect x="0" y="34" width="520" height="6" fill="#5C534A"/>
+    <text x="260" y="27" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">Standard Algorithm: 8 Multiplications</text>
+
+    <!-- Matrix equation -->
+    <g transform="translate(30, 60)">
+      <!-- Matrix A -->
+      <rect x="0" y="0" width="80" height="80" fill="#F4F3EE" stroke="#E5E2DC" stroke-width="1"/>
+      <line x1="0" y1="40" x2="80" y2="40" stroke="#E5E2DC"/>
+      <line x1="40" y1="0" x2="40" y2="80" stroke="#E5E2DC"/>
+      <text x="20" y="28" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">a</text>
+      <text x="60" y="28" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">b</text>
+      <text x="20" y="68" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">c</text>
+      <text x="60" y="68" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">d</text>
+
+      <!-- × -->
+      <text x="105" y="48" font-family="Georgia, serif" font-size="20" fill="#5C534A">×</text>
+
+      <!-- Matrix B -->
+      <rect x="130" y="0" width="80" height="80" fill="#F4F3EE" stroke="#E5E2DC" stroke-width="1"/>
+      <line x1="130" y1="40" x2="210" y2="40" stroke="#E5E2DC"/>
+      <line x1="170" y1="0" x2="170" y2="80" stroke="#E5E2DC"/>
+      <text x="150" y="28" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">e</text>
+      <text x="190" y="28" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">f</text>
+      <text x="150" y="68" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">g</text>
+      <text x="190" y="68" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">h</text>
+
+      <!-- = -->
+      <text x="235" y="48" font-family="Georgia, serif" font-size="20" fill="#5C534A">=</text>
+
+      <!-- Result Matrix -->
+      <rect x="260" y="0" width="180" height="80" fill="#F4F3EE" stroke="#E5E2DC" stroke-width="1"/>
+      <line x1="260" y1="40" x2="440" y2="40" stroke="#E5E2DC"/>
+      <line x1="350" y1="0" x2="350" y2="80" stroke="#E5E2DC"/>
+      <text x="305" y="28" font-family="Monaco, monospace" font-size="11" fill="#1A1612" text-anchor="middle">ae+bg</text>
+      <text x="395" y="28" font-family="Monaco, monospace" font-size="11" fill="#1A1612" text-anchor="middle">af+bh</text>
+      <text x="305" y="68" font-family="Monaco, monospace" font-size="11" fill="#1A1612" text-anchor="middle">ce+dg</text>
+      <text x="395" y="68" font-family="Monaco, monospace" font-size="11" fill="#1A1612" text-anchor="middle">cf+dh</text>
+    </g>
+
+    <!-- Operation count -->
+    <g transform="translate(30, 165)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612">Operations needed:</text>
+
+      <rect x="0" y="15" width="200" height="30" rx="3" fill="#C15F3C"/>
+      <text x="100" y="35" font-family="Georgia, serif" font-size="13" fill="#FFFFFF" text-anchor="middle">8 Multiplications</text>
+
+      <rect x="220" y="15" width="200" height="30" rx="3" fill="#7D9B76"/>
+      <text x="320" y="35" font-family="Georgia, serif" font-size="13" fill="#FFFFFF" text-anchor="middle">4 Additions</text>
+
+      <text x="0" y="70" font-family="Georgia, serif" font-size="12" fill="#5C534A">Each output element = 2 multiplications + 1 addition</text>
+      <text x="0" y="88" font-family="Georgia, serif" font-size="12" fill="#5C534A">4 output elements × 2 = 8 multiplications total</text>
+    </g>
+
+    <!-- Why it matters -->
+    <g transform="translate(30, 265)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="12" fill="#8C8279" font-style="italic">For n×n matrices: O(n³) multiplications</text>
+    </g>
+  </g>
+
+  <!-- RIGHT: Strassen's Algorithm -->
+  <g transform="translate(620, 110)">
+    <rect x="0" y="0" width="530" height="320" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+    <rect x="0" y="0" width="530" height="40" rx="6" fill="#C15F3C"/>
+    <rect x="0" y="34" width="530" height="6" fill="#C15F3C"/>
+    <text x="265" y="27" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">Strassen's Algorithm: 7 Multiplications</text>
+
+    <!-- The 7 M formulas -->
+    <g transform="translate(20, 55)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#1A1612">The 7 clever products:</text>
+
+      <text x="0" y="25" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">M₁</text>
+      <text x="25" y="25" font-family="Monaco, monospace" font-size="11" fill="#5C534A">= (a+d)(e+h)</text>
+
+      <text x="0" y="45" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">M₂</text>
+      <text x="25" y="45" font-family="Monaco, monospace" font-size="11" fill="#5C534A">= (c+d)e</text>
+
+      <text x="0" y="65" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">M₃</text>
+      <text x="25" y="65" font-family="Monaco, monospace" font-size="11" fill="#5C534A">= a(f-h)</text>
+
+      <text x="0" y="85" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">M₄</text>
+      <text x="25" y="85" font-family="Monaco, monospace" font-size="11" fill="#5C534A">= d(g-e)</text>
+
+      <text x="170" y="25" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">M₅</text>
+      <text x="195" y="25" font-family="Monaco, monospace" font-size="11" fill="#5C534A">= (a+b)h</text>
+
+      <text x="170" y="45" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">M₆</text>
+      <text x="195" y="45" font-family="Monaco, monospace" font-size="11" fill="#5C534A">= (c-a)(e+f)</text>
+
+      <text x="170" y="65" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">M₇</text>
+      <text x="195" y="65" font-family="Monaco, monospace" font-size="11" fill="#5C534A">= (b-d)(g+h)</text>
+    </g>
+
+    <!-- Result computation -->
+    <g transform="translate(340, 55)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#1A1612">Combine:</text>
+      <text x="0" y="25" font-family="Monaco, monospace" font-size="11" fill="#5C534A">C₁₁ = M₁+M₄-M₅+M₇</text>
+      <text x="0" y="45" font-family="Monaco, monospace" font-size="11" fill="#5C534A">C₁₂ = M₃+M₅</text>
+      <text x="0" y="65" font-family="Monaco, monospace" font-size="11" fill="#5C534A">C₂₁ = M₂+M₄</text>
+      <text x="0" y="85" font-family="Monaco, monospace" font-size="11" fill="#5C534A">C₂₂ = M₁-M₂+M₃+M₆</text>
+    </g>
+
+    <!-- Operation count -->
+    <g transform="translate(20, 165)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612">Operations needed:</text>
+
+      <rect x="0" y="15" width="200" height="30" rx="3" fill="#C15F3C"/>
+      <text x="100" y="35" font-family="Georgia, serif" font-size="13" fill="#FFFFFF" text-anchor="middle">7 Multiplications</text>
+
+      <rect x="220" y="15" width="200" height="30" rx="3" fill="#7D9B76"/>
+      <text x="320" y="35" font-family="Georgia, serif" font-size="13" fill="#FFFFFF" text-anchor="middle">18 Additions</text>
+
+      <text x="0" y="70" font-family="Georgia, serif" font-size="12" fill="#5C534A">Trade 1 multiplication for 14 more additions</text>
+      <text x="0" y="88" font-family="Georgia, serif" font-size="12" fill="#C15F3C" font-weight="600">Worth it! Multiplications dominate cost.</text>
+    </g>
+
+    <!-- Why it matters -->
+    <g transform="translate(20, 265)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="12" fill="#C15F3C" font-style="italic" font-weight="600">For n×n matrices: O(n^2.81) — asymptotically faster!</text>
+    </g>
+  </g>
+
+  <!-- BOTTOM: Why Multiplications Cost More -->
+  <g transform="translate(50, 460)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612">Why Multiplications Are More Expensive</text>
+
+    <!-- Binary addition -->
+    <g transform="translate(0, 30)">
+      <rect x="0" y="0" width="350" height="120" rx="4" fill="#FFFFFF" stroke="#7D9B76" stroke-width="2"/>
+      <text x="175" y="25" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#7D9B76" text-anchor="middle">Addition (cheap)</text>
+      <text x="20" y="50" font-family="Monaco, monospace" font-size="11" fill="#5C534A">  1011  (11)</text>
+      <text x="20" y="65" font-family="Monaco, monospace" font-size="11" fill="#5C534A">+ 0110  (6)</text>
+      <text x="20" y="80" font-family="Monaco, monospace" font-size="11" fill="#5C534A">──────</text>
+      <text x="20" y="95" font-family="Monaco, monospace" font-size="11" fill="#7D9B76" font-weight="600">  10001 (17)</text>
+      <text x="175" y="113" font-family="Georgia, serif" font-size="11" fill="#8C8279" text-anchor="middle">Single pass, parallel bit operations</text>
+    </g>
+
+    <!-- Binary multiplication -->
+    <g transform="translate(400, 30)">
+      <rect x="0" y="0" width="350" height="120" rx="4" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+      <text x="175" y="25" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#C15F3C" text-anchor="middle">Multiplication (expensive)</text>
+      <text x="20" y="50" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    1011 × 0110</text>
+      <text x="20" y="65" font-family="Monaco, monospace" font-size="11" fill="#5C534A">= 1011×0 + 1011×1×2 + 1011×1×4 + ...</text>
+      <text x="20" y="80" font-family="Monaco, monospace" font-size="11" fill="#5C534A">= multiple shifts + multiple additions</text>
+      <text x="20" y="95" font-family="Monaco, monospace" font-size="11" fill="#C15F3C" font-weight="600">= O(n) additions for n-bit numbers</text>
+      <text x="175" y="113" font-family="Georgia, serif" font-size="11" fill="#8C8279" text-anchor="middle">Series of shift-and-add operations</text>
+    </g>
+
+    <!-- Hardware reality -->
+    <g transform="translate(800, 30)">
+      <rect x="0" y="0" width="350" height="120" rx="4" fill="#F4F3EE" stroke="#E5E2DC" stroke-width="1.5"/>
+      <text x="175" y="25" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612" text-anchor="middle">Modern GPU Reality</text>
+      <text x="20" y="50" font-family="Georgia, serif" font-size="12" fill="#5C534A">• FP32 multiply: 4 cycles</text>
+      <text x="20" y="70" font-family="Georgia, serif" font-size="12" fill="#5C534A">• FP32 add: 4 cycles</text>
+      <text x="20" y="90" font-family="Georgia, serif" font-size="12" fill="#5C534A">• But FMA units do both!</text>
+      <text x="20" y="110" font-family="Georgia, serif" font-size="11" fill="#8C8279" font-style="italic">Tradeoffs shift but principle holds</text>
+    </g>
+  </g>
+
+  <!-- BOTTOM: The Big Picture -->
+  <g transform="translate(50, 620)">
+    <rect x="0" y="0" width="1100" height="150" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+
+    <text x="550" y="30" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612" text-anchor="middle">The Asymptotic Impact</text>
+
+    <!-- Complexity comparison -->
+    <g transform="translate(50, 50)">
+      <rect x="0" y="0" width="300" height="45" rx="3" fill="#5C534A"/>
+      <text x="150" y="20" font-family="Georgia, serif" font-size="13" fill="#FFFFFF" text-anchor="middle">Standard: O(n³)</text>
+      <text x="150" y="38" font-family="Georgia, serif" font-size="11" fill="#B1ADA1" text-anchor="middle">1000³ = 1,000,000,000 ops</text>
+    </g>
+
+    <g transform="translate(400, 50)">
+      <rect x="0" y="0" width="300" height="45" rx="3" fill="#C15F3C"/>
+      <text x="150" y="20" font-family="Georgia, serif" font-size="13" fill="#FFFFFF" text-anchor="middle">Strassen: O(n^2.81)</text>
+      <text x="150" y="38" font-family="Georgia, serif" font-size="11" fill="#F4F3EE" text-anchor="middle">1000^2.81 ≈ 417,000,000 ops</text>
+    </g>
+
+    <g transform="translate(750, 50)">
+      <rect x="0" y="0" width="300" height="45" rx="3" fill="#7D9B76"/>
+      <text x="150" y="20" font-family="Georgia, serif" font-size="13" fill="#FFFFFF" text-anchor="middle">AlphaTensor: Even better!</text>
+      <text x="150" y="38" font-family="Georgia, serif" font-size="11" fill="#F4F3EE" text-anchor="middle">Finds optimal for specific sizes</text>
+    </g>
+
+    <text x="550" y="125" font-family="Georgia, serif" font-size="14" fill="#5C534A" text-anchor="middle" font-style="italic">
+      For 50 years, no one found a better algorithm for 4×4 matrices... until AlphaTensor.
+    </text>
+  </g>
+</svg>

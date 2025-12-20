@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <defs>
+    <marker id="arrowhead5" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C15F3C"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="900" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="32" font-weight="bold" fill="#C15F3C" text-anchor="middle">AlphaTensor vs AlphaEvolve</text>
+  <text x="600" y="80" font-family="Georgia, serif" font-size="16" fill="#5a4a3a" text-anchor="middle">From specialized game-playing to general-purpose LLM-guided evolution</text>
+
+  <!-- AlphaTensor Section -->
+  <g transform="translate(50, 110)">
+    <rect x="0" y="0" width="520" height="720" fill="#fff" stroke="#8B5CF6" stroke-width="3" rx="15"/>
+    <rect x="0" y="0" width="520" height="55" fill="#8B5CF6" rx="15"/>
+    <rect x="0" y="40" width="520" height="15" fill="#8B5CF6"/>
+    <text x="260" y="38" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#fff" text-anchor="middle">AlphaTensor (2022)</text>
+
+    <!-- Core Approach -->
+    <g transform="translate(20, 75)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#8B5CF6">Core Approach</text>
+      <rect x="0" y="10" width="480" height="80" fill="#e8e4dc" stroke="#8B5CF6" stroke-width="1" rx="8"/>
+      <text x="240" y="35" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5a4a3a" text-anchor="middle">Reinforcement Learning + Game Playing</text>
+      <text x="240" y="55" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Based on AlphaZero architecture</text>
+      <text x="240" y="75" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Single-player "TensorGame" to find decompositions</text>
+    </g>
+
+    <!-- Problem Domain -->
+    <g transform="translate(20, 180)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#8B5CF6">Problem Domain</text>
+      <rect x="0" y="10" width="480" height="60" fill="#e8e4dc" stroke="#8B5CF6" stroke-width="1" rx="8"/>
+      <text x="240" y="35" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5a4a3a" text-anchor="middle">Specialized: Matrix Multiplication Only</text>
+      <text x="240" y="55" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Finding low-rank tensor decompositions</text>
+    </g>
+
+    <!-- Search Space -->
+    <g transform="translate(20, 265)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#8B5CF6">Search Strategy</text>
+      <rect x="0" y="10" width="480" height="80" fill="#e8e4dc" stroke="#8B5CF6" stroke-width="1" rx="8"/>
+      <text x="240" y="35" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Monte Carlo Tree Search (MCTS)</text>
+      <text x="240" y="55" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Search space: &gt;10³³ possible moves per step</text>
+      <text x="240" y="75" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Needs custom training for each problem size</text>
+    </g>
+
+    <!-- Output -->
+    <g transform="translate(20, 360)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#8B5CF6">Output Format</text>
+      <rect x="0" y="10" width="480" height="60" fill="#e8e4dc" stroke="#8B5CF6" stroke-width="1" rx="8"/>
+      <text x="240" y="35" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">Tensor factors (U, V, W matrices)</text>
+      <text x="240" y="55" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Mathematical representation, not executable code</text>
+    </g>
+
+    <!-- Key Results -->
+    <g transform="translate(20, 445)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#8B5CF6">Key Results</text>
+      <rect x="0" y="10" width="480" height="100" fill="#d4c4b0" stroke="#8B5CF6" stroke-width="2" rx="8"/>
+      <text x="20" y="35" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">• 4×4 binary matrices: 47 mults (was 49)</text>
+      <text x="20" y="55" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">• First improvement on Strassen in 50 years</text>
+      <text x="20" y="75" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">• 14,236 nonequivalent algorithms discovered</text>
+      <text x="20" y="95" font-family="Georgia, serif" font-size="13" fill="#8B5CF6" font-weight="bold">• Limited to binary (0/1) matrices</text>
+    </g>
+
+    <!-- Limitations -->
+    <g transform="translate(20, 565)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#8B5CF6">Limitations</text>
+      <rect x="0" y="10" width="480" height="120" fill="#fce4e4" stroke="#8a2a2a" stroke-width="1" rx="8"/>
+      <text x="20" y="35" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">✗ Only works for matrix multiplication</text>
+      <text x="20" y="55" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">✗ Requires new training for each matrix size</text>
+      <text x="20" y="75" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">✗ Binary matrices only (0s and 1s)</text>
+      <text x="20" y="95" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">✗ Output needs manual conversion to code</text>
+      <text x="20" y="115" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">✗ Massive compute requirements</text>
+    </g>
+  </g>
+
+  <!-- Arrow in middle -->
+  <g transform="translate(580, 450)">
+    <line x1="0" y1="0" x2="40" y2="0" stroke="#C15F3C" stroke-width="4" marker-end="url(#arrowhead5)"/>
+    <text x="20" y="-15" font-family="Georgia, serif" font-size="14" fill="#C15F3C" text-anchor="middle">3 years</text>
+    <text x="20" y="25" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">evolution</text>
+  </g>
+
+  <!-- AlphaEvolve Section -->
+  <g transform="translate(630, 110)">
+    <rect x="0" y="0" width="520" height="720" fill="#fff" stroke="#C15F3C" stroke-width="3" rx="15"/>
+    <rect x="0" y="0" width="520" height="55" fill="#C15F3C" rx="15"/>
+    <rect x="0" y="40" width="520" height="15" fill="#C15F3C"/>
+    <text x="260" y="38" font-family="Georgia, serif" font-size="24" font-weight="bold" fill="#fff" text-anchor="middle">AlphaEvolve (2025)</text>
+
+    <!-- Core Approach -->
+    <g transform="translate(20, 75)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C">Core Approach</text>
+      <rect x="0" y="10" width="480" height="80" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" rx="8"/>
+      <text x="240" y="35" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#5a4a3a" text-anchor="middle">LLM Ensemble + Evolutionary Algorithm</text>
+      <text x="240" y="55" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Gemini Flash (throughput) + Gemini Pro (quality)</text>
+      <text x="240" y="75" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">LLM proposes code mutations, evolution selects best</text>
+    </g>
+
+    <!-- Problem Domain -->
+    <g transform="translate(20, 180)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C">Problem Domain</text>
+      <rect x="0" y="10" width="480" height="60" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="8"/>
+      <text x="240" y="35" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a" text-anchor="middle">General Purpose: Any Algorithmic Problem</text>
+      <text x="240" y="55" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Math, scheduling, ML kernels, hardware design...</text>
+    </g>
+
+    <!-- Search Space -->
+    <g transform="translate(20, 265)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C">Search Strategy</text>
+      <rect x="0" y="10" width="480" height="80" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" rx="8"/>
+      <text x="240" y="35" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">LLM-guided evolutionary search</text>
+      <text x="240" y="55" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">~16,000 candidates evaluated (vs millions for RL)</text>
+      <text x="240" y="75" font-family="Georgia, serif" font-size="13" fill="#5a4a3a" text-anchor="middle">Same system works across different problems</text>
+    </g>
+
+    <!-- Output -->
+    <g transform="translate(20, 360)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C">Output Format</text>
+      <rect x="0" y="10" width="480" height="60" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="8"/>
+      <text x="240" y="35" font-family="Georgia, serif" font-size="14" fill="#2a8a2a" font-weight="bold" text-anchor="middle">Executable Code (Python, JAX, etc.)</text>
+      <text x="240" y="55" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Ready to deploy, diff-based improvements</text>
+    </g>
+
+    <!-- Key Results -->
+    <g transform="translate(20, 445)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C">Key Results</text>
+      <rect x="0" y="10" width="480" height="100" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="8"/>
+      <text x="20" y="35" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">• 4×4 complex matrices: 48 mults (first since 1969!)</text>
+      <text x="20" y="55" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">• 23% Gemini kernel speedup, 1% training reduction</text>
+      <text x="20" y="75" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">• 0.7% Google-wide compute savings</text>
+      <text x="20" y="95" font-family="Georgia, serif" font-size="13" fill="#C15F3C" font-weight="bold">• Works with any numeric type!</text>
+    </g>
+
+    <!-- Advantages -->
+    <g transform="translate(20, 565)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C">Advantages</text>
+      <rect x="0" y="10" width="480" height="120" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="1" rx="8"/>
+      <text x="20" y="35" font-family="Georgia, serif" font-size="12" fill="#2a8a2a">✓ General purpose - works on any problem</text>
+      <text x="20" y="55" font-family="Georgia, serif" font-size="12" fill="#2a8a2a">✓ No retraining needed per problem</text>
+      <text x="20" y="75" font-family="Georgia, serif" font-size="12" fill="#2a8a2a">✓ Any numeric type (not just binary)</text>
+      <text x="20" y="95" font-family="Georgia, serif" font-size="12" fill="#2a8a2a">✓ Produces deployable code directly</text>
+      <text x="20" y="115" font-family="Georgia, serif" font-size="12" fill="#2a8a2a">✓ More efficient search (~100x fewer evals)</text>
+    </g>
+  </g>
+
+  <!-- Bottom insight -->
+  <rect x="50" y="850" width="1100" height="40" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="10"/>
+  <text x="600" y="877" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">Key Insight: AlphaEvolve delegates intelligence to LLMs, making the system general-purpose while improving results</text>
+</svg>

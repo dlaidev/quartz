@@ -1,0 +1,332 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850">
+  <!-- Background -->
+  <rect width="1200" height="850" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="30" font-weight="bold" fill="#C15F3C" text-anchor="middle">Matrix Multiplication as a 3D Tensor</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5a4a3a" text-anchor="middle">How the tensor T₂ encodes 2×2 matrix multiplication</text>
+
+  <!-- Matrix equation -->
+  <g transform="translate(50, 100)">
+    <rect x="0" y="0" width="400" height="100" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <text x="200" y="30" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">The 2×2 Matrix Multiplication</text>
+
+    <!-- Matrix A -->
+    <text x="30" y="65" font-family="Georgia, serif" font-size="14" fill="#5a4a3a">[</text>
+    <text x="45" y="55" font-family="Georgia, serif" font-size="12" fill="#2a8a2a">a₁</text>
+    <text x="70" y="55" font-family="Georgia, serif" font-size="12" fill="#2a8a2a">a₂</text>
+    <text x="45" y="80" font-family="Georgia, serif" font-size="12" fill="#2a8a2a">a₃</text>
+    <text x="70" y="80" font-family="Georgia, serif" font-size="12" fill="#2a8a2a">a₄</text>
+    <text x="90" y="65" font-family="Georgia, serif" font-size="14" fill="#5a4a3a">]</text>
+
+    <text x="110" y="65" font-family="Georgia, serif" font-size="16" fill="#5a4a3a">×</text>
+
+    <!-- Matrix B -->
+    <text x="130" y="65" font-family="Georgia, serif" font-size="14" fill="#5a4a3a">[</text>
+    <text x="145" y="55" font-family="Georgia, serif" font-size="12" fill="#8B5CF6">b₁</text>
+    <text x="170" y="55" font-family="Georgia, serif" font-size="12" fill="#8B5CF6">b₂</text>
+    <text x="145" y="80" font-family="Georgia, serif" font-size="12" fill="#8B5CF6">b₃</text>
+    <text x="170" y="80" font-family="Georgia, serif" font-size="12" fill="#8B5CF6">b₄</text>
+    <text x="190" y="65" font-family="Georgia, serif" font-size="14" fill="#5a4a3a">]</text>
+
+    <text x="210" y="65" font-family="Georgia, serif" font-size="16" fill="#5a4a3a">=</text>
+
+    <!-- Matrix C -->
+    <text x="230" y="65" font-family="Georgia, serif" font-size="14" fill="#5a4a3a">[</text>
+    <text x="245" y="55" font-family="Georgia, serif" font-size="12" fill="#C15F3C">c₁</text>
+    <text x="270" y="55" font-family="Georgia, serif" font-size="12" fill="#C15F3C">c₂</text>
+    <text x="245" y="80" font-family="Georgia, serif" font-size="12" fill="#C15F3C">c₃</text>
+    <text x="270" y="80" font-family="Georgia, serif" font-size="12" fill="#C15F3C">c₄</text>
+    <text x="290" y="65" font-family="Georgia, serif" font-size="14" fill="#5a4a3a">]</text>
+
+    <!-- Formulas -->
+    <text x="320" y="55" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">c₁ = a₁b₁ + a₂b₃</text>
+    <text x="320" y="70" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">c₂ = a₁b₂ + a₂b₄</text>
+    <text x="320" y="85" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">c₃ = a₃b₁ + a₄b₃</text>
+  </g>
+
+  <!-- Tensor meaning explanation -->
+  <g transform="translate(480, 100)">
+    <rect x="0" y="0" width="670" height="100" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <text x="335" y="30" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">The Tensor T₂ Encodes This</text>
+    <text x="20" y="55" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">T[a, b, c] = 1 means: "when computing matrix product, entry a of A × entry b of B → contributes to entry c of C"</text>
+    <text x="20" y="80" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">T[a, b, c] = 0 means: "entry a of A and entry b of B don't interact for entry c of C"</text>
+  </g>
+
+  <!-- 3D Tensor Visualization - 4 slices -->
+  <g transform="translate(50, 220)">
+    <text x="550" y="0" font-family="Georgia, serif" font-size="20" font-weight="bold" fill="#C15F3C" text-anchor="middle">The Tensor T₂ Visualized: 4 Slices Along Dimension a</text>
+    <text x="550" y="25" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">Each slice shows: for a fixed aᵢ, which (b,c) pairs have T[aᵢ,b,c]=1</text>
+
+    <!-- Slice a1 -->
+    <g transform="translate(0, 50)">
+      <text x="70" y="0" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a" text-anchor="middle">a₁ slice</text>
+
+      <!-- 3D cube for a1 -->
+      <g transform="translate(10, 15)">
+        <!-- Grid 4x4 -->
+        <rect x="0" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+
+        <rect x="0" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+
+        <rect x="0" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+
+        <rect x="0" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+
+        <!-- Highlighted cells (where a1 participates) -->
+        <!-- a1*b1 -> c1: T[a1,b1,c1]=1 -->
+        <rect x="0" y="0" width="30" height="30" fill="#8B5CF6" opacity="0.8"/>
+        <!-- a1*b2 -> c2: T[a1,b2,c2]=1 -->
+        <rect x="30" y="30" width="30" height="30" fill="#8B5CF6" opacity="0.8"/>
+
+        <!-- Labels -->
+        <text x="-5" y="20" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₁</text>
+        <text x="-5" y="50" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₂</text>
+        <text x="-5" y="80" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₃</text>
+        <text x="-5" y="110" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₄</text>
+
+        <text x="15" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₁</text>
+        <text x="45" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₂</text>
+        <text x="75" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₃</text>
+        <text x="105" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₄</text>
+      </g>
+
+      <text x="70" y="175" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">a₁b₁→c₁, a₁b₂→c₂</text>
+    </g>
+
+    <!-- Slice a2 -->
+    <g transform="translate(160, 50)">
+      <text x="70" y="0" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a" text-anchor="middle">a₂ slice</text>
+
+      <g transform="translate(10, 15)">
+        <rect x="0" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="0" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="0" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="0" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+
+        <!-- a2*b3 -> c1: T[a2,b3,c1]=1 -->
+        <rect x="0" y="60" width="30" height="30" fill="#8B5CF6" opacity="0.8"/>
+        <!-- a2*b4 -> c2: T[a2,b4,c2]=1 -->
+        <rect x="30" y="90" width="30" height="30" fill="#8B5CF6" opacity="0.8"/>
+
+        <text x="-5" y="20" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₁</text>
+        <text x="-5" y="50" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₂</text>
+        <text x="-5" y="80" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₃</text>
+        <text x="-5" y="110" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₄</text>
+        <text x="15" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₁</text>
+        <text x="45" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₂</text>
+        <text x="75" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₃</text>
+        <text x="105" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₄</text>
+      </g>
+
+      <text x="70" y="175" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">a₂b₃→c₁, a₂b₄→c₂</text>
+    </g>
+
+    <!-- Slice a3 -->
+    <g transform="translate(320, 50)">
+      <text x="70" y="0" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a" text-anchor="middle">a₃ slice</text>
+
+      <g transform="translate(10, 15)">
+        <rect x="0" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="0" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="0" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="0" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+
+        <!-- a3*b1 -> c3: T[a3,b1,c3]=1 -->
+        <rect x="60" y="0" width="30" height="30" fill="#8B5CF6" opacity="0.8"/>
+        <!-- a3*b2 -> c4: T[a3,b2,c4]=1 -->
+        <rect x="90" y="30" width="30" height="30" fill="#8B5CF6" opacity="0.8"/>
+
+        <text x="-5" y="20" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₁</text>
+        <text x="-5" y="50" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₂</text>
+        <text x="-5" y="80" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₃</text>
+        <text x="-5" y="110" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₄</text>
+        <text x="15" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₁</text>
+        <text x="45" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₂</text>
+        <text x="75" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₃</text>
+        <text x="105" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₄</text>
+      </g>
+
+      <text x="70" y="175" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">a₃b₁→c₃, a₃b₂→c₄</text>
+    </g>
+
+    <!-- Slice a4 -->
+    <g transform="translate(480, 50)">
+      <text x="70" y="0" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a" text-anchor="middle">a₄ slice</text>
+
+      <g transform="translate(10, 15)">
+        <rect x="0" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="0" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="0" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="30" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="0" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="60" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="0" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="30" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="60" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+        <rect x="90" y="90" width="30" height="30" fill="#fff" stroke="#5a4a3a" stroke-width="1"/>
+
+        <!-- a4*b3 -> c3: T[a4,b3,c3]=1 -->
+        <rect x="60" y="60" width="30" height="30" fill="#8B5CF6" opacity="0.8"/>
+        <!-- a4*b4 -> c4: T[a4,b4,c4]=1 -->
+        <rect x="90" y="90" width="30" height="30" fill="#8B5CF6" opacity="0.8"/>
+
+        <text x="-5" y="20" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₁</text>
+        <text x="-5" y="50" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₂</text>
+        <text x="-5" y="80" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₃</text>
+        <text x="-5" y="110" font-family="Georgia, serif" font-size="9" fill="#8B5CF6" text-anchor="end">b₄</text>
+        <text x="15" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₁</text>
+        <text x="45" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₂</text>
+        <text x="75" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₃</text>
+        <text x="105" y="135" font-family="Georgia, serif" font-size="9" fill="#C15F3C" text-anchor="middle">c₄</text>
+      </g>
+
+      <text x="70" y="175" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">a₄b₃→c₃, a₄b₄→c₄</text>
+    </g>
+
+    <!-- 3D assembled view -->
+    <g transform="translate(650, 30)">
+      <rect x="0" y="0" width="430" height="200" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="10"/>
+      <text x="215" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">Assembled 3D View</text>
+
+      <!-- Isometric 3D representation -->
+      <g transform="translate(50, 50)">
+        <!-- Four cubes stacked in 3D -->
+        <!-- a1 cube (front) -->
+        <g transform="translate(0, 80)">
+          <polygon points="0,0 60,0 60,60 0,60" fill="#8B5CF6" opacity="0.3" stroke="#5a4a3a" stroke-width="1"/>
+          <rect x="0" y="0" width="15" height="15" fill="#8B5CF6" opacity="0.9"/>
+          <rect x="15" y="15" width="15" height="15" fill="#8B5CF6" opacity="0.9"/>
+          <text x="30" y="75" font-family="Georgia, serif" font-size="10" fill="#2a8a2a" text-anchor="middle">a₁</text>
+        </g>
+
+        <!-- a2 cube -->
+        <g transform="translate(70, 60)">
+          <polygon points="0,0 60,0 60,60 0,60" fill="#8B5CF6" opacity="0.2" stroke="#5a4a3a" stroke-width="1"/>
+          <rect x="0" y="30" width="15" height="15" fill="#8B5CF6" opacity="0.9"/>
+          <rect x="15" y="45" width="15" height="15" fill="#8B5CF6" opacity="0.9"/>
+          <text x="30" y="75" font-family="Georgia, serif" font-size="10" fill="#2a8a2a" text-anchor="middle">a₂</text>
+        </g>
+
+        <!-- a3 cube -->
+        <g transform="translate(140, 40)">
+          <polygon points="0,0 60,0 60,60 0,60" fill="#8B5CF6" opacity="0.2" stroke="#5a4a3a" stroke-width="1"/>
+          <rect x="30" y="0" width="15" height="15" fill="#8B5CF6" opacity="0.9"/>
+          <rect x="45" y="15" width="15" height="15" fill="#8B5CF6" opacity="0.9"/>
+          <text x="30" y="75" font-family="Georgia, serif" font-size="10" fill="#2a8a2a" text-anchor="middle">a₃</text>
+        </g>
+
+        <!-- a4 cube -->
+        <g transform="translate(210, 20)">
+          <polygon points="0,0 60,0 60,60 0,60" fill="#8B5CF6" opacity="0.2" stroke="#5a4a3a" stroke-width="1"/>
+          <rect x="30" y="30" width="15" height="15" fill="#8B5CF6" opacity="0.9"/>
+          <rect x="45" y="45" width="15" height="15" fill="#8B5CF6" opacity="0.9"/>
+          <text x="30" y="75" font-family="Georgia, serif" font-size="10" fill="#2a8a2a" text-anchor="middle">a₄</text>
+        </g>
+
+        <!-- Axis labels -->
+        <text x="-20" y="110" font-family="Georgia, serif" font-size="12" fill="#8B5CF6">b</text>
+        <text x="30" y="160" font-family="Georgia, serif" font-size="12" fill="#C15F3C">c</text>
+        <text x="290" y="50" font-family="Georgia, serif" font-size="12" fill="#2a8a2a">a</text>
+
+        <!-- Arrows for axes -->
+        <line x1="0" y1="145" x2="280" y2="145" stroke="#2a8a2a" stroke-width="2"/>
+        <polygon points="280,145 270,140 270,150" fill="#2a8a2a"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Bottom: The AlphaTensor Game -->
+  <g transform="translate(50, 480)">
+    <rect x="0" y="0" width="1100" height="350" fill="#d4c4b0" stroke="#C15F3C" stroke-width="3" rx="15"/>
+    <text x="550" y="35" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#C15F3C" text-anchor="middle">The AlphaTensor Game: Zero Out the Tensor</text>
+
+    <!-- The game explanation -->
+    <g transform="translate(30, 60)">
+      <rect x="0" y="0" width="500" height="120" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+      <text x="250" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">The Goal</text>
+      <text x="20" y="50" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">1. Start with tensor T (encoding matrix multiplication)</text>
+      <text x="20" y="70" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">2. Each "move" subtracts a rank-1 tensor: uᵣ ⊗ vᵣ ⊗ wᵣ</text>
+      <text x="20" y="90" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">3. Goal: Zero out T in minimum number of moves</text>
+      <text x="20" y="110" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#C15F3C">Minimum moves = minimum multiplications!</text>
+    </g>
+
+    <!-- Example move -->
+    <g transform="translate(560, 60)">
+      <rect x="0" y="0" width="510" height="120" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+      <text x="255" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">Example Move: m₁ = (a₁+a₄)(b₁+b₄)</text>
+
+      <text x="20" y="50" font-family="Georgia, serif" font-size="11" fill="#2a8a2a">u₁ = [1, 0, 0, 1]   (a₁ and a₄ coefficients)</text>
+      <text x="20" y="70" font-family="Georgia, serif" font-size="11" fill="#8B5CF6">v₁ = [1, 0, 0, 1]   (b₁ and b₄ coefficients)</text>
+      <text x="20" y="90" font-family="Georgia, serif" font-size="11" fill="#C15F3C">w₁ = [1, 0, 0, 1]   (contributes to c₁ and c₄)</text>
+
+      <text x="20" y="115" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">This single multiplication covers 4 terms in the tensor!</text>
+    </g>
+
+    <!-- Key insight -->
+    <g transform="translate(30, 200)">
+      <rect x="0" y="0" width="1040" height="130" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+      <text x="520" y="30" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#C15F3C" text-anchor="middle">Why AlphaTensor Succeeds</text>
+
+      <g transform="translate(40, 50)">
+        <rect x="0" y="0" width="300" height="60" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" rx="5"/>
+        <text x="150" y="25" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#C15F3C" text-anchor="middle">Traditional Search</text>
+        <text x="150" y="45" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Brute force: 10^12+ possible moves</text>
+      </g>
+
+      <g transform="translate(370, 50)">
+        <rect x="0" y="0" width="300" height="60" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="5"/>
+        <text x="150" y="25" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#2a8a2a" text-anchor="middle">AlphaTensor (RL Agent)</text>
+        <text x="150" y="45" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Learns which moves "look promising"</text>
+      </g>
+
+      <g transform="translate(700, 50)">
+        <rect x="0" y="0" width="300" height="60" fill="#fce4d4" stroke="#C15F3C" stroke-width="2" rx="5"/>
+        <text x="150" y="25" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#C15F3C" text-anchor="middle">Result</text>
+        <text x="150" y="45" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">4×4: 47 mults (was 49!)</text>
+      </g>
+    </g>
+  </g>
+</svg>

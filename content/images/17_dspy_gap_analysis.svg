@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="600" fill="#1A1612" text-anchor="middle">Gap Analysis with DSPy</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">Structured prompting for research-to-optimization idea generation</text>
+
+  <!-- LEFT: DSPy Signature Code -->
+  <g transform="translate(50, 110)">
+    <rect x="0" y="0" width="550" height="380" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+    <rect x="0" y="0" width="550" height="35" rx="6" fill="#C15F3C"/>
+    <rect x="0" y="29" width="550" height="6" fill="#C15F3C"/>
+    <text x="275" y="24" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">DSPy Signature Definition</text>
+
+    <!-- Code block -->
+    <g transform="translate(20, 50)">
+      <text x="0" y="0" font-family="Monaco, monospace" font-size="12" fill="#9B7DC1">class</text>
+      <text x="45" y="0" font-family="Monaco, monospace" font-size="12" fill="#1A1612"> GenerateOptimizationIdeas(</text>
+      <text x="0" y="20" font-family="Monaco, monospace" font-size="12" fill="#1A1612">        dspy.Signature):</text>
+
+      <text x="0" y="50" font-family="Monaco, monospace" font-size="12" fill="#8C8279">    """Given research literature, generate</text>
+      <text x="0" y="70" font-family="Monaco, monospace" font-size="12" fill="#8C8279">    kernel optimization ideas."""</text>
+
+      <text x="0" y="100" font-family="Monaco, monospace" font-size="12" fill="#8C8279">    # Input: summarized research</text>
+      <text x="0" y="120" font-family="Monaco, monospace" font-size="12" fill="#5C534A">    literature_summary: </text>
+      <text x="175" y="120" font-family="Monaco, monospace" font-size="12" fill="#9B7DC1">str</text>
+      <text x="200" y="120" font-family="Monaco, monospace" font-size="12" fill="#5C534A"> = dspy.InputField()</text>
+
+      <text x="0" y="150" font-family="Monaco, monospace" font-size="12" fill="#8C8279">    # Output: structured ideas</text>
+      <text x="0" y="170" font-family="Monaco, monospace" font-size="12" fill="#5C534A">    ideas: </text>
+      <text x="55" y="170" font-family="Monaco, monospace" font-size="12" fill="#9B7DC1">str</text>
+      <text x="80" y="170" font-family="Monaco, monospace" font-size="12" fill="#5C534A"> = dspy.OutputField(</text>
+      <text x="20" y="190" font-family="Monaco, monospace" font-size="12" fill="#5C534A">desc=</text>
+      <text x="60" y="190" font-family="Monaco, monospace" font-size="12" fill="#7D9B76">"JSON array with:"</text>
+      <text x="20" y="210" font-family="Monaco, monospace" font-size="12" fill="#7D9B76">  "title, description,"</text>
+      <text x="20" y="230" font-family="Monaco, monospace" font-size="12" fill="#7D9B76">  "novelty_score (1-10),"</text>
+      <text x="20" y="250" font-family="Monaco, monospace" font-size="12" fill="#7D9B76">  "feasibility_score (1-10),"</text>
+      <text x="20" y="270" font-family="Monaco, monospace" font-size="12" fill="#7D9B76">  "potential_speedup,"</text>
+      <text x="20" y="290" font-family="Monaco, monospace" font-size="12" fill="#7D9B76">  "implementation_notes"</text>
+      <text x="0" y="310" font-family="Monaco, monospace" font-size="12" fill="#5C534A">    )</text>
+    </g>
+
+    <!-- What DSPy provides -->
+    <g transform="translate(20, 340)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="11" fill="#C15F3C" font-weight="600">DSPy Advantages:</text>
+      <text x="130" y="0" font-family="Georgia, serif" font-size="11" fill="#5C534A">Structured I/O • Auto-optimization • Reproducible</text>
+    </g>
+  </g>
+
+  <!-- RIGHT: Sample Output -->
+  <g transform="translate(630, 110)">
+    <rect x="0" y="0" width="520" height="380" rx="6" fill="#FFFFFF" stroke="#7D9B76" stroke-width="2"/>
+    <rect x="0" y="0" width="520" height="35" rx="6" fill="#7D9B76"/>
+    <rect x="0" y="29" width="520" height="6" fill="#7D9B76"/>
+    <text x="260" y="24" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Sample Output</text>
+
+    <!-- JSON output -->
+    <g transform="translate(20, 50)">
+      <text x="0" y="0" font-family="Monaco, monospace" font-size="11" fill="#5C534A">[{</text>
+      <text x="10" y="20" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">"title"</text>
+      <text x="60" y="20" font-family="Monaco, monospace" font-size="11" fill="#5C534A">: "Fused QKV projection",</text>
+
+      <text x="10" y="40" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">"description"</text>
+      <text x="100" y="40" font-family="Monaco, monospace" font-size="11" fill="#5C534A">: "Combine Q, K, V matmuls</text>
+      <text x="20" y="58" font-family="Monaco, monospace" font-size="11" fill="#5C534A">into single kernel for attention",</text>
+
+      <text x="10" y="78" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">"novelty_score"</text>
+      <text x="115" y="78" font-family="Monaco, monospace" font-size="11" fill="#5C534A">: </text>
+      <text x="125" y="78" font-family="Monaco, monospace" font-size="11" fill="#7D9B76">7</text>
+      <text x="135" y="78" font-family="Monaco, monospace" font-size="11" fill="#5C534A">,</text>
+
+      <text x="10" y="98" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">"feasibility_score"</text>
+      <text x="145" y="98" font-family="Monaco, monospace" font-size="11" fill="#5C534A">: </text>
+      <text x="155" y="98" font-family="Monaco, monospace" font-size="11" fill="#7D9B76">9</text>
+      <text x="165" y="98" font-family="Monaco, monospace" font-size="11" fill="#5C534A">,</text>
+
+      <text x="10" y="118" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">"potential_speedup"</text>
+      <text x="155" y="118" font-family="Monaco, monospace" font-size="11" fill="#5C534A">: </text>
+      <text x="165" y="118" font-family="Monaco, monospace" font-size="11" fill="#7D9B76">"1.15-1.3x"</text>
+      <text x="245" y="118" font-family="Monaco, monospace" font-size="11" fill="#5C534A">,</text>
+
+      <text x="10" y="138" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">"implementation_notes"</text>
+      <text x="175" y="138" font-family="Monaco, monospace" font-size="11" fill="#5C534A">:</text>
+      <text x="20" y="158" font-family="Monaco, monospace" font-size="11" fill="#5C534A">"Use Helion tiled matmul,</text>
+      <text x="20" y="178" font-family="Monaco, monospace" font-size="11" fill="#5C534A">tune block sizes for H100"</text>
+      <text x="0" y="198" font-family="Monaco, monospace" font-size="11" fill="#5C534A">},</text>
+
+      <!-- Second idea -->
+      <text x="0" y="218" font-family="Monaco, monospace" font-size="11" fill="#5C534A">{</text>
+      <text x="10" y="238" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">"title"</text>
+      <text x="60" y="238" font-family="Monaco, monospace" font-size="11" fill="#5C534A">: "Persistent kernel attention",</text>
+      <text x="10" y="258" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">"novelty_score"</text>
+      <text x="115" y="258" font-family="Monaco, monospace" font-size="11" fill="#5C534A">: </text>
+      <text x="125" y="258" font-family="Monaco, monospace" font-size="11" fill="#7D9B76">8</text>
+      <text x="135" y="258" font-family="Monaco, monospace" font-size="11" fill="#5C534A">,</text>
+      <text x="10" y="278" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">"feasibility_score"</text>
+      <text x="145" y="278" font-family="Monaco, monospace" font-size="11" fill="#5C534A">: </text>
+      <text x="155" y="278" font-family="Monaco, monospace" font-size="11" fill="#7D9B76">6</text>
+      <text x="165" y="278" font-family="Monaco, monospace" font-size="11" fill="#5C534A">,</text>
+      <text x="10" y="298" font-family="Monaco, monospace" font-size="11" fill="#5C534A">...</text>
+      <text x="0" y="318" font-family="Monaco, monospace" font-size="11" fill="#5C534A">}]</text>
+    </g>
+  </g>
+
+  <!-- BOTTOM: The Pipeline Context -->
+  <g transform="translate(50, 520)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612">Where This Fits in the Pipeline</text>
+
+    <!-- Flow diagram -->
+    <g transform="translate(0, 30)">
+      <rect x="0" y="0" width="200" height="70" rx="4" fill="#FFFFFF" stroke="#5C8A9B" stroke-width="2"/>
+      <text x="100" y="25" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#5C8A9B" text-anchor="middle">Research Discovery</text>
+      <text x="100" y="45" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">arXiv + X threads</text>
+      <text x="100" y="60" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle">(Exa + xAI)</text>
+
+      <path d="M210,35 L260,35" stroke="#5C534A" stroke-width="2" marker-end="url(#arrowhead3)"/>
+
+      <rect x="270" y="0" width="200" height="70" rx="4" fill="#C15F3C"/>
+      <text x="370" y="25" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Gap Analysis</text>
+      <text x="370" y="45" font-family="Georgia, serif" font-size="11" fill="#FFFFFF" text-anchor="middle">Generate optimization ideas</text>
+      <text x="370" y="60" font-family="Georgia, serif" font-size="10" fill="#F4F3EE" text-anchor="middle">(DSPy)</text>
+
+      <path d="M480,35 L530,35" stroke="#5C534A" stroke-width="2" marker-end="url(#arrowhead3)"/>
+
+      <rect x="540" y="0" width="200" height="70" rx="4" fill="#FFFFFF" stroke="#7D9B76" stroke-width="2"/>
+      <text x="640" y="25" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#7D9B76" text-anchor="middle">Idea Validation</text>
+      <text x="640" y="45" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">Novelty + feasibility check</text>
+      <text x="640" y="60" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle">(LLM scoring)</text>
+
+      <path d="M750,35 L800,35" stroke="#5C534A" stroke-width="2" marker-end="url(#arrowhead3)"/>
+
+      <rect x="810" y="0" width="200" height="70" rx="4" fill="#FFFFFF" stroke="#9B7DC1" stroke-width="2"/>
+      <text x="910" y="25" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#9B7DC1" text-anchor="middle">Code Generation</text>
+      <text x="910" y="45" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">PyTorch implementation</text>
+      <text x="910" y="60" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle">(LLM)</text>
+    </g>
+  </g>
+
+  <defs>
+    <marker id="arrowhead3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C534A"/>
+    </marker>
+  </defs>
+
+  <!-- Key Insight Box -->
+  <g transform="translate(50, 650)">
+    <rect x="0" y="0" width="1100" height="120" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+
+    <text x="550" y="30" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#C15F3C" text-anchor="middle">Why DSPy Instead of Raw Prompts?</text>
+
+    <g transform="translate(80, 50)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="13" fill="#5C534A">
+        <tspan font-weight="600" fill="#1A1612">1. Structured Output:</tspan> Guarantees JSON format, not free-form text
+      </text>
+      <text x="0" y="22" font-family="Georgia, serif" font-size="13" fill="#5C534A">
+        <tspan font-weight="600" fill="#1A1612">2. Composability:</tspan> Chain multiple signatures together (research → ideas → code)
+      </text>
+      <text x="0" y="44" font-family="Georgia, serif" font-size="13" fill="#5C534A">
+        <tspan font-weight="600" fill="#1A1612">3. Auto-Optimization:</tspan> DSPy can tune prompts based on examples (few-shot learning)
+      </text>
+      <text x="0" y="66" font-family="Georgia, serif" font-size="13" fill="#5C534A">
+        <tspan font-weight="600" fill="#1A1612">4. Reproducibility:</tspan> Same signature → consistent behavior across runs
+      </text>
+    </g>
+  </g>
+</svg>

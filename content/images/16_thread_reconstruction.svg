@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="600" fill="#1A1612" text-anchor="middle">Reconstructing the Research Conversation</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">Combining Exa + xAI to extract structured knowledge from X/Twitter</text>
+
+  <!-- LEFT: The Problem -->
+  <g transform="translate(50, 110)">
+    <rect x="0" y="0" width="350" height="280" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+    <rect x="0" y="0" width="350" height="35" rx="6" fill="#5C534A"/>
+    <rect x="0" y="29" width="350" height="6" fill="#5C534A"/>
+    <text x="175" y="24" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">The Problem: Fragmented Knowledge</text>
+
+    <!-- Tweet fragments -->
+    <g transform="translate(20, 55)">
+      <!-- Tweet 1 -->
+      <rect x="0" y="0" width="310" height="50" rx="4" fill="#F4F3EE" stroke="#E5E2DC"/>
+      <circle cx="25" cy="25" r="15" fill="#C15F3C" opacity="0.3"/>
+      <text x="50" y="20" font-family="Georgia, serif" font-size="11" fill="#5C534A">@researcher_1:</text>
+      <text x="50" y="36" font-family="Georgia, serif" font-size="10" fill="#8C8279">"Just tried flash attention v3, 2x faster..."</text>
+
+      <!-- Tweet 2 -->
+      <rect x="0" y="60" width="310" height="50" rx="4" fill="#F4F3EE" stroke="#E5E2DC"/>
+      <circle cx="25" cy="85" r="15" fill="#5C8A9B" opacity="0.3"/>
+      <text x="50" y="80" font-family="Georgia, serif" font-size="11" fill="#5C534A">@ml_engineer:</text>
+      <text x="50" y="96" font-family="Georgia, serif" font-size="10" fill="#8C8279">"Reply: Did you try with causal mask?..."</text>
+
+      <!-- Tweet 3 -->
+      <rect x="0" y="120" width="310" height="50" rx="4" fill="#F4F3EE" stroke="#E5E2DC"/>
+      <circle cx="25" cy="145" r="15" fill="#7D9B76" opacity="0.3"/>
+      <text x="50" y="140" font-family="Georgia, serif" font-size="11" fill="#5C534A">@gpu_wizard:</text>
+      <text x="50" y="156" font-family="Georgia, serif" font-size="10" fill="#8C8279">"The trick is to tune block sizes..."</text>
+
+      <!-- Scattered dots representing more tweets -->
+      <text x="155" y="195" font-family="Georgia, serif" font-size="24" fill="#8C8279" text-anchor="middle">. . .</text>
+      <text x="155" y="220" font-family="Georgia, serif" font-size="11" fill="#8C8279" text-anchor="middle" font-style="italic">100s of related posts scattered</text>
+    </g>
+  </g>
+
+  <!-- CENTER: The Pipeline -->
+  <g transform="translate(430, 110)">
+    <rect x="0" y="0" width="340" height="280" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+    <rect x="0" y="0" width="340" height="35" rx="6" fill="#C15F3C"/>
+    <rect x="0" y="29" width="340" height="6" fill="#C15F3C"/>
+    <text x="170" y="24" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">The Pipeline</text>
+
+    <!-- Step 1: Exa Search -->
+    <g transform="translate(20, 50)">
+      <rect x="0" y="0" width="300" height="55" rx="4" fill="#F4F3EE" stroke="#5C8A9B" stroke-width="2"/>
+      <text x="15" y="20" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#5C8A9B">1. Exa Semantic Search</text>
+      <text x="15" y="38" font-family="Monaco, monospace" font-size="10" fill="#5C534A">exa.search("flash attention optimization")</text>
+      <text x="250" y="48" font-family="Georgia, serif" font-size="10" fill="#8C8279">→ URLs</text>
+    </g>
+
+    <!-- Arrow -->
+    <path d="M170,115 L170,130" stroke="#C15F3C" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+    <!-- Step 2: xAI x_search -->
+    <g transform="translate(20, 140)">
+      <rect x="0" y="0" width="300" height="55" rx="4" fill="#F4F3EE" stroke="#C15F3C" stroke-width="2"/>
+      <text x="15" y="20" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#C15F3C">2. xAI x_search API</text>
+      <text x="15" y="38" font-family="Monaco, monospace" font-size="10" fill="#5C534A">grok.x_search(topic, include_replies=True)</text>
+      <text x="250" y="48" font-family="Georgia, serif" font-size="10" fill="#8C8279">→ Threads</text>
+    </g>
+
+    <!-- Arrow -->
+    <path d="M170,205 L170,220" stroke="#C15F3C" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+    <!-- Step 3: LLM Synthesis -->
+    <g transform="translate(20, 230)">
+      <rect x="0" y="0" width="300" height="40" rx="4" fill="#C15F3C"/>
+      <text x="150" y="17" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="middle">3. LLM Thread Synthesis</text>
+      <text x="150" y="33" font-family="Georgia, serif" font-size="10" fill="#F4F3EE" text-anchor="middle">Reconstruct full conversation context</text>
+    </g>
+  </g>
+
+  <!-- Arrow definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C15F3C"/>
+    </marker>
+  </defs>
+
+  <!-- RIGHT: The Output -->
+  <g transform="translate(800, 110)">
+    <rect x="0" y="0" width="350" height="280" rx="6" fill="#FFFFFF" stroke="#7D9B76" stroke-width="2"/>
+    <rect x="0" y="0" width="350" height="35" rx="6" fill="#7D9B76"/>
+    <rect x="0" y="29" width="350" height="6" fill="#7D9B76"/>
+    <text x="175" y="24" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">The Output: Structured Knowledge</text>
+
+    <!-- Structured output -->
+    <g transform="translate(15, 50)">
+      <text x="0" y="0" font-family="Monaco, monospace" font-size="10" fill="#5C534A">{</text>
+      <text x="10" y="18" font-family="Monaco, monospace" font-size="10" fill="#5C534A">"topic": "Flash Attention v3",</text>
+      <text x="10" y="36" font-family="Monaco, monospace" font-size="10" fill="#5C534A">"key_insights": [</text>
+      <text x="20" y="54" font-family="Monaco, monospace" font-size="10" fill="#7D9B76">"2x speedup with causal mask",</text>
+      <text x="20" y="72" font-family="Monaco, monospace" font-size="10" fill="#7D9B76">"Block size 128 optimal for A100",</text>
+      <text x="20" y="90" font-family="Monaco, monospace" font-size="10" fill="#7D9B76">"Memory usage reduced 40%"</text>
+      <text x="10" y="108" font-family="Monaco, monospace" font-size="10" fill="#5C534A">],</text>
+      <text x="10" y="126" font-family="Monaco, monospace" font-size="10" fill="#5C534A">"experts": ["@tri_dao", "@.."],</text>
+      <text x="10" y="144" font-family="Monaco, monospace" font-size="10" fill="#5C534A">"related_papers": ["arXiv:..."],</text>
+      <text x="10" y="162" font-family="Monaco, monospace" font-size="10" fill="#5C534A">"code_snippets": [...],</text>
+      <text x="10" y="180" font-family="Monaco, monospace" font-size="10" fill="#5C534A">"open_questions": [...]</text>
+      <text x="0" y="198" font-family="Monaco, monospace" font-size="10" fill="#5C534A">}</text>
+    </g>
+
+    <text x="175" y="265" font-family="Georgia, serif" font-size="11" fill="#8C8279" text-anchor="middle" font-style="italic">Ready for downstream processing</text>
+  </g>
+
+  <!-- BOTTOM: Data Flow -->
+  <g transform="translate(50, 420)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612">Complete Data Flow</text>
+
+    <g transform="translate(0, 30)">
+      <!-- Flow boxes -->
+      <rect x="0" y="0" width="150" height="60" rx="4" fill="#FFFFFF" stroke="#E5E2DC"/>
+      <text x="75" y="25" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#1A1612" text-anchor="middle">Topic Query</text>
+      <text x="75" y="45" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">"kernel optimization"</text>
+
+      <path d="M160,30 L200,30" stroke="#5C534A" stroke-width="2" marker-end="url(#arrowhead2)"/>
+
+      <rect x="210" y="0" width="150" height="60" rx="4" fill="#FFFFFF" stroke="#5C8A9B" stroke-width="2"/>
+      <text x="285" y="25" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#5C8A9B" text-anchor="middle">Exa Search</text>
+      <text x="285" y="45" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">Semantic retrieval</text>
+
+      <path d="M370,30 L410,30" stroke="#5C534A" stroke-width="2" marker-end="url(#arrowhead2)"/>
+
+      <rect x="420" y="0" width="150" height="60" rx="4" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+      <text x="495" y="25" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#C15F3C" text-anchor="middle">xAI x_search</text>
+      <text x="495" y="45" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">Thread expansion</text>
+
+      <path d="M580,30 L620,30" stroke="#5C534A" stroke-width="2" marker-end="url(#arrowhead2)"/>
+
+      <rect x="630" y="0" width="150" height="60" rx="4" fill="#FFFFFF" stroke="#9B7DC1" stroke-width="2"/>
+      <text x="705" y="25" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#9B7DC1" text-anchor="middle">LLM Synthesis</text>
+      <text x="705" y="45" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">Context reconstruction</text>
+
+      <path d="M790,30 L830,30" stroke="#5C534A" stroke-width="2" marker-end="url(#arrowhead2)"/>
+
+      <rect x="840" y="0" width="150" height="60" rx="4" fill="#7D9B76"/>
+      <text x="915" y="25" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="middle">Structured</text>
+      <text x="915" y="45" font-family="Georgia, serif" font-size="10" fill="#FFFFFF" text-anchor="middle">Knowledge</text>
+    </g>
+  </g>
+
+  <defs>
+    <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#5C534A"/>
+    </marker>
+  </defs>
+
+  <!-- Why This Matters -->
+  <g transform="translate(50, 550)">
+    <rect x="0" y="0" width="1100" height="120" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+
+    <text x="550" y="30" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#1A1612" text-anchor="middle">Why This Architecture Works</text>
+
+    <g transform="translate(100, 55)">
+      <circle cx="0" cy="10" r="5" fill="#5C8A9B"/>
+      <text x="20" y="15" font-family="Georgia, serif" font-size="13" fill="#5C534A"><tspan font-weight="600">Exa:</tspan> Finds relevant content via semantic similarity (not keyword matching)</text>
+    </g>
+
+    <g transform="translate(100, 80)">
+      <circle cx="0" cy="10" r="5" fill="#C15F3C"/>
+      <text x="20" y="15" font-family="Georgia, serif" font-size="13" fill="#5C534A"><tspan font-weight="600">xAI x_search:</tspan> Expands to full thread context, including replies and quote tweets</text>
+    </g>
+
+    <g transform="translate(100, 105)">
+      <circle cx="0" cy="10" r="5" fill="#9B7DC1"/>
+      <text x="20" y="15" font-family="Georgia, serif" font-size="13" fill="#5C534A"><tspan font-weight="600">LLM:</tspan> Synthesizes fragmented conversation into coherent knowledge</text>
+    </g>
+  </g>
+
+  <!-- Connection to next slide -->
+  <g transform="translate(50, 700)">
+    <rect x="0" y="0" width="1100" height="70" rx="4" fill="#F4F3EE" stroke="#C15F3C" stroke-width="1.5"/>
+    <text x="550" y="25" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle" font-weight="600">Next Step: Gap Analysis</text>
+    <text x="550" y="50" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">
+      This structured knowledge feeds into DSPy for identifying optimization opportunities.
+    </text>
+  </g>
+</svg>

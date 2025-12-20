@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="600" fill="#1A1612" text-anchor="middle">Why Direct Kernel Generation Fails</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">The training data problem for GPU kernel synthesis</text>
+
+  <!-- Main Bar Chart -->
+  <g transform="translate(100, 130)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612">Training Data Available for Code Generation</text>
+
+    <!-- Python bar -->
+    <g transform="translate(0, 40)">
+      <text x="0" y="25" font-family="Georgia, serif" font-size="14" fill="#5C534A">Python functions</text>
+      <rect x="180" y="5" width="800" height="40" rx="4" fill="#7D9B76"/>
+      <text x="590" y="32" font-family="Georgia, serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="600">~10,000,000+ examples</text>
+      <text x="990" y="30" font-family="Georgia, serif" font-size="12" fill="#5C534A">GitHub, StackOverflow, docs</text>
+    </g>
+
+    <!-- PyTorch bar -->
+    <g transform="translate(0, 100)">
+      <text x="0" y="25" font-family="Georgia, serif" font-size="14" fill="#5C534A">PyTorch code</text>
+      <rect x="180" y="5" width="500" height="40" rx="4" fill="#5C8A9B"/>
+      <text x="430" y="32" font-family="Georgia, serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="600">~1,000,000+ examples</text>
+      <text x="690" y="30" font-family="Georgia, serif" font-size="12" fill="#5C534A">Tutorials, research code</text>
+    </g>
+
+    <!-- CUDA bar -->
+    <g transform="translate(0, 160)">
+      <text x="0" y="25" font-family="Georgia, serif" font-size="14" fill="#5C534A">CUDA kernels</text>
+      <rect x="180" y="5" width="80" height="40" rx="4" fill="#9B7DC1"/>
+      <text x="220" y="32" font-family="Georgia, serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="600">~50K</text>
+      <text x="270" y="30" font-family="Georgia, serif" font-size="12" fill="#5C534A">cuBLAS, cuDNN, CUTLASS</text>
+    </g>
+
+    <!-- Triton bar (tiny!) -->
+    <g transform="translate(0, 220)">
+      <text x="0" y="25" font-family="Georgia, serif" font-size="14" fill="#C15F3C" font-weight="600">Triton kernels</text>
+      <rect x="180" y="5" width="20" height="40" rx="4" fill="#C15F3C"/>
+      <text x="210" y="32" font-family="Georgia, serif" font-size="14" fill="#C15F3C" font-weight="600">~5K</text>
+      <text x="240" y="30" font-family="Georgia, serif" font-size="12" fill="#C15F3C">OpenAI, community</text>
+    </g>
+
+    <!-- Helion bar (even tinier!) -->
+    <g transform="translate(0, 280)">
+      <text x="0" y="25" font-family="Georgia, serif" font-size="14" fill="#C15F3C" font-weight="600">Helion kernels</text>
+      <rect x="180" y="5" width="8" height="40" rx="4" fill="#C15F3C"/>
+      <text x="200" y="32" font-family="Georgia, serif" font-size="14" fill="#C15F3C" font-weight="600">&lt;500</text>
+      <text x="250" y="30" font-family="Georgia, serif" font-size="12" fill="#C15F3C">PyTorch team examples</text>
+    </g>
+  </g>
+
+  <!-- Scale comparison -->
+  <g transform="translate(100, 470)">
+    <rect x="0" y="0" width="1000" height="100" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+
+    <text x="500" y="30" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#C15F3C" text-anchor="middle">The Scale Problem</text>
+
+    <g transform="translate(50, 50)">
+      <!-- Python to Triton ratio -->
+      <g transform="translate(0, 0)">
+        <text x="0" y="15" font-family="Georgia, serif" font-size="14" fill="#5C534A">Python → Triton:</text>
+        <text x="140" y="15" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#C15F3C">2000:1</text>
+        <text x="220" y="15" font-family="Georgia, serif" font-size="12" fill="#8C8279">data ratio</text>
+      </g>
+
+      <!-- Implications -->
+      <g transform="translate(350, 0)">
+        <text x="0" y="15" font-family="Georgia, serif" font-size="14" fill="#5C534A">Implication:</text>
+        <text x="90" y="15" font-family="Georgia, serif" font-size="14" fill="#1A1612" font-weight="600">LLMs haven't seen enough Triton to generate it reliably</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- The Consequence -->
+  <g transform="translate(100, 590)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612">What Happens When You Ask an LLM to Write Triton</text>
+
+    <g transform="translate(0, 30)">
+      <!-- Good: Python -->
+      <g transform="translate(0, 0)">
+        <rect x="0" y="0" width="320" height="130" rx="4" fill="#FFFFFF" stroke="#7D9B76" stroke-width="2"/>
+        <text x="160" y="25" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#7D9B76" text-anchor="middle">✓ Python: Works great</text>
+        <text x="15" y="50" font-family="Monaco, monospace" font-size="10" fill="#5C534A">def attention(q, k, v):</text>
+        <text x="15" y="68" font-family="Monaco, monospace" font-size="10" fill="#5C534A">    scores = q @ k.T / sqrt(d)</text>
+        <text x="15" y="86" font-family="Monaco, monospace" font-size="10" fill="#5C534A">    weights = softmax(scores)</text>
+        <text x="15" y="104" font-family="Monaco, monospace" font-size="10" fill="#5C534A">    return weights @ v</text>
+        <text x="160" y="125" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">Correct, readable, tested</text>
+      </g>
+
+      <!-- Bad: Triton -->
+      <g transform="translate(350, 0)">
+        <rect x="0" y="0" width="320" height="130" rx="4" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+        <text x="160" y="25" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#C15F3C" text-anchor="middle">✗ Triton: Often broken</text>
+        <text x="15" y="50" font-family="Monaco, monospace" font-size="10" fill="#5C534A">@triton.jit</text>
+        <text x="15" y="68" font-family="Monaco, monospace" font-size="10" fill="#C15F3C">def attn_kernel(...):  # wrong strides</text>
+        <text x="15" y="86" font-family="Monaco, monospace" font-size="10" fill="#C15F3C">    offs = ???  # incorrect indexing</text>
+        <text x="15" y="104" font-family="Monaco, monospace" font-size="10" fill="#C15F3C">    mask = ???  # missing bounds check</text>
+        <text x="160" y="125" font-family="Georgia, serif" font-size="10" fill="#C15F3C" text-anchor="middle" font-style="italic">Compiles but wrong results</text>
+      </g>
+
+      <!-- The insight -->
+      <g transform="translate(700, 0)">
+        <rect x="0" y="0" width="300" height="130" rx="4" fill="#C15F3C"/>
+        <text x="150" y="35" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">The Insight</text>
+        <text x="150" y="60" font-family="Georgia, serif" font-size="12" fill="#FFFFFF" text-anchor="middle">Don't ask LLMs to</text>
+        <text x="150" y="78" font-family="Georgia, serif" font-size="12" fill="#FFFFFF" text-anchor="middle" font-weight="600">generate</text>
+        <text x="150" y="96" font-family="Georgia, serif" font-size="12" fill="#FFFFFF" text-anchor="middle">optimal kernels.</text>
+        <text x="150" y="120" font-family="Georgia, serif" font-size="12" fill="#FFFFFF" text-anchor="middle">Ask them to <tspan font-weight="600">search</tspan>.</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Quote -->
+  <g transform="translate(100, 755)">
+    <text x="500" y="0" font-family="Georgia, serif" font-size="16" fill="#1A1612" text-anchor="middle" font-style="italic">
+      "LLMs don't have enough training data for direct kernel generation."
+    </text>
+  </g>
+</svg>

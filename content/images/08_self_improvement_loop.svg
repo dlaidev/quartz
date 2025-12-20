@@ -1,0 +1,76 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowLoop" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C15F3C"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="55" font-family="Georgia, serif" font-size="36" font-weight="400" fill="#1A1612" text-anchor="middle">The Self-Improvement Hypothesis</text>
+  <text x="600" y="90" font-family="Georgia, serif" font-size="18" fill="#5C534A" text-anchor="middle" font-style="italic">AI Optimizing Its Own Infrastructure</text>
+
+  <!-- Decorative line -->
+  <line x1="400" y1="110" x2="800" y2="110" stroke="#E5E2DC" stroke-width="1"/>
+
+  <!-- Main loop -->
+  <g transform="translate(600, 360)">
+    <!-- Subtle background circle -->
+    <circle cx="0" cy="0" r="170" fill="none" stroke="#E5E2DC" stroke-width="1" stroke-dasharray="4,4"/>
+
+    <!-- Node 1: Grok optimizes (top) -->
+    <g transform="translate(0, -150)">
+      <rect x="-110" y="-40" width="220" height="80" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <text x="0" y="-5" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#1A1612" text-anchor="middle">Grok</text>
+      <text x="0" y="20" font-family="Georgia, serif" font-size="14" fill="#5C534A" text-anchor="middle">optimizes kernels</text>
+    </g>
+
+    <!-- Node 2: Kernels run faster (right) -->
+    <g transform="translate(145, 75)">
+      <rect x="-100" y="-40" width="200" height="80" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <text x="0" y="-5" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#1A1612" text-anchor="middle">Kernels</text>
+      <text x="0" y="20" font-family="Georgia, serif" font-size="14" fill="#5C534A" text-anchor="middle">run Grok faster</text>
+    </g>
+
+    <!-- Node 3: Faster Grok (left) -->
+    <g transform="translate(-145, 75)">
+      <rect x="-100" y="-40" width="200" height="80" rx="4" fill="#FBF7F4" stroke="#C15F3C" stroke-width="2"/>
+      <text x="0" y="-5" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#C15F3C" text-anchor="middle">Faster Grok</text>
+      <text x="0" y="20" font-family="Georgia, serif" font-size="14" fill="#5C534A" text-anchor="middle">optimizes better</text>
+    </g>
+
+    <!-- Arrows -->
+    <path d="M 75,-115 Q 150,-50 145,30" stroke="#5C534A" stroke-width="2" fill="none" marker-end="url(#arrowLoop)"/>
+    <path d="M 45,115 Q 0,160 -45,115" stroke="#5C534A" stroke-width="2" fill="none" marker-end="url(#arrowLoop)"/>
+    <path d="M -145,30 Q -150,-50 -75,-115" stroke="#C15F3C" stroke-width="2" fill="none" marker-end="url(#arrowLoop)"/>
+
+    <!-- Center text -->
+    <text x="0" y="0" font-family="Georgia, serif" font-size="16" fill="#C15F3C" text-anchor="middle" font-style="italic">repeat</text>
+  </g>
+
+  <!-- Explanation boxes -->
+  <g transform="translate(100, 560)">
+    <rect x="0" y="0" width="470" height="120" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="235" y="30" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#1A1612" text-anchor="middle">What This Means</text>
+    <text x="25" y="60" font-family="Georgia, serif" font-size="14" fill="#5C534A">The kernels we produce today could train</text>
+    <text x="25" y="80" font-family="Georgia, serif" font-size="14" fill="#5C534A">faster models tomorrow.</text>
+    <text x="25" y="105" font-family="Georgia, serif" font-size="13" fill="#8C8279" font-style="italic">Not weights, but infrastructure.</text>
+  </g>
+
+  <g transform="translate(610, 560)">
+    <rect x="0" y="0" width="490" height="120" rx="4" fill="#FBF7F4" stroke="#C15F3C" stroke-width="1"/>
+    <text x="245" y="30" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#C15F3C" text-anchor="middle">Not the "Scary" Self-Improvement</text>
+    <text x="25" y="60" font-family="Georgia, serif" font-size="14" fill="#5C534A">We're not modifying weights or reasoning.</text>
+    <text x="25" y="85" font-family="Georgia, serif" font-size="13" fill="#8C8279">We're optimizing:</text>
+    <text x="25" y="105" font-family="Georgia, serif" font-size="13" fill="#5C534A">execution environment, memory patterns, compute efficiency</text>
+  </g>
+
+  <!-- Research question -->
+  <rect x="250" y="130" width="700" height="50" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+  <text x="600" y="162" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">
+    <tspan font-weight="600" fill="#C15F3C">Research Question:</tspan>
+    <tspan> What happens when AI can optimize its own infrastructure?</tspan>
+  </text>
+</svg>

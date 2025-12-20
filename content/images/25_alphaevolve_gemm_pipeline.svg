@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850">
+  <defs>
+    <marker id="arrowhead3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C15F3C"/>
+    </marker>
+    <marker id="arrowheadWhite" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fff"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="850" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="30" font-weight="bold" fill="#C15F3C" text-anchor="middle">AlphaEvolve GEMM Optimization Pipeline</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5a4a3a" text-anchor="middle">Automatically discover tiling heuristics for Gemini's training kernels</text>
+
+  <!-- Step 1: Collect Input Shapes -->
+  <g transform="translate(50, 100)">
+    <rect x="0" y="0" width="320" height="160" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <rect x="0" y="0" width="320" height="35" fill="#C15F3C" rx="10"/>
+    <rect x="0" y="25" width="320" height="10" fill="#C15F3C"/>
+    <text x="160" y="25" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Step 1: Collect Real Input Shapes</text>
+
+    <!-- Gemini logo/box -->
+    <rect x="20" y="50" width="80" height="50" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" rx="5"/>
+    <text x="60" y="75" font-family="Georgia, serif" font-size="14" fill="#C15F3C" text-anchor="middle">Gemini</text>
+    <text x="60" y="92" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">Training</text>
+
+    <!-- Arrow -->
+    <line x1="105" y1="75" x2="125" y2="75" stroke="#C15F3C" stroke-width="2" marker-end="url(#arrowhead3)"/>
+
+    <!-- Collected shapes -->
+    <rect x="130" y="45" width="170" height="100" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" rx="5"/>
+    <text x="215" y="65" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5a4a3a" text-anchor="middle">Kernel Input Shapes</text>
+    <text x="140" y="85" font-family="monospace" font-size="10" fill="#5a4a3a">[4096, 2048, 512]</text>
+    <text x="140" y="100" font-family="monospace" font-size="10" fill="#5a4a3a">[8192, 1024, 256]</text>
+    <text x="140" y="115" font-family="monospace" font-size="10" fill="#5a4a3a">[2048, 4096, 1024]</text>
+    <text x="140" y="130" font-family="monospace" font-size="10" fill="#5a4a3a">... (many more)</text>
+  </g>
+
+  <!-- Arrow to Step 2 -->
+  <line x1="380" y1="180" x2="430" y2="180" stroke="#C15F3C" stroke-width="3" marker-end="url(#arrowhead3)"/>
+
+  <!-- Step 2: Split Train/Eval -->
+  <g transform="translate(440, 100)">
+    <rect x="0" y="0" width="320" height="160" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <rect x="0" y="0" width="320" height="35" fill="#C15F3C" rx="10"/>
+    <rect x="0" y="25" width="320" height="10" fill="#C15F3C"/>
+    <text x="160" y="25" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Step 2: Split Train / Eval Sets</text>
+
+    <!-- Train set -->
+    <rect x="20" y="50" width="130" height="95" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="5"/>
+    <text x="85" y="75" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">Training Set</text>
+    <text x="85" y="95" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">50% of shapes</text>
+    <text x="85" y="115" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">Used during</text>
+    <text x="85" y="130" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">evolution</text>
+
+    <!-- Eval set -->
+    <rect x="170" y="50" width="130" height="95" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="5"/>
+    <text x="235" y="75" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">Eval Set</text>
+    <text x="235" y="95" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">50% of shapes</text>
+    <text x="235" y="115" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">Test general</text>
+    <text x="235" y="130" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">applicability</text>
+  </g>
+
+  <!-- Arrow to Step 3 -->
+  <line x1="770" y1="180" x2="820" y2="180" stroke="#C15F3C" stroke-width="3" marker-end="url(#arrowhead3)"/>
+
+  <!-- Step 3: Define Objective -->
+  <g transform="translate(830, 100)">
+    <rect x="0" y="0" width="320" height="160" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <rect x="0" y="0" width="320" height="35" fill="#C15F3C" rx="10"/>
+    <rect x="0" y="25" width="320" height="10" fill="#C15F3C"/>
+    <text x="160" y="25" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Step 3: Define Fitness Objective</text>
+
+    <text x="160" y="70" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">Objective: Minimize kernel runtime</text>
+
+    <!-- Formula box -->
+    <rect x="30" y="85" width="260" height="55" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" rx="5"/>
+    <text x="160" y="110" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">fitness = -Σ runtime(shape_i)</text>
+    <text x="160" y="130" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Measured on real TPU accelerators</text>
+  </g>
+
+  <!-- Main Evolution Section -->
+  <rect x="50" y="290" width="1100" height="300" fill="#d4c4b0" stroke="#C15F3C" stroke-width="3" rx="15"/>
+  <text x="600" y="325" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#C15F3C" text-anchor="middle">Step 4: Evolutionary Heuristic Discovery</text>
+
+  <!-- Initial Heuristic -->
+  <g transform="translate(80, 350)">
+    <rect x="0" y="0" width="180" height="120" fill="#2d2d2d" stroke="#C15F3C" stroke-width="2" rx="8"/>
+    <text x="90" y="25" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#98c379" text-anchor="middle">Initial Heuristic</text>
+    <text x="10" y="50" font-family="monospace" font-size="9" fill="#e5c07b">def tile_heuristic(M,N,K):</text>
+    <text x="10" y="65" font-family="monospace" font-size="9" fill="#61afef">  return (128, 128, 32)</text>
+    <text x="10" y="80" font-family="monospace" font-size="9" fill="#7f848e"># Simple baseline</text>
+    <text x="90" y="110" font-family="Georgia, serif" font-size="10" fill="#fff" text-anchor="middle">Expert starting point</text>
+  </g>
+
+  <!-- Arrow -->
+  <line x1="265" y1="410" x2="315" y2="410" stroke="#C15F3C" stroke-width="3" marker-end="url(#arrowhead3)"/>
+
+  <!-- LLM Evolution Loop -->
+  <g transform="translate(320, 345)">
+    <rect x="0" y="0" width="280" height="180" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <text x="140" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">LLM Evolution Loop</text>
+
+    <!-- Mini loop diagram -->
+    <ellipse cx="70" cy="90" rx="45" ry="35" fill="none" stroke="#C15F3C" stroke-width="2"/>
+    <text x="70" y="85" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">Propose</text>
+    <text x="70" y="98" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">Mutations</text>
+
+    <ellipse cx="200" cy="90" rx="45" ry="35" fill="none" stroke="#C15F3C" stroke-width="2"/>
+    <text x="200" y="85" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">Evaluate</text>
+    <text x="200" y="98" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">on TPU</text>
+
+    <!-- Loop arrows -->
+    <path d="M115,70 Q140,40 165,70" fill="none" stroke="#C15F3C" stroke-width="2" marker-end="url(#arrowhead3)"/>
+    <path d="M165,110 Q140,150 115,110" fill="none" stroke="#C15F3C" stroke-width="2" marker-end="url(#arrowhead3)"/>
+
+    <text x="140" y="165" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Keep best, discard rest</text>
+  </g>
+
+  <!-- Arrow -->
+  <line x1="605" y1="410" x2="655" y2="410" stroke="#C15F3C" stroke-width="3" marker-end="url(#arrowhead3)"/>
+
+  <!-- TPU Evaluation -->
+  <g transform="translate(660, 350)">
+    <rect x="0" y="0" width="180" height="120" fill="#e8e4dc" stroke="#C15F3C" stroke-width="2" rx="8"/>
+    <text x="90" y="25" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#C15F3C" text-anchor="middle">TPU Evaluation</text>
+
+    <!-- TPU chips -->
+    <rect x="20" y="40" width="40" height="30" fill="#C15F3C" rx="3"/>
+    <text x="40" y="60" font-family="Georgia, serif" font-size="9" fill="#fff" text-anchor="middle">TPU</text>
+    <rect x="70" y="40" width="40" height="30" fill="#C15F3C" rx="3"/>
+    <text x="90" y="60" font-family="Georgia, serif" font-size="9" fill="#fff" text-anchor="middle">TPU</text>
+    <rect x="120" y="40" width="40" height="30" fill="#C15F3C" rx="3"/>
+    <text x="140" y="60" font-family="Georgia, serif" font-size="9" fill="#fff" text-anchor="middle">TPU</text>
+
+    <text x="90" y="90" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">Run each shape on</text>
+    <text x="90" y="105" font-family="Georgia, serif" font-size="10" fill="#5a4a3a" text-anchor="middle">real TPU hardware</text>
+  </g>
+
+  <!-- Arrow -->
+  <line x1="845" y1="410" x2="895" y2="410" stroke="#C15F3C" stroke-width="3" marker-end="url(#arrowhead3)"/>
+
+  <!-- Final Heuristic -->
+  <g transform="translate(900, 350)">
+    <rect x="0" y="0" width="220" height="120" fill="#2d2d2d" stroke="#C15F3C" stroke-width="3" rx="8"/>
+    <text x="110" y="22" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#98c379" text-anchor="middle">Evolved Heuristic</text>
+    <text x="8" y="42" font-family="monospace" font-size="8" fill="#e5c07b">def tile_heuristic(M,N,K):</text>
+    <text x="8" y="55" font-family="monospace" font-size="8" fill="#c678dd">  if M*N &gt; 8M and K &lt; 512:</text>
+    <text x="8" y="68" font-family="monospace" font-size="8" fill="#61afef">    return (256, 64, K//2)</text>
+    <text x="8" y="81" font-family="monospace" font-size="8" fill="#c678dd">  elif is_power_of_2(K):</text>
+    <text x="8" y="94" font-family="monospace" font-size="8" fill="#61afef">    return (128, 128, min(K,64))</text>
+    <text x="8" y="107" font-family="monospace" font-size="8" fill="#7f848e">  # ... sophisticated logic</text>
+  </g>
+
+  <!-- Key Insight Box -->
+  <rect x="430" y="500" width="340" height="70" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="8"/>
+  <text x="600" y="525" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">Key Insight: Correctness by Construction</text>
+  <text x="600" y="550" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">AlphaEvolve only changes tiling strategy</text>
+  <text x="600" y="565" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Math operation remains unchanged → always correct</text>
+
+  <!-- Step 5: Validation and Deployment -->
+  <g transform="translate(50, 610)">
+    <rect x="0" y="0" width="540" height="140" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <rect x="0" y="0" width="540" height="35" fill="#C15F3C" rx="10"/>
+    <rect x="0" y="25" width="540" height="10" fill="#C15F3C"/>
+    <text x="270" y="25" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Step 5: Validate on Held-Out Eval Set</text>
+
+    <!-- Eval process -->
+    <g transform="translate(20, 50)">
+      <rect x="0" y="0" width="120" height="70" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" rx="5"/>
+      <text x="60" y="25" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5a4a3a" text-anchor="middle">Evolved</text>
+      <text x="60" y="40" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Heuristic</text>
+      <text x="60" y="60" font-family="Georgia, serif" font-size="10" fill="#C15F3C" text-anchor="middle">(from Step 4)</text>
+    </g>
+
+    <text x="165" y="85" font-family="Georgia, serif" font-size="20" fill="#C15F3C">→</text>
+
+    <g transform="translate(190, 50)">
+      <rect x="0" y="0" width="120" height="70" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" rx="5"/>
+      <text x="60" y="25" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#5a4a3a" text-anchor="middle">Run on</text>
+      <text x="60" y="40" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Eval Set</text>
+      <text x="60" y="60" font-family="Georgia, serif" font-size="10" fill="#C15F3C" text-anchor="middle">(unseen shapes)</text>
+    </g>
+
+    <text x="335" y="85" font-family="Georgia, serif" font-size="20" fill="#C15F3C">→</text>
+
+    <g transform="translate(360, 50)">
+      <rect x="0" y="0" width="160" height="70" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="5"/>
+      <text x="80" y="25" font-family="Georgia, serif" font-size="12" font-weight="bold" fill="#C15F3C" text-anchor="middle">Generalizes!</text>
+      <text x="80" y="45" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">23% faster than</text>
+      <text x="80" y="60" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">expert heuristic</text>
+    </g>
+  </g>
+
+  <!-- Step 6: Deploy -->
+  <g transform="translate(610, 610)">
+    <rect x="0" y="0" width="540" height="140" fill="#d4c4b0" stroke="#C15F3C" stroke-width="3" rx="10"/>
+    <rect x="0" y="0" width="540" height="35" fill="#C15F3C" rx="10"/>
+    <rect x="0" y="25" width="540" height="10" fill="#C15F3C"/>
+    <text x="270" y="25" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Step 6: Deploy to Production</text>
+
+    <text x="270" y="65" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">Gemini optimizes its own training!</text>
+
+    <text x="40" y="95" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">✓ Heuristic deployed in Gemini's training pipeline</text>
+    <text x="40" y="115" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">✓ 1% reduction in overall training time</text>
+    <text x="40" y="135" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">✓ First time: Gemini improves itself via AlphaEvolve</text>
+  </g>
+
+  <!-- Bottom timeline -->
+  <text x="600" y="790" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#C15F3C" text-anchor="middle">Engineering Time: Months → Days</text>
+  <text x="600" y="820" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">Engineers can focus on strategic, higher-level optimization problems</text>
+</svg>

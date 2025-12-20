@@ -1,0 +1,247 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="600" fill="#1A1612" text-anchor="middle">Matrix Multiplication as Tensor Decomposition</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">The mathematical foundation of AlphaTensor's game</text>
+
+  <!-- LEFT: The 3D Tensor -->
+  <g transform="translate(50, 100)">
+    <text x="200" y="0" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612" text-anchor="middle">The Matrix Multiplication Tensor</text>
+
+    <!-- 3D Cube visualization -->
+    <g transform="translate(50, 30)">
+      <!-- Back face -->
+      <polygon points="60,20 260,20 260,180 60,180" fill="#E5E2DC" stroke="#B1ADA1" stroke-width="1"/>
+
+      <!-- Top face -->
+      <polygon points="60,20 260,20 320,0 120,0" fill="#D5D2CC" stroke="#B1ADA1" stroke-width="1"/>
+
+      <!-- Right face -->
+      <polygon points="260,20 320,0 320,160 260,180" fill="#CCCAC4" stroke="#B1ADA1" stroke-width="1"/>
+
+      <!-- Front face (semi-transparent to show structure) -->
+      <polygon points="0,40 200,40 200,200 0,200" fill="#F4F3EE" fill-opacity="0.9" stroke="#5C534A" stroke-width="2"/>
+
+      <!-- Grid lines on front face -->
+      <line x1="50" y1="40" x2="50" y2="200" stroke="#E5E2DC" stroke-width="1"/>
+      <line x1="100" y1="40" x2="100" y2="200" stroke="#E5E2DC" stroke-width="1"/>
+      <line x1="150" y1="40" x2="150" y2="200" stroke="#E5E2DC" stroke-width="1"/>
+      <line x1="0" y1="80" x2="200" y2="80" stroke="#E5E2DC" stroke-width="1"/>
+      <line x1="0" y1="120" x2="200" y2="120" stroke="#E5E2DC" stroke-width="1"/>
+      <line x1="0" y1="160" x2="200" y2="160" stroke="#E5E2DC" stroke-width="1"/>
+
+      <!-- Some colored cells to show tensor entries -->
+      <rect x="0" y="40" width="50" height="40" fill="#5C8A9B" fill-opacity="0.6"/>
+      <rect x="100" y="80" width="50" height="40" fill="#C15F3C" fill-opacity="0.6"/>
+      <rect x="150" y="120" width="50" height="40" fill="#7D9B76" fill-opacity="0.6"/>
+
+      <!-- Axis labels -->
+      <text x="100" y="225" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle">Elements of A</text>
+      <text x="-20" y="120" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle" transform="rotate(-90, -20, 120)">Elements of B</text>
+      <text x="340" y="80" font-family="Georgia, serif" font-size="12" fill="#5C534A">Elements of C</text>
+    </g>
+
+    <!-- Explanation -->
+    <g transform="translate(0, 270)">
+      <rect x="0" y="0" width="400" height="100" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <text x="200" y="25" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#1A1612" text-anchor="middle">The Tensor T encodes:</text>
+      <text x="20" y="50" font-family="Georgia, serif" font-size="12" fill="#5C534A">• How each input element (a,b,c,d,e,f,g,h)</text>
+      <text x="20" y="70" font-family="Georgia, serif" font-size="12" fill="#5C534A">• Contributes to each output element</text>
+      <text x="20" y="90" font-family="Georgia, serif" font-size="12" fill="#5C534A">• T[i,j,k] = 1 if Aᵢ × Bⱼ → Cₖ</text>
+    </g>
+  </g>
+
+  <!-- RIGHT: The Decomposition -->
+  <g transform="translate(500, 100)">
+    <text x="325" y="0" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612" text-anchor="middle">Rank-R Decomposition</text>
+
+    <!-- Decomposition equation -->
+    <g transform="translate(0, 40)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="16" fill="#1A1612">T = </text>
+
+      <!-- Sum of rank-1 tensors -->
+      <g transform="translate(40, -15)">
+        <!-- Sigma -->
+        <text x="0" y="15" font-family="Georgia, serif" font-size="24" fill="#C15F3C">Σ</text>
+        <text x="5" y="35" font-family="Georgia, serif" font-size="10" fill="#5C534A">r=1</text>
+        <text x="5" y="-5" font-family="Georgia, serif" font-size="10" fill="#5C534A">R</text>
+
+        <!-- u ⊗ v ⊗ w -->
+        <text x="40" y="15" font-family="Georgia, serif" font-size="16" fill="#1A1612">(</text>
+        <text x="50" y="15" font-family="Georgia, serif" font-size="16" fill="#7D9B76" font-weight="600">uᵣ</text>
+        <text x="75" y="15" font-family="Georgia, serif" font-size="16" fill="#5C534A">⊗</text>
+        <text x="100" y="15" font-family="Georgia, serif" font-size="16" fill="#9B7DC1" font-weight="600">vᵣ</text>
+        <text x="125" y="15" font-family="Georgia, serif" font-size="16" fill="#5C534A">⊗</text>
+        <text x="150" y="15" font-family="Georgia, serif" font-size="16" fill="#C1A43C" font-weight="600">wᵣ</text>
+        <text x="175" y="15" font-family="Georgia, serif" font-size="16" fill="#1A1612">)</text>
+      </g>
+    </g>
+
+    <!-- Visual representation of outer product -->
+    <g transform="translate(0, 80)">
+      <!-- U vector (green) -->
+      <g transform="translate(0, 0)">
+        <text x="25" y="0" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#7D9B76" text-anchor="middle">U</text>
+        <rect x="10" y="10" width="30" height="100" fill="#FFFFFF" stroke="#7D9B76" stroke-width="2"/>
+        <rect x="10" y="10" width="30" height="25" fill="#7D9B76" fill-opacity="0.3"/>
+        <rect x="10" y="35" width="30" height="25" fill="#7D9B76" fill-opacity="0.5"/>
+        <rect x="10" y="60" width="30" height="25" fill="#7D9B76" fill-opacity="0.7"/>
+        <rect x="10" y="85" width="30" height="25" fill="#7D9B76" fill-opacity="0.9"/>
+        <text x="25" y="125" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">coeffs</text>
+        <text x="25" y="138" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">for A</text>
+      </g>
+
+      <!-- ⊗ -->
+      <text x="65" y="65" font-family="Georgia, serif" font-size="18" fill="#5C534A">⊗</text>
+
+      <!-- V vector (purple) -->
+      <g transform="translate(90, 0)">
+        <text x="25" y="0" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#9B7DC1" text-anchor="middle">V</text>
+        <rect x="10" y="10" width="30" height="100" fill="#FFFFFF" stroke="#9B7DC1" stroke-width="2"/>
+        <rect x="10" y="10" width="30" height="25" fill="#9B7DC1" fill-opacity="0.3"/>
+        <rect x="10" y="35" width="30" height="25" fill="#9B7DC1" fill-opacity="0.5"/>
+        <rect x="10" y="60" width="30" height="25" fill="#9B7DC1" fill-opacity="0.7"/>
+        <rect x="10" y="85" width="30" height="25" fill="#9B7DC1" fill-opacity="0.9"/>
+        <text x="25" y="125" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">coeffs</text>
+        <text x="25" y="138" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">for B</text>
+      </g>
+
+      <!-- ⊗ -->
+      <text x="155" y="65" font-family="Georgia, serif" font-size="18" fill="#5C534A">⊗</text>
+
+      <!-- W vector (yellow/gold) -->
+      <g transform="translate(180, 0)">
+        <text x="25" y="0" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#C1A43C" text-anchor="middle">W</text>
+        <rect x="10" y="10" width="30" height="100" fill="#FFFFFF" stroke="#C1A43C" stroke-width="2"/>
+        <rect x="10" y="10" width="30" height="25" fill="#C1A43C" fill-opacity="0.3"/>
+        <rect x="10" y="35" width="30" height="25" fill="#C1A43C" fill-opacity="0.5"/>
+        <rect x="10" y="60" width="30" height="25" fill="#C1A43C" fill-opacity="0.7"/>
+        <rect x="10" y="85" width="30" height="25" fill="#C1A43C" fill-opacity="0.9"/>
+        <text x="25" y="125" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">coeffs</text>
+        <text x="25" y="138" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">for C</text>
+      </g>
+
+      <!-- = -->
+      <text x="255" y="65" font-family="Georgia, serif" font-size="18" fill="#5C534A">=</text>
+
+      <!-- Result: One multiplication step -->
+      <g transform="translate(280, 10)">
+        <rect x="0" y="0" width="200" height="100" rx="4" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+        <text x="100" y="25" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#C15F3C" text-anchor="middle">One Multiplication Step</text>
+        <text x="100" y="50" font-family="Monaco, monospace" font-size="11" fill="#5C534A" text-anchor="middle">Mᵣ = (Σuᵣᵢ·Aᵢ) × (Σvᵣⱼ·Bⱼ)</text>
+        <text x="100" y="75" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">Add to output: wᵣₖ · Mᵣ → Cₖ</text>
+      </g>
+    </g>
+
+    <!-- Key insight -->
+    <g transform="translate(0, 250)">
+      <rect x="0" y="0" width="650" height="120" rx="4" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+      <text x="325" y="25" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#C15F3C" text-anchor="middle">Key Insight: Rank = Number of Multiplications</text>
+
+      <text x="20" y="55" font-family="Georgia, serif" font-size="13" fill="#1A1612">• Standard 2×2: Rank 8 decomposition → 8 multiplications</text>
+      <text x="20" y="75" font-family="Georgia, serif" font-size="13" fill="#1A1612">• Strassen 2×2: Rank 7 decomposition → 7 multiplications</text>
+      <text x="20" y="95" font-family="Georgia, serif" font-size="13" fill="#C15F3C" font-weight="600">• AlphaTensor finds: Lowest possible rank for any size</text>
+      <text x="20" y="112" font-family="Georgia, serif" font-size="11" fill="#8C8279" font-style="italic">Finding low-rank decompositions is NP-hard — that's why AI helps!</text>
+    </g>
+  </g>
+
+  <!-- BOTTOM: Strassen as Tensor Decomposition -->
+  <g transform="translate(50, 500)">
+    <text x="550" y="0" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612" text-anchor="middle">Strassen's Algorithm as U, V, W Matrices</text>
+
+    <!-- The 7 column decomposition -->
+    <g transform="translate(0, 30)">
+      <!-- U matrix (green) -->
+      <g transform="translate(0, 0)">
+        <text x="140" y="0" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#7D9B76" text-anchor="middle">U (coefficients for A)</text>
+        <rect x="0" y="10" width="280" height="120" fill="#FFFFFF" stroke="#7D9B76" stroke-width="2"/>
+
+        <!-- Header -->
+        <text x="50" y="30" font-family="Monaco, monospace" font-size="9" fill="#8C8279" text-anchor="middle">M₁</text>
+        <text x="90" y="30" font-family="Monaco, monospace" font-size="9" fill="#8C8279" text-anchor="middle">M₂</text>
+        <text x="130" y="30" font-family="Monaco, monospace" font-size="9" fill="#8C8279" text-anchor="middle">M₃</text>
+        <text x="170" y="30" font-family="Monaco, monospace" font-size="9" fill="#8C8279" text-anchor="middle">M₄</text>
+        <text x="210" y="30" font-family="Monaco, monospace" font-size="9" fill="#8C8279" text-anchor="middle">M₅</text>
+        <text x="250" y="30" font-family="Monaco, monospace" font-size="9" fill="#8C8279" text-anchor="middle">M₆ M₇</text>
+
+        <!-- Row labels -->
+        <text x="15" y="55" font-family="Monaco, monospace" font-size="9" fill="#5C534A">a</text>
+        <text x="15" y="75" font-family="Monaco, monospace" font-size="9" fill="#5C534A">b</text>
+        <text x="15" y="95" font-family="Monaco, monospace" font-size="9" fill="#5C534A">c</text>
+        <text x="15" y="115" font-family="Monaco, monospace" font-size="9" fill="#5C534A">d</text>
+
+        <!-- Values (simplified representation) -->
+        <text x="50" y="55" font-family="Monaco, monospace" font-size="10" fill="#7D9B76" text-anchor="middle">1</text>
+        <text x="130" y="55" font-family="Monaco, monospace" font-size="10" fill="#7D9B76" text-anchor="middle">1</text>
+        <text x="210" y="55" font-family="Monaco, monospace" font-size="10" fill="#7D9B76" text-anchor="middle">1</text>
+        <text x="210" y="75" font-family="Monaco, monospace" font-size="10" fill="#7D9B76" text-anchor="middle">1</text>
+        <text x="90" y="95" font-family="Monaco, monospace" font-size="10" fill="#7D9B76" text-anchor="middle">1</text>
+        <text x="50" y="115" font-family="Monaco, monospace" font-size="10" fill="#7D9B76" text-anchor="middle">1</text>
+        <text x="170" y="115" font-family="Monaco, monospace" font-size="10" fill="#7D9B76" text-anchor="middle">1</text>
+        <text x="90" y="115" font-family="Monaco, monospace" font-size="10" fill="#7D9B76" text-anchor="middle">1</text>
+      </g>
+
+      <!-- V matrix (purple) -->
+      <g transform="translate(310, 0)">
+        <text x="140" y="0" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#9B7DC1" text-anchor="middle">V (coefficients for B)</text>
+        <rect x="0" y="10" width="280" height="120" fill="#FFFFFF" stroke="#9B7DC1" stroke-width="2"/>
+
+        <!-- Similar structure -->
+        <text x="15" y="55" font-family="Monaco, monospace" font-size="9" fill="#5C534A">e</text>
+        <text x="15" y="75" font-family="Monaco, monospace" font-size="9" fill="#5C534A">f</text>
+        <text x="15" y="95" font-family="Monaco, monospace" font-size="9" fill="#5C534A">g</text>
+        <text x="15" y="115" font-family="Monaco, monospace" font-size="9" fill="#5C534A">h</text>
+
+        <text x="50" y="55" font-family="Monaco, monospace" font-size="10" fill="#9B7DC1" text-anchor="middle">1</text>
+        <text x="90" y="55" font-family="Monaco, monospace" font-size="10" fill="#9B7DC1" text-anchor="middle">1</text>
+        <text x="130" y="75" font-family="Monaco, monospace" font-size="10" fill="#9B7DC1" text-anchor="middle">1</text>
+        <text x="170" y="95" font-family="Monaco, monospace" font-size="10" fill="#9B7DC1" text-anchor="middle">1</text>
+        <text x="50" y="115" font-family="Monaco, monospace" font-size="10" fill="#9B7DC1" text-anchor="middle">1</text>
+        <text x="210" y="115" font-family="Monaco, monospace" font-size="10" fill="#9B7DC1" text-anchor="middle">1</text>
+      </g>
+
+      <!-- W matrix (yellow) -->
+      <g transform="translate(620, 0)">
+        <text x="140" y="0" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#C1A43C" text-anchor="middle">W (coefficients for C)</text>
+        <rect x="0" y="10" width="280" height="120" fill="#FFFFFF" stroke="#C1A43C" stroke-width="2"/>
+
+        <!-- Row labels -->
+        <text x="15" y="55" font-family="Monaco, monospace" font-size="9" fill="#5C534A">C₁₁</text>
+        <text x="15" y="75" font-family="Monaco, monospace" font-size="9" fill="#5C534A">C₁₂</text>
+        <text x="15" y="95" font-family="Monaco, monospace" font-size="9" fill="#5C534A">C₂₁</text>
+        <text x="15" y="115" font-family="Monaco, monospace" font-size="9" fill="#5C534A">C₂₂</text>
+
+        <text x="50" y="55" font-family="Monaco, monospace" font-size="10" fill="#C1A43C" text-anchor="middle">1</text>
+        <text x="170" y="55" font-family="Monaco, monospace" font-size="10" fill="#C1A43C" text-anchor="middle">1</text>
+        <text x="130" y="75" font-family="Monaco, monospace" font-size="10" fill="#C1A43C" text-anchor="middle">1</text>
+        <text x="210" y="75" font-family="Monaco, monospace" font-size="10" fill="#C1A43C" text-anchor="middle">1</text>
+        <text x="90" y="95" font-family="Monaco, monospace" font-size="10" fill="#C1A43C" text-anchor="middle">1</text>
+        <text x="170" y="95" font-family="Monaco, monospace" font-size="10" fill="#C1A43C" text-anchor="middle">1</text>
+        <text x="50" y="115" font-family="Monaco, monospace" font-size="10" fill="#C1A43C" text-anchor="middle">1</text>
+        <text x="130" y="115" font-family="Monaco, monospace" font-size="10" fill="#C1A43C" text-anchor="middle">1</text>
+      </g>
+    </g>
+
+    <!-- Caption -->
+    <text x="450" y="180" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle" font-style="italic">
+      7 columns = 7 multiplications. Each column defines one Mᵢ and how it contributes to output.
+    </text>
+  </g>
+
+  <!-- Connection to KernelEvolve -->
+  <g transform="translate(50, 710)">
+    <rect x="0" y="0" width="1100" height="70" rx="4" fill="#FFFFFF" stroke="#C15F3C" stroke-width="1.5"/>
+    <text x="550" y="25" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle" font-weight="600">
+      The Connection to KernelEvolve
+    </text>
+    <text x="550" y="48" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">
+      AlphaTensor searches for <tspan font-weight="600" fill="#C15F3C">algorithm structure</tspan> (U, V, W matrices).
+      KernelEvolve searches for <tspan font-weight="600" fill="#C15F3C">implementation parameters</tspan> (block sizes, warps, stages).
+    </text>
+    <text x="550" y="65" font-family="Georgia, serif" font-size="12" fill="#8C8279" text-anchor="middle" font-style="italic">
+      Same principle: LLM-guided evolution to navigate impossibly large search spaces.
+    </text>
+  </g>
+</svg>

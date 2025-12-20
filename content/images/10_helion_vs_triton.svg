@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="600" fill="#1A1612" text-anchor="middle">Helion vs Triton: Code Comparison</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">Same kernel, radically different abstraction levels</text>
+
+  <!-- LEFT SIDE: Helion -->
+  <g transform="translate(50, 100)">
+    <!-- Header -->
+    <rect x="0" y="0" width="520" height="50" rx="6" fill="#C15F3C"/>
+    <text x="260" y="32" font-family="Georgia, serif" font-size="20" font-weight="600" fill="#FFFFFF" text-anchor="middle">Helion (30 lines)</text>
+
+    <!-- Code block -->
+    <rect x="0" y="55" width="520" height="420" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+
+    <text x="20" y="85" font-family="Monaco, monospace" font-size="11" fill="#C15F3C" font-weight="600">@helion.kernel()</text>
+    <text x="20" y="105" font-family="Monaco, monospace" font-size="11" fill="#1A1612">def attention(q: Tensor, k: Tensor, v: Tensor):</text>
+    <text x="20" y="125" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    batch, heads, seq_q, head_dim = q.size()</text>
+    <text x="20" y="145" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    seq_k = k.size(-2)</text>
+    <text x="20" y="165" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    scale = head_dim ** -0.5</text>
+    <text x="20" y="195" font-family="Monaco, monospace" font-size="11" fill="#8C8279">    # Output allocation - familiar PyTorch</text>
+    <text x="20" y="215" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    out = torch.empty_like(q)</text>
+
+    <text x="20" y="245" font-family="Monaco, monospace" font-size="11" fill="#8C8279">    # Tile iteration - Helion handles grid</text>
+    <text x="20" y="265" font-family="Monaco, monospace" font-size="11" fill="#C15F3C" font-weight="600">    for tile_b, tile_h, tile_m in hl.tile(</text>
+    <text x="20" y="285" font-family="Monaco, monospace" font-size="11" fill="#C15F3C" font-weight="600">            [batch, heads, seq_q]):</text>
+
+    <text x="20" y="315" font-family="Monaco, monospace" font-size="11" fill="#5C534A">        acc = hl.zeros([tile_m, head_dim],</text>
+    <text x="20" y="335" font-family="Monaco, monospace" font-size="11" fill="#5C534A">                       dtype=torch.float32)</text>
+    <text x="20" y="355" font-family="Monaco, monospace" font-size="11" fill="#5C534A">        m_i = hl.full([tile_m], float('-inf'))</text>
+
+    <text x="20" y="385" font-family="Monaco, monospace" font-size="11" fill="#C15F3C" font-weight="600">        for tile_n in hl.tile(seq_k):</text>
+    <text x="20" y="405" font-family="Monaco, monospace" font-size="11" fill="#5C534A">            qk = torch.bmm(</text>
+    <text x="20" y="425" font-family="Monaco, monospace" font-size="11" fill="#5C534A">                q[tile_b, tile_h, tile_m, :],</text>
+    <text x="20" y="445" font-family="Monaco, monospace" font-size="11" fill="#5C534A">                k[tile_b, tile_h, tile_n, :].T</text>
+    <text x="20" y="465" font-family="Monaco, monospace" font-size="11" fill="#5C534A">            ) * scale</text>
+  </g>
+
+  <!-- RIGHT SIDE: Triton -->
+  <g transform="translate(630, 100)">
+    <!-- Header -->
+    <rect x="0" y="0" width="520" height="50" rx="6" fill="#5C534A"/>
+    <text x="260" y="32" font-family="Georgia, serif" font-size="20" font-weight="600" fill="#FFFFFF" text-anchor="middle">Triton (120+ lines)</text>
+
+    <!-- Code block -->
+    <rect x="0" y="55" width="520" height="420" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+
+    <text x="20" y="85" font-family="Monaco, monospace" font-size="11" fill="#5C534A">@triton.jit</text>
+    <text x="20" y="105" font-family="Monaco, monospace" font-size="11" fill="#1A1612">def attention_kernel(</text>
+    <text x="20" y="125" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    Q, K, V, Out,</text>
+    <text x="20" y="145" font-family="Monaco, monospace" font-size="11" fill="#8C8279">    # Manual stride params</text>
+    <text x="20" y="165" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    stride_qb, stride_qh, stride_qm, stride_qk,</text>
+    <text x="20" y="185" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    stride_kb, stride_kh, stride_kn, stride_kk,</text>
+    <text x="20" y="205" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    stride_vb, stride_vh, stride_vn, stride_vk,</text>
+    <text x="20" y="225" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    stride_ob, stride_oh, stride_om, stride_ok,</text>
+    <text x="20" y="245" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    SEQ_Q, SEQ_K, HEAD_DIM,</text>
+    <text x="20" y="265" font-family="Monaco, monospace" font-size="11" fill="#8C8279">    # Manual block size constexprs</text>
+    <text x="20" y="285" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">    BLOCK_M: tl.constexpr,</text>
+    <text x="20" y="305" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">    BLOCK_N: tl.constexpr,</text>
+    <text x="20" y="325" font-family="Monaco, monospace" font-size="11" fill="#C15F3C">    BLOCK_K: tl.constexpr,</text>
+    <text x="20" y="345" font-family="Monaco, monospace" font-size="11" fill="#5C534A">):</text>
+    <text x="20" y="375" font-family="Monaco, monospace" font-size="11" fill="#8C8279">    # Manual program ID calculation</text>
+    <text x="20" y="395" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    pid_batch = tl.program_id(0)</text>
+    <text x="20" y="415" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    pid_head = tl.program_id(1)</text>
+    <text x="20" y="435" font-family="Monaco, monospace" font-size="11" fill="#5C534A">    pid_m = tl.program_id(2)</text>
+    <text x="20" y="455" font-family="Monaco, monospace" font-size="11" fill="#8C8279">    # ... 80+ more lines of pointer math</text>
+  </g>
+
+  <!-- COMPARISON TABLE -->
+  <g transform="translate(50, 540)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612">Side-by-Side Comparison</text>
+
+    <!-- Table -->
+    <g transform="translate(0, 20)">
+      <!-- Header row -->
+      <rect x="0" y="0" width="240" height="35" fill="#5C534A"/>
+      <rect x="240" y="0" width="340" height="35" fill="#C15F3C"/>
+      <rect x="580" y="0" width="340" height="35" fill="#5C534A"/>
+      <text x="120" y="24" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Aspect</text>
+      <text x="410" y="24" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Helion</text>
+      <text x="750" y="24" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Triton</text>
+
+      <!-- Row 1 -->
+      <rect x="0" y="35" width="240" height="35" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <rect x="240" y="35" width="340" height="35" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <rect x="580" y="35" width="340" height="35" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <text x="15" y="58" font-family="Georgia, serif" font-size="12" fill="#1A1612">Lines of code</text>
+      <text x="410" y="58" font-family="Georgia, serif" font-size="12" fill="#C15F3C" font-weight="600" text-anchor="middle">~30 lines</text>
+      <text x="750" y="58" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle">~120+ lines</text>
+
+      <!-- Row 2 -->
+      <rect x="0" y="70" width="240" height="35" fill="#F4F3EE" stroke="#E5E2DC" stroke-width="1"/>
+      <rect x="240" y="70" width="340" height="35" fill="#F4F3EE" stroke="#E5E2DC" stroke-width="1"/>
+      <rect x="580" y="70" width="340" height="35" fill="#F4F3EE" stroke="#E5E2DC" stroke-width="1"/>
+      <text x="15" y="93" font-family="Georgia, serif" font-size="12" fill="#1A1612">Memory indexing</text>
+      <text x="410" y="93" font-family="Georgia, serif" font-size="12" fill="#C15F3C" font-weight="600" text-anchor="middle">Automatic (tensor slicing)</text>
+      <text x="750" y="93" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle">Manual pointer arithmetic</text>
+
+      <!-- Row 3 -->
+      <rect x="0" y="105" width="240" height="35" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <rect x="240" y="105" width="340" height="35" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <rect x="580" y="105" width="340" height="35" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <text x="15" y="128" font-family="Georgia, serif" font-size="12" fill="#1A1612">Block sizes</text>
+      <text x="410" y="128" font-family="Georgia, serif" font-size="12" fill="#C15F3C" font-weight="600" text-anchor="middle">Autotuned (search space)</text>
+      <text x="750" y="128" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle">Hardcoded constants</text>
+
+      <!-- Row 4 -->
+      <rect x="0" y="140" width="240" height="35" fill="#F4F3EE" stroke="#E5E2DC" stroke-width="1"/>
+      <rect x="240" y="140" width="340" height="35" fill="#F4F3EE" stroke="#E5E2DC" stroke-width="1"/>
+      <rect x="580" y="140" width="340" height="35" fill="#F4F3EE" stroke="#E5E2DC" stroke-width="1"/>
+      <text x="15" y="163" font-family="Georgia, serif" font-size="12" fill="#1A1612">Masking</text>
+      <text x="410" y="163" font-family="Georgia, serif" font-size="12" fill="#C15F3C" font-weight="600" text-anchor="middle">Implicit, optimized away</text>
+      <text x="750" y="163" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle">Explicit tl.where() calls</text>
+
+      <!-- Row 5 -->
+      <rect x="0" y="175" width="240" height="35" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <rect x="240" y="175" width="340" height="35" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <rect x="580" y="175" width="340" height="35" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <text x="15" y="198" font-family="Georgia, serif" font-size="12" fill="#1A1612">Grid specification</text>
+      <text x="410" y="198" font-family="Georgia, serif" font-size="12" fill="#C15F3C" font-weight="600" text-anchor="middle">Derived from hl.tile()</text>
+      <text x="750" y="198" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle">Manual grid lambda</text>
+    </g>
+  </g>
+
+  <!-- KEY INSIGHT -->
+  <g transform="translate(100, 765)">
+    <rect x="0" y="0" width="1000" height="40" rx="4" fill="#FFFFFF" stroke="#C15F3C" stroke-width="1.5"/>
+    <text x="500" y="26" font-family="Georgia, serif" font-size="14" fill="#5C534A" text-anchor="middle">
+      <tspan font-weight="600" fill="#C15F3C">Key insight:</tspan> Helion's higher abstraction creates a <tspan font-weight="600">searchable configuration space</tspan>.
+      KernelEvolve searches it with LLM-guided evolution.
+    </text>
+  </g>
+</svg>

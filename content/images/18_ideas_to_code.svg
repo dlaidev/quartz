@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="600" fill="#1A1612" text-anchor="middle">Ideas to Code Pipeline</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">From research insight to working kernel — where does it get stuck?</text>
+
+  <!-- Main Pipeline Checklist -->
+  <g transform="translate(100, 120)">
+    <!-- Step 1: Novelty Validation - DONE -->
+    <g transform="translate(0, 0)">
+      <rect x="0" y="0" width="1000" height="120" rx="8" fill="#FFFFFF" stroke="#7D9B76" stroke-width="3"/>
+
+      <!-- Checkbox -->
+      <rect x="30" y="35" width="50" height="50" rx="6" fill="#7D9B76"/>
+      <path d="M42,60 L52,70 L72,50" stroke="#FFFFFF" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- Content -->
+      <text x="100" y="50" font-family="Georgia, serif" font-size="20" font-weight="600" fill="#7D9B76">1. Novelty Validation</text>
+      <text x="100" y="75" font-family="Georgia, serif" font-size="14" fill="#5C534A">Check if the optimization idea is actually new (not already in PyTorch/Triton)</text>
+      <text x="100" y="95" font-family="Georgia, serif" font-size="12" fill="#8C8279" font-style="italic">LLM + code search → "Yes, this approach is novel for attention on H100"</text>
+
+      <!-- Status -->
+      <rect x="850" y="40" width="120" height="40" rx="4" fill="#7D9B76"/>
+      <text x="910" y="65" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">COMPLETE</text>
+    </g>
+
+    <!-- Step 2: PyTorch Generation - DONE -->
+    <g transform="translate(0, 140)">
+      <rect x="0" y="0" width="1000" height="120" rx="8" fill="#FFFFFF" stroke="#7D9B76" stroke-width="3"/>
+
+      <!-- Checkbox -->
+      <rect x="30" y="35" width="50" height="50" rx="6" fill="#7D9B76"/>
+      <path d="M42,60 L52,70 L72,50" stroke="#FFFFFF" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- Content -->
+      <text x="100" y="50" font-family="Georgia, serif" font-size="20" font-weight="600" fill="#7D9B76">2. PyTorch Generation</text>
+      <text x="100" y="75" font-family="Georgia, serif" font-size="14" fill="#5C534A">Generate working PyTorch reference implementation</text>
+      <text x="100" y="95" font-family="Georgia, serif" font-size="12" fill="#8C8279" font-style="italic">LLM → def fused_qkv_attention(q, k, v): ... → passes unit tests</text>
+
+      <!-- Status -->
+      <rect x="850" y="40" width="120" height="40" rx="4" fill="#7D9B76"/>
+      <text x="910" y="65" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">COMPLETE</text>
+    </g>
+
+    <!-- Step 3: Kernel Optimization - THE HARD PART -->
+    <g transform="translate(0, 280)">
+      <rect x="0" y="0" width="1000" height="160" rx="8" fill="#FFFFFF" stroke="#C15F3C" stroke-width="4"/>
+
+      <!-- Empty checkbox -->
+      <rect x="30" y="55" width="50" height="50" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="3"/>
+
+      <!-- Content -->
+      <text x="100" y="50" font-family="Georgia, serif" font-size="20" font-weight="600" fill="#C15F3C">3. Kernel Optimization</text>
+      <text x="100" y="75" font-family="Georgia, serif" font-size="14" fill="#5C534A">Convert PyTorch to optimized Triton/CUDA kernel</text>
+
+      <!-- The problems -->
+      <g transform="translate(100, 95)">
+        <text x="0" y="0" font-family="Georgia, serif" font-size="12" fill="#C15F3C">✗ LLMs can't reliably generate correct Triton code</text>
+        <text x="0" y="20" font-family="Georgia, serif" font-size="12" fill="#C15F3C">✗ Manual tuning requires GPU expertise</text>
+        <text x="0" y="40" font-family="Georgia, serif" font-size="12" fill="#C15F3C">✗ Configuration space is too large for grid search</text>
+      </g>
+
+      <!-- Status -->
+      <rect x="800" y="45" width="170" height="70" rx="4" fill="#C15F3C"/>
+      <text x="885" y="72" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">THE HARD</text>
+      <text x="885" y="95" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">PART</text>
+
+      <!-- Arrow pointing to this -->
+      <g transform="translate(-60, 80)">
+        <path d="M0,0 L40,0" stroke="#C15F3C" stroke-width="3" marker-end="url(#arrowhead4)"/>
+      </g>
+    </g>
+  </g>
+
+  <defs>
+    <marker id="arrowhead4" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#C15F3C"/>
+    </marker>
+  </defs>
+
+  <!-- Why Step 3 is Hard -->
+  <g transform="translate(100, 590)">
+    <rect x="0" y="0" width="1000" height="180" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+
+    <text x="500" y="30" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612" text-anchor="middle">Why Kernel Optimization is the Bottleneck</text>
+
+    <g transform="translate(40, 55)">
+      <!-- Column 1 -->
+      <g transform="translate(0, 0)">
+        <rect x="0" y="0" width="290" height="100" rx="4" fill="#F4F3EE" stroke="#E5E2DC"/>
+        <text x="145" y="25" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#1A1612" text-anchor="middle">The Expertise Gap</text>
+        <text x="15" y="50" font-family="Georgia, serif" font-size="11" fill="#5C534A">• &lt;1,000 CUDA kernel experts</text>
+        <text x="15" y="68" font-family="Georgia, serif" font-size="11" fill="#5C534A">• &gt;1,000,000 ML engineers</text>
+        <text x="15" y="86" font-family="Georgia, serif" font-size="11" fill="#C15F3C" font-weight="600">• 1000:1 demand ratio</text>
+      </g>
+
+      <!-- Column 2 -->
+      <g transform="translate(320, 0)">
+        <rect x="0" y="0" width="290" height="100" rx="4" fill="#F4F3EE" stroke="#E5E2DC"/>
+        <text x="145" y="25" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#1A1612" text-anchor="middle">The Data Gap</text>
+        <text x="15" y="50" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Python functions: ~10M examples</text>
+        <text x="15" y="68" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Triton kernels: ~5K examples</text>
+        <text x="15" y="86" font-family="Georgia, serif" font-size="11" fill="#C15F3C" font-weight="600">• 2000:1 data ratio</text>
+      </g>
+
+      <!-- Column 3 -->
+      <g transform="translate(640, 0)">
+        <rect x="0" y="0" width="290" height="100" rx="4" fill="#F4F3EE" stroke="#E5E2DC"/>
+        <text x="145" y="25" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#1A1612" text-anchor="middle">The Search Gap</text>
+        <text x="15" y="50" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Config space: millions</text>
+        <text x="15" y="68" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Eval time: seconds each</text>
+        <text x="15" y="86" font-family="Georgia, serif" font-size="11" fill="#C15F3C" font-weight="600">• Grid search: years</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Solution teaser -->
+  <g transform="translate(100, 730)">
+    <rect x="0" y="0" width="1000" height="50" rx="4" fill="#C15F3C"/>
+    <text x="500" y="32" font-family="Georgia, serif" font-size="16" fill="#FFFFFF" text-anchor="middle" font-weight="600">
+      Solution: LLM-guided evolutionary search (KernelEvolve) →
+    </text>
+  </g>
+</svg>

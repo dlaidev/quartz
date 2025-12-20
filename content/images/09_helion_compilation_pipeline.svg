@@ -1,0 +1,257 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750">
+  <!-- Background -->
+  <rect width="1200" height="750" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="600" fill="#1A1612" text-anchor="middle">Helion Compilation Pipeline</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">From Python to GPU Machine Code</text>
+
+  <!-- TOP ROW: Python → AST → Triton IR -->
+
+  <!-- Python Source -->
+  <g transform="translate(50, 110)">
+    <rect x="0" y="0" width="200" height="180" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+    <rect x="0" y="0" width="200" height="32" rx="6" fill="#C15F3C"/>
+    <rect x="0" y="26" width="200" height="6" fill="#C15F3C"/>
+    <text x="100" y="22" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Python + Helion DSL</text>
+
+    <!-- Code snippet -->
+    <text x="12" y="55" font-family="Monaco, monospace" font-size="10" fill="#5C534A">@helion.kernel()</text>
+    <text x="12" y="70" font-family="Monaco, monospace" font-size="10" fill="#5C534A">def matmul(x, y):</text>
+    <text x="12" y="85" font-family="Monaco, monospace" font-size="10" fill="#5C534A">  m, k = x.size()</text>
+    <text x="12" y="100" font-family="Monaco, monospace" font-size="10" fill="#5C534A">  out = torch.empty(...)</text>
+    <text x="12" y="115" font-family="Monaco, monospace" font-size="10" fill="#C15F3C" font-weight="600">  for tile_m, tile_n</text>
+    <text x="12" y="130" font-family="Monaco, monospace" font-size="10" fill="#C15F3C" font-weight="600">      in hl.tile(...):</text>
+    <text x="12" y="145" font-family="Monaco, monospace" font-size="10" fill="#5C534A">    acc = hl.zeros(...)</text>
+    <text x="12" y="160" font-family="Monaco, monospace" font-size="10" fill="#5C534A">    ...</text>
+
+    <text x="100" y="175" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">Familiar Python syntax</text>
+  </g>
+
+  <!-- Arrow 1 -->
+  <g transform="translate(260, 185)">
+    <line x1="0" y1="0" x2="50" y2="0" stroke="#C15F3C" stroke-width="2"/>
+    <polygon points="50,0 42,-6 42,6" fill="#C15F3C"/>
+    <text x="25" y="-10" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">FX Trace</text>
+  </g>
+
+  <!-- AST / FX Graph -->
+  <g transform="translate(320, 110)">
+    <rect x="0" y="0" width="200" height="180" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+    <rect x="0" y="0" width="200" height="32" rx="6" fill="#5C534A"/>
+    <rect x="0" y="26" width="200" height="6" fill="#5C534A"/>
+    <text x="100" y="22" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">FX Graph (AST)</text>
+
+    <!-- Graph visualization -->
+    <circle cx="50" cy="70" r="15" fill="#F4F3EE" stroke="#5C534A" stroke-width="1.5"/>
+    <text x="50" y="74" font-family="Monaco, monospace" font-size="9" fill="#5C534A" text-anchor="middle">tile</text>
+
+    <circle cx="100" cy="110" r="15" fill="#F4F3EE" stroke="#5C534A" stroke-width="1.5"/>
+    <text x="100" y="114" font-family="Monaco, monospace" font-size="9" fill="#5C534A" text-anchor="middle">load</text>
+
+    <circle cx="150" cy="70" r="15" fill="#F4F3EE" stroke="#5C534A" stroke-width="1.5"/>
+    <text x="150" y="74" font-family="Monaco, monospace" font-size="9" fill="#5C534A" text-anchor="middle">addmm</text>
+
+    <circle cx="100" cy="150" r="15" fill="#F4F3EE" stroke="#5C534A" stroke-width="1.5"/>
+    <text x="100" y="154" font-family="Monaco, monospace" font-size="9" fill="#5C534A" text-anchor="middle">store</text>
+
+    <!-- Edges -->
+    <line x1="60" y1="80" x2="90" y2="100" stroke="#8C8279" stroke-width="1"/>
+    <line x1="140" y1="80" x2="110" y2="100" stroke="#8C8279" stroke-width="1"/>
+    <line x1="100" y1="125" x2="100" y2="135" stroke="#8C8279" stroke-width="1"/>
+
+    <text x="100" y="175" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">PyTorch operations traced</text>
+  </g>
+
+  <!-- Arrow 2 -->
+  <g transform="translate(530, 185)">
+    <line x1="0" y1="0" x2="50" y2="0" stroke="#C15F3C" stroke-width="2"/>
+    <polygon points="50,0 42,-6 42,6" fill="#C15F3C"/>
+    <text x="25" y="-10" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">Codegen</text>
+  </g>
+
+  <!-- Triton Source -->
+  <g transform="translate(590, 110)">
+    <rect x="0" y="0" width="200" height="180" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+    <rect x="0" y="0" width="200" height="32" rx="6" fill="#5C534A"/>
+    <rect x="0" y="26" width="200" height="6" fill="#5C534A"/>
+    <text x="100" y="22" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">Generated Triton</text>
+
+    <text x="12" y="55" font-family="Monaco, monospace" font-size="10" fill="#5C534A">@triton.jit</text>
+    <text x="12" y="70" font-family="Monaco, monospace" font-size="10" fill="#5C534A">def kernel(Q, K, V,</text>
+    <text x="12" y="85" font-family="Monaco, monospace" font-size="10" fill="#5C534A">  stride_qm, ...):</text>
+    <text x="12" y="100" font-family="Monaco, monospace" font-size="10" fill="#5C534A">  pid = tl.program_id</text>
+    <text x="12" y="115" font-family="Monaco, monospace" font-size="10" fill="#5C534A">  offs = pid * BLOCK</text>
+    <text x="12" y="130" font-family="Monaco, monospace" font-size="10" fill="#5C534A">  ptrs = Q + offs</text>
+    <text x="12" y="145" font-family="Monaco, monospace" font-size="10" fill="#5C534A">  acc = tl.zeros(...)</text>
+    <text x="12" y="160" font-family="Monaco, monospace" font-size="10" fill="#5C534A">  ...</text>
+
+    <text x="100" y="175" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">Auto-generated, many variants</text>
+  </g>
+
+  <!-- Arrow 3 -->
+  <g transform="translate(800, 185)">
+    <line x1="0" y1="0" x2="50" y2="0" stroke="#C15F3C" stroke-width="2"/>
+    <polygon points="50,0 42,-6 42,6" fill="#C15F3C"/>
+    <text x="25" y="-10" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">Parse</text>
+  </g>
+
+  <!-- TTIR -->
+  <g transform="translate(860, 110)">
+    <rect x="0" y="0" width="280" height="180" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+    <rect x="0" y="0" width="280" height="32" rx="6" fill="#5C534A"/>
+    <rect x="0" y="26" width="280" height="6" fill="#5C534A"/>
+    <text x="140" y="22" font-family="Georgia, serif" font-size="13" font-weight="600" fill="#FFFFFF" text-anchor="middle">TTIR (Triton IR)</text>
+
+    <text x="12" y="55" font-family="Monaco, monospace" font-size="9" fill="#5C534A">module {</text>
+    <text x="12" y="70" font-family="Monaco, monospace" font-size="9" fill="#5C534A">  tt.func @kernel(%arg0: !tt.ptr)</text>
+    <text x="12" y="85" font-family="Monaco, monospace" font-size="9" fill="#5C534A">    %c0 = arith.constant 0 : i32</text>
+    <text x="12" y="100" font-family="Monaco, monospace" font-size="9" fill="#5C534A">    %pid = tt.get_program_id x</text>
+    <text x="12" y="115" font-family="Monaco, monospace" font-size="9" fill="#5C534A">    %ptr = tt.addptr %arg0, %off</text>
+    <text x="12" y="130" font-family="Monaco, monospace" font-size="9" fill="#5C534A">    %val = tt.load %ptr</text>
+    <text x="12" y="145" font-family="Monaco, monospace" font-size="9" fill="#5C534A">    %res = tt.dot %a, %b, %acc</text>
+    <text x="12" y="160" font-family="Monaco, monospace" font-size="9" fill="#5C534A">  }</text>
+
+    <text x="140" y="175" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">Machine-independent, tile-level ops</text>
+  </g>
+
+  <!-- MIDDLE ROW: IR Lowering -->
+  <text x="600" y="330" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#C15F3C" text-anchor="middle">MLIR-Based Lowering Pipeline</text>
+
+  <!-- TTIR Box (compact) -->
+  <g transform="translate(80, 360)">
+    <rect x="0" y="0" width="160" height="100" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+    <text x="80" y="30" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612" text-anchor="middle">TTIR</text>
+    <text x="80" y="50" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">Triton IR</text>
+    <text x="80" y="70" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">Tile operations</text>
+    <text x="80" y="85" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">No hardware details</text>
+  </g>
+
+  <!-- Arrow -->
+  <g transform="translate(250, 405)">
+    <line x1="0" y1="0" x2="60" y2="0" stroke="#5C534A" stroke-width="2"/>
+    <polygon points="60,0 52,-5 52,5" fill="#5C534A"/>
+    <text x="30" y="-8" font-family="Georgia, serif" font-size="9" fill="#8C8279" text-anchor="middle">+ layouts</text>
+  </g>
+
+  <!-- TTGIR Box -->
+  <g transform="translate(320, 360)">
+    <rect x="0" y="0" width="160" height="100" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+    <text x="80" y="30" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612" text-anchor="middle">TTGIR</text>
+    <text x="80" y="50" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">Triton GPU IR</text>
+    <text x="80" y="70" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">Memory layouts</text>
+    <text x="80" y="85" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">Tensor core ops</text>
+  </g>
+
+  <!-- Arrow -->
+  <g transform="translate(490, 405)">
+    <line x1="0" y1="0" x2="60" y2="0" stroke="#5C534A" stroke-width="2"/>
+    <polygon points="60,0 52,-5 52,5" fill="#5C534A"/>
+    <text x="30" y="-8" font-family="Georgia, serif" font-size="9" fill="#8C8279" text-anchor="middle">lower</text>
+  </g>
+
+  <!-- LLVM IR Box -->
+  <g transform="translate(560, 360)">
+    <rect x="0" y="0" width="160" height="100" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+    <text x="80" y="30" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612" text-anchor="middle">LLVM IR</text>
+    <text x="80" y="50" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">LLVM Dialect</text>
+    <text x="80" y="70" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">Backend-specific</text>
+    <text x="80" y="85" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">nvvm intrinsics</text>
+  </g>
+
+  <!-- Arrow -->
+  <g transform="translate(730, 405)">
+    <line x1="0" y1="0" x2="60" y2="0" stroke="#5C534A" stroke-width="2"/>
+    <polygon points="60,0 52,-5 52,5" fill="#5C534A"/>
+    <text x="30" y="-8" font-family="Georgia, serif" font-size="9" fill="#8C8279" text-anchor="middle">compile</text>
+  </g>
+
+  <!-- PTX Box -->
+  <g transform="translate(800, 360)">
+    <rect x="0" y="0" width="160" height="100" rx="6" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+    <text x="80" y="30" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612" text-anchor="middle">PTX</text>
+    <text x="80" y="50" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">Assembly</text>
+    <text x="80" y="70" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">Thread-level</text>
+    <text x="80" y="85" font-family="Georgia, serif" font-size="10" fill="#8C8279" text-anchor="middle" font-style="italic">instructions</text>
+  </g>
+
+  <!-- Arrow -->
+  <g transform="translate(970, 405)">
+    <line x1="0" y1="0" x2="60" y2="0" stroke="#5C534A" stroke-width="2"/>
+    <polygon points="60,0 52,-5 52,5" fill="#5C534A"/>
+    <text x="30" y="-8" font-family="Georgia, serif" font-size="9" fill="#8C8279" text-anchor="middle">assemble</text>
+  </g>
+
+  <!-- CUBIN Box -->
+  <g transform="translate(1040, 360)">
+    <rect x="0" y="0" width="110" height="100" rx="6" fill="#C15F3C" stroke="#C15F3C" stroke-width="2"/>
+    <text x="55" y="30" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">CUBIN</text>
+    <text x="55" y="50" font-family="Georgia, serif" font-size="11" fill="#FFFFFF" text-anchor="middle">Binary</text>
+    <text x="55" y="75" font-family="Georgia, serif" font-size="10" fill="#FFFFFF" text-anchor="middle" font-style="italic">Runs on</text>
+    <text x="55" y="90" font-family="Georgia, serif" font-size="10" fill="#FFFFFF" text-anchor="middle" font-style="italic">GPU!</text>
+  </g>
+
+  <!-- BOTTOM: Key Optimizations -->
+  <g transform="translate(80, 500)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#1A1612">Optimization Passes at Each Stage</text>
+
+    <!-- TTIR optimizations -->
+    <g transform="translate(0, 25)">
+      <rect x="0" y="0" width="260" height="95" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <text x="130" y="20" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#C15F3C" text-anchor="middle">TTIR Passes</text>
+      <text x="15" y="40" font-family="Georgia, serif" font-size="11" fill="#5C534A">• CSE (common subexpression elim)</text>
+      <text x="15" y="55" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Dead code elimination</text>
+      <text x="15" y="70" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Canonicalization</text>
+      <text x="15" y="85" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Loop invariant hoisting</text>
+    </g>
+
+    <!-- TTGIR optimizations -->
+    <g transform="translate(280, 25)">
+      <rect x="0" y="0" width="280" height="95" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <text x="140" y="20" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#C15F3C" text-anchor="middle">TTGIR Passes (Hardware-Specific)</text>
+      <text x="15" y="40" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Layout optimization (mma, wmma)</text>
+      <text x="15" y="55" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Shared memory allocation</text>
+      <text x="15" y="70" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Pipeline scheduling</text>
+      <text x="15" y="85" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Coalescing analysis</text>
+    </g>
+
+    <!-- Layout encodings -->
+    <g transform="translate(580, 25)">
+      <rect x="0" y="0" width="260" height="95" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+      <text x="130" y="20" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#C15F3C" text-anchor="middle">Layout Encodings</text>
+      <text x="15" y="40" font-family="Georgia, serif" font-size="11" fill="#5C534A">• nvidia_mma (tensor cores)</text>
+      <text x="15" y="55" font-family="Georgia, serif" font-size="11" fill="#5C534A">• amd_mfma / amd_wmma</text>
+      <text x="15" y="70" font-family="Georgia, serif" font-size="11" fill="#5C534A">• shared (GPU shared memory)</text>
+      <text x="15" y="85" font-family="Georgia, serif" font-size="11" fill="#5C534A">• dot_op (optimized matmul)</text>
+    </g>
+
+    <!-- What Helion Automates -->
+    <g transform="translate(860, 25)">
+      <rect x="0" y="0" width="260" height="95" rx="4" fill="#C15F3C" stroke="#C15F3C" stroke-width="1"/>
+      <text x="130" y="20" font-family="Georgia, serif" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="middle">What Helion Automates</text>
+      <text x="15" y="40" font-family="Georgia, serif" font-size="11" fill="#FFFFFF">• Block size selection</text>
+      <text x="15" y="55" font-family="Georgia, serif" font-size="11" fill="#FFFFFF">• Memory indexing strategy</text>
+      <text x="15" y="70" font-family="Georgia, serif" font-size="11" fill="#FFFFFF">• Pipeline stages</text>
+      <text x="15" y="85" font-family="Georgia, serif" font-size="11" fill="#FFFFFF">• Grid mapping</text>
+    </g>
+  </g>
+
+  <!-- Footer -->
+  <text x="600" y="640" font-family="Georgia, serif" font-size="14" fill="#5C534A" text-anchor="middle" font-style="italic">
+    Helion generates Triton code. Triton compiles through MLIR to GPU binaries.
+  </text>
+  <text x="600" y="660" font-family="Georgia, serif" font-size="14" fill="#5C534A" text-anchor="middle" font-style="italic">
+    The search space exists in the Triton codegen step — which configurations to try.
+  </text>
+
+  <!-- Connection to KernelEvolve -->
+  <g transform="translate(200, 685)">
+    <rect x="0" y="0" width="800" height="45" rx="4" fill="#FFFFFF" stroke="#C15F3C" stroke-width="1.5"/>
+    <text x="400" y="18" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">
+      <tspan font-weight="600" fill="#C15F3C">KernelEvolve</tspan> uses LLMs to intelligently search this configuration space,
+    </text>
+    <text x="400" y="36" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">
+      rather than random search or exhaustive enumeration.
+    </text>
+  </g>
+</svg>

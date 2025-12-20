@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750">
+  <!-- Background -->
+  <rect width="1200" height="750" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="600" fill="#1A1612" text-anchor="middle">Helion's Autotuning Search Space</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">The configuration dimensions that determine kernel performance</text>
+
+  <!-- LEFT SIDE: Search Space Dimensions -->
+  <g transform="translate(50, 110)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612">Configuration Dimensions</text>
+
+    <!-- block_sizes -->
+    <g transform="translate(0, 30)">
+      <rect x="0" y="0" width="500" height="70" rx="4" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+      <text x="15" y="25" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#C15F3C">block_sizes</text>
+      <text x="15" y="45" font-family="Georgia, serif" font-size="12" fill="#5C534A">Tile dimensions for each hl.tile() call</text>
+      <text x="15" y="62" font-family="Monaco, monospace" font-size="11" fill="#8C8279">[32, 64, 128, 256] × num_tile_dims</text>
+      <rect x="360" y="15" width="120" height="40" rx="3" fill="#F4F3EE" stroke="#E5E2DC"/>
+      <text x="420" y="40" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">4ⁿ variants</text>
+    </g>
+
+    <!-- num_warps -->
+    <g transform="translate(0, 110)">
+      <rect x="0" y="0" width="500" height="70" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+      <text x="15" y="25" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612">num_warps</text>
+      <text x="15" y="45" font-family="Georgia, serif" font-size="12" fill="#5C534A">Thread group parallelism per block</text>
+      <text x="15" y="62" font-family="Monaco, monospace" font-size="11" fill="#8C8279">[2, 4, 8, 16] warps</text>
+      <rect x="360" y="15" width="120" height="40" rx="3" fill="#F4F3EE" stroke="#E5E2DC"/>
+      <text x="420" y="40" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">4 variants</text>
+    </g>
+
+    <!-- num_stages -->
+    <g transform="translate(0, 190)">
+      <rect x="0" y="0" width="500" height="70" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+      <text x="15" y="25" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612">num_stages</text>
+      <text x="15" y="45" font-family="Georgia, serif" font-size="12" fill="#5C534A">Software pipelining depth</text>
+      <text x="15" y="62" font-family="Monaco, monospace" font-size="11" fill="#8C8279">[2, 3, 4, 5] stages</text>
+      <rect x="360" y="15" width="120" height="40" rx="3" fill="#F4F3EE" stroke="#E5E2DC"/>
+      <text x="420" y="40" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">4 variants</text>
+    </g>
+
+    <!-- indexing -->
+    <g transform="translate(0, 270)">
+      <rect x="0" y="0" width="500" height="70" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+      <text x="15" y="25" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612">indexing</text>
+      <text x="15" y="45" font-family="Georgia, serif" font-size="12" fill="#5C534A">Memory access strategy per load/store</text>
+      <text x="15" y="62" font-family="Monaco, monospace" font-size="11" fill="#8C8279">[pointer, block_ptr, tensor_descriptor]</text>
+      <rect x="360" y="15" width="120" height="40" rx="3" fill="#F4F3EE" stroke="#E5E2DC"/>
+      <text x="420" y="40" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">3ᵐ variants</text>
+    </g>
+
+    <!-- pid_type -->
+    <g transform="translate(0, 350)">
+      <rect x="0" y="0" width="500" height="70" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+      <text x="15" y="25" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612">pid_type</text>
+      <text x="15" y="45" font-family="Georgia, serif" font-size="12" fill="#5C534A">Grid-to-block mapping strategy</text>
+      <text x="15" y="62" font-family="Monaco, monospace" font-size="11" fill="#8C8279">[flat, xyz, persistent_blocked, persistent_interleaved]</text>
+      <rect x="360" y="15" width="120" height="40" rx="3" fill="#F4F3EE" stroke="#E5E2DC"/>
+      <text x="420" y="40" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">4 variants</text>
+    </g>
+
+    <!-- loop_orders -->
+    <g transform="translate(0, 430)">
+      <rect x="0" y="0" width="500" height="70" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1.5"/>
+      <text x="15" y="25" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#1A1612">loop_orders</text>
+      <text x="15" y="45" font-family="Georgia, serif" font-size="12" fill="#5C534A">Iteration order permutations</text>
+      <text x="15" y="62" font-family="Monaco, monospace" font-size="11" fill="#8C8279">All permutations of loop dimensions</text>
+      <rect x="360" y="15" width="120" height="40" rx="3" fill="#F4F3EE" stroke="#E5E2DC"/>
+      <text x="420" y="40" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">k! variants</text>
+    </g>
+  </g>
+
+  <!-- RIGHT SIDE: Search Methods -->
+  <g transform="translate(600, 110)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612">Search Methods</text>
+
+    <!-- Standard Helion Autotuning -->
+    <g transform="translate(0, 30)">
+      <rect x="0" y="0" width="550" height="180" rx="6" fill="#FFFFFF" stroke="#5C534A" stroke-width="2"/>
+      <rect x="0" y="0" width="550" height="35" rx="6" fill="#5C534A"/>
+      <rect x="0" y="29" width="550" height="6" fill="#5C534A"/>
+      <text x="275" y="24" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Helion Default: Differential Evolution</text>
+
+      <text x="20" y="60" font-family="Georgia, serif" font-size="12" fill="#5C534A">• Random initial population</text>
+      <text x="20" y="80" font-family="Georgia, serif" font-size="12" fill="#5C534A">• Crossover and mutation operators</text>
+      <text x="20" y="100" font-family="Georgia, serif" font-size="12" fill="#5C534A">• ~10 minutes, 100s of evaluations</text>
+      <text x="20" y="120" font-family="Georgia, serif" font-size="12" fill="#5C534A">• Finds good solutions, not optimal</text>
+
+      <!-- Mini diagram -->
+      <g transform="translate(300, 55)">
+        <circle cx="30" cy="20" r="8" fill="#E5E2DC" stroke="#5C534A"/>
+        <circle cx="70" cy="35" r="8" fill="#E5E2DC" stroke="#5C534A"/>
+        <circle cx="50" cy="60" r="8" fill="#E5E2DC" stroke="#5C534A"/>
+        <circle cx="110" cy="25" r="8" fill="#E5E2DC" stroke="#5C534A"/>
+        <circle cx="150" cy="50" r="8" fill="#E5E2DC" stroke="#5C534A"/>
+        <text x="180" y="40" font-family="Georgia, serif" font-size="10" fill="#8C8279">random</text>
+        <text x="180" y="55" font-family="Georgia, serif" font-size="10" fill="#8C8279">search</text>
+      </g>
+
+      <text x="20" y="155" font-family="Georgia, serif" font-size="11" fill="#8C8279" font-style="italic">Limitation: No reasoning about why configurations fail</text>
+    </g>
+
+    <!-- KernelEvolve Enhancement -->
+    <g transform="translate(0, 230)">
+      <rect x="0" y="0" width="550" height="260" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+      <rect x="0" y="0" width="550" height="35" rx="6" fill="#C15F3C"/>
+      <rect x="0" y="29" width="550" height="6" fill="#C15F3C"/>
+      <text x="275" y="24" font-family="Georgia, serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">KernelEvolve: LLM-Guided Search</text>
+
+      <text x="20" y="60" font-family="Georgia, serif" font-size="12" fill="#5C534A">• LLM sees configuration + performance</text>
+      <text x="20" y="80" font-family="Georgia, serif" font-size="12" fill="#5C534A">• Reasons about hardware constraints</text>
+      <text x="20" y="100" font-family="Georgia, serif" font-size="12" fill="#5C534A">• Learns from failed attempts</text>
+      <text x="20" y="120" font-family="Georgia, serif" font-size="12" fill="#5C534A">• Intelligent mutation suggestions</text>
+
+      <!-- LLM reasoning example -->
+      <g transform="translate(20, 135)">
+        <rect x="0" y="0" width="510" height="100" rx="4" fill="#F4F3EE" stroke="#E5E2DC"/>
+        <text x="10" y="20" font-family="Monaco, monospace" font-size="10" fill="#8C8279"># LLM observes:</text>
+        <text x="10" y="35" font-family="Monaco, monospace" font-size="10" fill="#5C534A">"Increasing warps 4→8 didn't help (78→78 TFLOPS)"</text>
+        <text x="10" y="55" font-family="Monaco, monospace" font-size="10" fill="#8C8279"># LLM reasons:</text>
+        <text x="10" y="70" font-family="Monaco, monospace" font-size="10" fill="#5C534A">"We're compute-bound, not warp-limited."</text>
+        <text x="10" y="85" font-family="Monaco, monospace" font-size="10" fill="#C15F3C" font-weight="600">"Try larger tiles: block_m 64→128"</text>
+      </g>
+
+      <text x="20" y="250" font-family="Georgia, serif" font-size="11" fill="#C15F3C" font-style="italic">Result: Faster convergence, better final performance</text>
+    </g>
+  </g>
+
+  <!-- BOTTOM: The Multiplicative Explosion -->
+  <g transform="translate(50, 560)">
+    <rect x="0" y="0" width="1100" height="75" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+
+    <text x="550" y="25" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#1A1612" text-anchor="middle">Total Search Space Size</text>
+
+    <text x="100" y="55" font-family="Monaco, monospace" font-size="14" fill="#5C534A">4ⁿ × 4 × 4 × 3ᵐ × 4 × k!</text>
+    <text x="370" y="55" font-family="Georgia, serif" font-size="14" fill="#5C534A">=</text>
+    <text x="400" y="55" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#C15F3C">Thousands to Millions</text>
+    <text x="640" y="55" font-family="Georgia, serif" font-size="14" fill="#5C534A">of valid configurations</text>
+    <text x="900" y="55" font-family="Georgia, serif" font-size="12" fill="#8C8279" font-style="italic">(n = tile dims, m = mem ops, k = loops)</text>
+  </g>
+
+  <!-- Connection callout -->
+  <g transform="translate(50, 655)">
+    <rect x="0" y="0" width="1100" height="75" rx="4" fill="#F4F3EE" stroke="#E5E2DC" stroke-width="1.5"/>
+    <text x="550" y="25" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle" font-weight="600">Why This Matters for KernelEvolve</text>
+    <text x="550" y="48" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">
+      Helion creates a <tspan font-weight="600" fill="#C15F3C">structured, discrete</tspan> search space.
+    </text>
+    <text x="550" y="68" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">
+      LLMs can reason about this space in ways that random search cannot.
+    </text>
+  </g>
+</svg>

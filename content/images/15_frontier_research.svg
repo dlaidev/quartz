@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <text x="600" y="50" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="#1A1612" text-anchor="middle">Where Does Cutting-Edge AI Research Live?</text>
+  <text x="600" y="85" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">The dual nature of frontier research discovery</text>
+
+  <!-- Left circle: arXiv -->
+  <circle cx="400" cy="380" r="180" fill="#5C8A9B" fill-opacity="0.25" stroke="#5C8A9B" stroke-width="3"/>
+
+  <!-- Right circle: X/Twitter -->
+  <circle cx="700" cy="380" r="180" fill="#C15F3C" fill-opacity="0.25" stroke="#C15F3C" stroke-width="3"/>
+
+  <!-- Left label: arXiv -->
+  <text x="280" y="280" font-family="Georgia, serif" font-size="28" fill="#5C8A9B" font-weight="bold">arXiv</text>
+  <text x="280" y="310" font-family="Georgia, serif" font-size="14" fill="#5C534A">(official)</text>
+  <text x="280" y="350" font-family="Georgia, serif" font-size="13" fill="#5C534A">• Peer-reviewed papers</text>
+  <text x="280" y="375" font-family="Georgia, serif" font-size="13" fill="#5C534A">• Complete methodology</text>
+  <text x="280" y="400" font-family="Georgia, serif" font-size="13" fill="#5C534A">• Reproducible results</text>
+  <text x="280" y="425" font-family="Georgia, serif" font-size="13" fill="#5C534A">• Historical record</text>
+  <text x="280" y="465" font-family="Georgia, serif" font-size="12" fill="#8C8279" font-style="italic">Lag: weeks to months</text>
+
+  <!-- Right label: X/Twitter -->
+  <text x="780" y="280" font-family="Georgia, serif" font-size="28" fill="#C15F3C" font-weight="bold">X / Twitter</text>
+  <text x="780" y="310" font-family="Georgia, serif" font-size="14" fill="#5C534A">(cutting edge)</text>
+  <text x="780" y="350" font-family="Georgia, serif" font-size="13" fill="#5C534A">• Real-time discoveries</text>
+  <text x="780" y="375" font-family="Georgia, serif" font-size="13" fill="#5C534A">• Expert discussions</text>
+  <text x="780" y="400" font-family="Georgia, serif" font-size="13" fill="#5C534A">• Failed experiments</text>
+  <text x="780" y="425" font-family="Georgia, serif" font-size="13" fill="#5C534A">• Intuitions and tricks</text>
+  <text x="780" y="465" font-family="Georgia, serif" font-size="12" fill="#8C8279" font-style="italic">Lag: hours to days</text>
+
+  <!-- Center intersection label -->
+  <text x="550" y="360" font-family="Georgia, serif" font-size="18" fill="#1A1612" font-weight="bold" text-anchor="middle">FRONTIER</text>
+  <text x="550" y="385" font-family="Georgia, serif" font-size="18" fill="#1A1612" font-weight="bold" text-anchor="middle">RESEARCH</text>
+  <text x="550" y="420" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle">Complete picture</text>
+  <text x="550" y="440" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle">requires both</text>
+
+  <!-- Timeline at top -->
+  <text x="100" y="130" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#1A1612">Example: Flash Attention Discovery Timeline</text>
+
+  <line x1="100" y1="175" x2="1000" y2="175" stroke="#E5E2DC" stroke-width="2"/>
+
+  <!-- Day 1 -->
+  <circle cx="180" cy="175" r="8" fill="#C15F3C"/>
+  <text x="180" y="205" font-family="Georgia, serif" font-size="11" fill="#C15F3C" text-anchor="middle" font-weight="bold">Day 1</text>
+  <text x="180" y="220" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">X threads</text>
+
+  <!-- Week 1 -->
+  <circle cx="380" cy="175" r="8" fill="#C15F3C"/>
+  <text x="380" y="205" font-family="Georgia, serif" font-size="11" fill="#C15F3C" text-anchor="middle" font-weight="bold">Week 1</text>
+  <text x="380" y="220" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">First results on X</text>
+
+  <!-- Month 2 -->
+  <circle cx="620" cy="175" r="8" fill="#5C8A9B"/>
+  <text x="620" y="205" font-family="Georgia, serif" font-size="11" fill="#5C8A9B" text-anchor="middle" font-weight="bold">Month 2</text>
+  <text x="620" y="220" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">arXiv preprint</text>
+
+  <!-- Month 6+ -->
+  <circle cx="860" cy="175" r="8" fill="#7D9B76"/>
+  <text x="860" y="205" font-family="Georgia, serif" font-size="11" fill="#7D9B76" text-anchor="middle" font-weight="bold">Month 6+</text>
+  <text x="860" y="220" font-family="Georgia, serif" font-size="10" fill="#5C534A" text-anchor="middle">PyTorch integration</text>
+
+  <!-- Key insight box -->
+  <rect x="700" y="120" width="400" height="70" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+  <text x="900" y="145" font-family="Georgia, serif" font-size="13" fill="#1A1612" text-anchor="middle" font-weight="bold">Why this matters:</text>
+  <text x="900" y="165" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle">If you only read papers, you're months behind.</text>
+  <text x="900" y="182" font-family="Georgia, serif" font-size="12" fill="#5C534A" text-anchor="middle">If you only read X, you miss the details.</text>
+
+  <!-- Quote box at bottom -->
+  <rect x="150" y="620" width="900" height="80" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+  <text x="600" y="655" font-family="Georgia, serif" font-size="20" fill="#1A1612" text-anchor="middle" font-style="italic">"The conversation is the cutting edge.</text>
+  <text x="600" y="685" font-family="Georgia, serif" font-size="20" fill="#1A1612" text-anchor="middle" font-style="italic">The paper is the historical record."</text>
+
+  <!-- Legend -->
+  <rect x="100" y="720" width="15" height="15" fill="#C15F3C" rx="2"/>
+  <text x="125" y="733" font-family="Georgia, serif" font-size="12" fill="#5C534A">Real-time (X/Twitter)</text>
+
+  <rect x="300" y="720" width="15" height="15" fill="#5C8A9B" rx="2"/>
+  <text x="325" y="733" font-family="Georgia, serif" font-size="12" fill="#5C534A">Official (arXiv)</text>
+
+  <rect x="480" y="720" width="15" height="15" fill="#7D9B76" rx="2"/>
+  <text x="505" y="733" font-family="Georgia, serif" font-size="12" fill="#5C534A">Production adoption</text>
+</svg>

@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <text x="600" y="45" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="#1A1612" text-anchor="middle">AlphaEvolve Architecture</text>
+  <text x="600" y="75" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle">A Gemini-powered coding agent for algorithm discovery (DeepMind, 2025)</text>
+
+  <!-- Four main components -->
+
+  <!-- 1. Program Database (left) -->
+  <rect x="50" y="130" width="250" height="280" rx="8" fill="#FFFFFF" stroke="#5C8A9B" stroke-width="3"/>
+  <rect x="50" y="130" width="250" height="40" rx="8" fill="#5C8A9B"/>
+  <rect x="50" y="162" width="250" height="8" fill="#5C8A9B"/>
+  <text x="175" y="158" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Program Database</text>
+
+  <text x="70" y="200" font-family="Georgia, serif" font-size="12" fill="#1A1612" font-weight="bold">Stores:</text>
+  <text x="70" y="220" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Prior code versions</text>
+  <text x="70" y="238" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Evaluation scores</text>
+  <text x="70" y="256" font-family="Georgia, serif" font-size="11" fill="#5C534A">• High-performing solutions</text>
+  <text x="70" y="274" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Fitness history</text>
+
+  <text x="70" y="305" font-family="Georgia, serif" font-size="12" fill="#1A1612" font-weight="bold">Purpose:</text>
+  <text x="70" y="325" font-family="Georgia, serif" font-size="11" fill="#5C534A">Collective memory that</text>
+  <text x="70" y="343" font-family="Georgia, serif" font-size="11" fill="#5C534A">feeds back into prompts</text>
+
+  <rect x="70" y="360" width="210" height="35" rx="4" fill="#5C8A9B" fill-opacity="0.2"/>
+  <text x="175" y="382" font-family="Georgia, serif" font-size="11" fill="#5C8A9B" text-anchor="middle" font-style="italic">Survival of the fittest</text>
+
+  <!-- 2. Prompt Sampler (top center) -->
+  <rect x="350" y="130" width="250" height="160" rx="8" fill="#FFFFFF" stroke="#9B7DC1" stroke-width="3"/>
+  <rect x="350" y="130" width="250" height="40" rx="8" fill="#9B7DC1"/>
+  <rect x="350" y="162" width="250" height="8" fill="#9B7DC1"/>
+  <text x="475" y="158" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Prompt Sampler</text>
+
+  <text x="370" y="200" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Selects parent programs</text>
+  <text x="370" y="220" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Chooses "inspirations"</text>
+  <text x="370" y="240" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Assembles rich context</text>
+  <text x="370" y="260" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Builds LLM prompts</text>
+
+  <!-- 3. LLM Ensemble (right top) -->
+  <rect x="650" y="130" width="280" height="280" rx="8" fill="#FFFFFF" stroke="#C15F3C" stroke-width="3"/>
+  <rect x="650" y="130" width="280" height="40" rx="8" fill="#C15F3C"/>
+  <rect x="650" y="162" width="280" height="8" fill="#C15F3C"/>
+  <text x="790" y="158" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">LLM Ensemble</text>
+
+  <!-- Gemini Flash -->
+  <rect x="670" y="190" width="240" height="70" rx="4" fill="#F4F3EE" stroke="#C15F3C" stroke-width="1"/>
+  <text x="790" y="215" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#C15F3C" text-anchor="middle">Gemini 2.0 Flash</text>
+  <text x="790" y="235" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">High throughput, fast iteration</text>
+  <text x="790" y="252" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">Maximizes breadth of ideas</text>
+
+  <!-- Gemini Pro -->
+  <rect x="670" y="270" width="240" height="70" rx="4" fill="#F4F3EE" stroke="#C15F3C" stroke-width="1"/>
+  <text x="790" y="295" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#C15F3C" text-anchor="middle">Gemini 2.0 Pro</text>
+  <text x="790" y="315" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">Higher quality suggestions</text>
+  <text x="790" y="332" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">Provides critical depth</text>
+
+  <text x="790" y="370" font-family="Georgia, serif" font-size="12" fill="#1A1612" font-weight="bold" text-anchor="middle">Output: Code diffs (mutations)</text>
+  <text x="790" y="390" font-family="Georgia, serif" font-size="11" fill="#5C534A" text-anchor="middle">Not random: semantically meaningful</text>
+
+  <!-- 4. Evaluator Pool (bottom right) -->
+  <rect x="650" y="440" width="280" height="180" rx="8" fill="#FFFFFF" stroke="#7D9B76" stroke-width="3"/>
+  <rect x="650" y="440" width="280" height="40" rx="8" fill="#7D9B76"/>
+  <rect x="650" y="472" width="280" height="8" fill="#7D9B76"/>
+  <text x="790" y="468" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Evaluator Pool</text>
+
+  <text x="670" y="505" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Executes modified code</text>
+  <text x="670" y="525" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Multi-metric feedback</text>
+  <text x="670" y="545" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Computational speed</text>
+  <text x="670" y="565" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Mathematical correctness</text>
+  <text x="670" y="585" font-family="Georgia, serif" font-size="11" fill="#5C534A">• Task-specific metrics</text>
+
+  <text x="790" y="610" font-family="Georgia, serif" font-size="11" fill="#7D9B76" text-anchor="middle" font-weight="bold">Ground truth from real execution</text>
+
+  <!-- 5. Distributed Controller (center) -->
+  <rect x="350" y="340" width="250" height="280" rx="8" fill="#FFFFFF" stroke="#1A1612" stroke-width="3"/>
+  <rect x="350" y="340" width="250" height="40" rx="8" fill="#1A1612"/>
+  <rect x="350" y="372" width="250" height="8" fill="#1A1612"/>
+  <text x="475" y="368" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Distributed Controller</text>
+
+  <text x="370" y="410" font-family="Georgia, serif" font-size="12" fill="#1A1612" font-weight="bold">The Core Loop:</text>
+  <text x="370" y="432" font-family="Georgia, serif" font-size="11" fill="#5C534A">1. Sample parents from DB</text>
+  <text x="370" y="452" font-family="Georgia, serif" font-size="11" fill="#5C534A">2. Build prompts</text>
+  <text x="370" y="472" font-family="Georgia, serif" font-size="11" fill="#5C534A">3. Generate code diffs (LLM)</text>
+  <text x="370" y="492" font-family="Georgia, serif" font-size="11" fill="#5C534A">4. Apply diffs → child programs</text>
+  <text x="370" y="512" font-family="Georgia, serif" font-size="11" fill="#5C534A">5. Execute and evaluate</text>
+  <text x="370" y="532" font-family="Georgia, serif" font-size="11" fill="#5C534A">6. Add children to DB</text>
+  <text x="370" y="552" font-family="Georgia, serif" font-size="11" fill="#5C534A">7. Repeat</text>
+
+  <rect x="370" y="570" width="210" height="35" rx="4" fill="#1A1612" fill-opacity="0.1"/>
+  <text x="475" y="592" font-family="Georgia, serif" font-size="11" fill="#1A1612" text-anchor="middle" font-style="italic">Async, massively parallel</text>
+
+  <!-- Arrows connecting components -->
+  <!-- DB to Prompt Sampler -->
+  <line x1="300" y1="220" x2="350" y2="200" stroke="#5C534A" stroke-width="2"/>
+  <polygon points="350,200 342,195 342,205" fill="#5C534A"/>
+
+  <!-- Prompt Sampler to LLM -->
+  <line x1="600" y1="200" x2="650" y2="200" stroke="#5C534A" stroke-width="2"/>
+  <polygon points="650,200 642,195 642,205" fill="#5C534A"/>
+
+  <!-- LLM to Controller -->
+  <line x1="650" y1="350" x2="600" y2="400" stroke="#5C534A" stroke-width="2"/>
+  <polygon points="600,400 608,393 610,403" fill="#5C534A"/>
+
+  <!-- Controller to Evaluator -->
+  <line x1="600" y1="500" x2="650" y2="500" stroke="#5C534A" stroke-width="2"/>
+  <polygon points="650,500 642,495 642,505" fill="#5C534A"/>
+
+  <!-- Evaluator to DB (feedback loop) -->
+  <path d="M650,580 Q400,700 175,410" fill="none" stroke="#7D9B76" stroke-width="2" stroke-dasharray="6,3"/>
+  <polygon points="175,410 182,418 172,420" fill="#7D9B76"/>
+  <text x="380" y="680" font-family="Georgia, serif" font-size="11" fill="#7D9B76" font-style="italic">Feedback loop: scores update database</text>
+
+  <!-- Key achievements box -->
+  <rect x="50" y="440" width="250" height="180" rx="6" fill="#FFFFFF" stroke="#C15F3C" stroke-width="2"/>
+  <text x="175" y="465" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">Key Achievements</text>
+
+  <text x="70" y="495" font-family="Georgia, serif" font-size="11" fill="#5C534A">• 4x4 complex matrices: 48 mults</text>
+  <text x="80" y="512" font-family="Georgia, serif" font-size="10" fill="#8C8279">(beat Strassen's 1969 record)</text>
+  <text x="70" y="535" font-family="Georgia, serif" font-size="11" fill="#5C534A">• 0.7% of Google's compute saved</text>
+  <text x="80" y="552" font-family="Georgia, serif" font-size="10" fill="#8C8279">(Borg scheduler optimization)</text>
+  <text x="70" y="575" font-family="Georgia, serif" font-size="11" fill="#5C534A">• 23% faster kernel tiling</text>
+  <text x="70" y="595" font-family="Georgia, serif" font-size="11" fill="#5C534A">• 32% faster FlashAttention</text>
+
+  <!-- Connection to KernelEvolve -->
+  <rect x="50" y="640" width="1100" height="70" rx="6" fill="#C15F3C" fill-opacity="0.1" stroke="#C15F3C" stroke-width="2"/>
+  <text x="600" y="670" font-family="Georgia, serif" font-size="15" fill="#1A1612" text-anchor="middle" font-weight="bold">Connection to KernelEvolve</text>
+  <text x="600" y="695" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">We apply the same principle: LLM-guided evolution to search Helion's configuration space for optimal GPU kernels.</text>
+
+  <!-- Labels for flow -->
+  <text x="320" y="185" font-family="Georgia, serif" font-size="10" fill="#8C8279">parents</text>
+  <text x="620" y="185" font-family="Georgia, serif" font-size="10" fill="#8C8279">prompts</text>
+  <text x="620" y="385" font-family="Georgia, serif" font-size="10" fill="#8C8279">diffs</text>
+  <text x="620" y="485" font-family="Georgia, serif" font-size="10" fill="#8C8279">children</text>
+</svg>

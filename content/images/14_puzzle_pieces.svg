@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="80" font-family="Georgia, serif" font-size="42" font-weight="600" fill="#1A1612" text-anchor="middle">Part 2</text>
+  <text x="600" y="140" font-family="Georgia, serif" font-size="32" fill="#5C534A" text-anchor="middle">The Pieces of the Puzzle</text>
+
+  <!-- Puzzle pieces visualization -->
+  <g transform="translate(200, 200)">
+    <!-- Piece 1: Research Discovery (top left, connected) -->
+    <g transform="translate(0, 0)">
+      <path d="M0,50 L0,0 L150,0 L150,50 Q150,75 175,75 Q200,75 200,50 L200,0 L200,150 L150,150 L150,100 Q150,75 125,75 Q100,75 100,100 L100,150 L0,150 L0,100 Q0,75 25,75 Q50,75 50,100 L50,150 L0,150 Z"
+            fill="#C15F3C" stroke="#FFFFFF" stroke-width="3"/>
+      <text x="100" y="70" font-family="Georgia, serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="600">Research</text>
+      <text x="100" y="90" font-family="Georgia, serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="600">Discovery</text>
+      <text x="100" y="125" font-family="Georgia, serif" font-size="11" fill="#FFFFFF" text-anchor="middle" font-style="italic">arXiv + X</text>
+    </g>
+
+    <!-- Piece 2: Idea Generation (top right, connected) -->
+    <g transform="translate(200, 0)">
+      <path d="M0,50 Q0,75 -25,75 Q-50,75 -50,50 L-50,0 L150,0 L150,50 Q150,75 175,75 Q200,75 200,50 L200,0 L200,150 L150,150 L150,100 Q150,75 125,75 Q100,75 100,100 L100,150 L0,150 L0,100 Q0,75 25,75 Q50,75 50,100 L50,150 L0,150 L0,50 Z"
+            fill="#7D9B76" stroke="#FFFFFF" stroke-width="3"/>
+      <text x="100" y="70" font-family="Georgia, serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="600">Idea</text>
+      <text x="100" y="90" font-family="Georgia, serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="600">Generation</text>
+      <text x="100" y="125" font-family="Georgia, serif" font-size="11" fill="#FFFFFF" text-anchor="middle" font-style="italic">DSPy</text>
+    </g>
+
+    <!-- Piece 3: Code Generation (top right 2, connected) -->
+    <g transform="translate(400, 0)">
+      <path d="M0,50 Q0,75 -25,75 Q-50,75 -50,50 L-50,0 L150,0 L150,150 L100,150 L100,100 Q100,75 75,75 Q50,75 50,100 L50,150 L0,150 L0,50 Z"
+            fill="#5C8A9B" stroke="#FFFFFF" stroke-width="3"/>
+      <text x="75" y="70" font-family="Georgia, serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="600">Code</text>
+      <text x="75" y="90" font-family="Georgia, serif" font-size="14" fill="#FFFFFF" text-anchor="middle" font-weight="600">Generation</text>
+      <text x="75" y="125" font-family="Georgia, serif" font-size="11" fill="#FFFFFF" text-anchor="middle" font-style="italic">PyTorch</text>
+    </g>
+
+    <!-- Piece 4: Kernel Optimization (bottom, disconnected with gap) -->
+    <g transform="translate(100, 200)">
+      <!-- Dashed outline showing where it should connect -->
+      <path d="M0,0 L0,-50 Q0,-75 25,-75 Q50,-75 50,-50 L50,0 L200,0 L200,-50 Q200,-75 225,-75 Q250,-75 250,-50 L250,0 L250,150 L0,150 Z"
+            fill="none" stroke="#C15F3C" stroke-width="2" stroke-dasharray="8,4" opacity="0.5"/>
+
+      <!-- The actual piece, slightly offset to show it's not connected -->
+      <g transform="translate(20, 30)">
+        <path d="M0,0 L0,-50 Q0,-75 25,-75 Q50,-75 50,-50 L50,0 L200,0 L200,-50 Q200,-75 225,-75 Q250,-75 250,-50 L250,0 L250,150 L0,150 Z"
+              fill="#C15F3C" stroke="#FFFFFF" stroke-width="3"/>
+        <text x="125" y="50" font-family="Georgia, serif" font-size="16" fill="#FFFFFF" text-anchor="middle" font-weight="600">Kernel</text>
+        <text x="125" y="75" font-family="Georgia, serif" font-size="16" fill="#FFFFFF" text-anchor="middle" font-weight="600">Optimization</text>
+        <text x="125" y="110" font-family="Georgia, serif" font-size="13" fill="#FFFFFF" text-anchor="middle" font-style="italic">The Missing Piece</text>
+
+        <!-- Question mark -->
+        <text x="125" y="140" font-family="Georgia, serif" font-size="24" fill="#FFFFFF" text-anchor="middle">?</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Arrow indicating the gap -->
+  <g transform="translate(700, 350)">
+    <line x1="0" y1="0" x2="100" y2="0" stroke="#C15F3C" stroke-width="3" stroke-dasharray="8,4"/>
+    <text x="150" y="5" font-family="Georgia, serif" font-size="14" fill="#C15F3C" font-weight="600">THE GAP</text>
+    <text x="150" y="25" font-family="Georgia, serif" font-size="12" fill="#5C534A">We have all the pieces</text>
+    <text x="150" y="42" font-family="Georgia, serif" font-size="12" fill="#5C534A">except the hardest one</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(700, 480)">
+    <text x="0" y="0" font-family="Georgia, serif" font-size="16" fill="#1A1612" font-weight="600">The Complete Pipeline:</text>
+
+    <g transform="translate(0, 30)">
+      <rect x="0" y="0" width="20" height="20" fill="#C15F3C" rx="3"/>
+      <text x="30" y="15" font-family="Georgia, serif" font-size="13" fill="#5C534A">Research Discovery (arXiv, X/Twitter)</text>
+    </g>
+
+    <g transform="translate(0, 60)">
+      <rect x="0" y="0" width="20" height="20" fill="#7D9B76" rx="3"/>
+      <text x="30" y="15" font-family="Georgia, serif" font-size="13" fill="#5C534A">Idea Generation (DSPy + LLM)</text>
+    </g>
+
+    <g transform="translate(0, 90)">
+      <rect x="0" y="0" width="20" height="20" fill="#5C8A9B" rx="3"/>
+      <text x="30" y="15" font-family="Georgia, serif" font-size="13" fill="#5C534A">Code Generation (PyTorch)</text>
+    </g>
+
+    <g transform="translate(0, 120)">
+      <rect x="0" y="0" width="20" height="20" fill="#C15F3C" rx="3" stroke="#C15F3C" stroke-dasharray="4,2"/>
+      <text x="30" y="15" font-family="Georgia, serif" font-size="13" fill="#C15F3C" font-weight="600">Kernel Optimization (Helion + Evolution)</text>
+    </g>
+  </g>
+
+  <!-- Bottom tagline -->
+  <g transform="translate(100, 720)">
+    <rect x="0" y="0" width="1000" height="50" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="500" y="32" font-family="Georgia, serif" font-size="16" fill="#5C534A" text-anchor="middle" font-style="italic">
+      "The pieces exist. The challenge is connecting them."
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,101 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="55" font-family="Georgia, serif" font-size="36" font-weight="400" fill="#1A1612" text-anchor="middle">The Configuration Search Space</text>
+  <text x="600" y="90" font-family="Georgia, serif" font-size="18" fill="#5C534A" text-anchor="middle" font-style="italic">Helion kernel parameters and their combinations</text>
+
+  <!-- Decorative line -->
+  <line x1="400" y1="110" x2="800" y2="110" stroke="#E5E2DC" stroke-width="1"/>
+
+  <!-- Parameter table -->
+  <g transform="translate(100, 140)">
+    <!-- Headers -->
+    <text x="0" y="0" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#5C534A">Parameter</text>
+    <text x="220" y="0" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#5C534A">Options</text>
+    <text x="680" y="0" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#5C534A">Count</text>
+
+    <!-- Row 1 -->
+    <rect x="0" y="20" width="180" height="45" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="90" y="50" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">block_sizes</text>
+    <rect x="220" y="20" width="400" height="45" rx="4" fill="#FBF7F4" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="240" y="50" font-family="Georgia, serif" font-size="13" fill="#5C534A">[32, 64, 128, 256] × 3 dimensions</text>
+    <text x="700" y="50" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#C15F3C">64</text>
+
+    <!-- Row 2 -->
+    <rect x="0" y="75" width="180" height="45" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="90" y="105" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">num_warps</text>
+    <rect x="220" y="75" width="150" height="45" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="240" y="105" font-family="Georgia, serif" font-size="13" fill="#5C534A">[2, 4, 8]</text>
+    <text x="700" y="105" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#5C534A">3</text>
+
+    <!-- Row 3 -->
+    <rect x="0" y="130" width="180" height="45" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="90" y="160" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">num_stages</text>
+    <rect x="220" y="130" width="150" height="45" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="240" y="160" font-family="Georgia, serif" font-size="13" fill="#5C534A">[2, 3, 4]</text>
+    <text x="700" y="160" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#5C534A">3</text>
+
+    <!-- Row 4 -->
+    <rect x="0" y="185" width="180" height="45" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="90" y="215" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">indexing</text>
+    <rect x="220" y="185" width="280" height="45" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="240" y="215" font-family="Georgia, serif" font-size="13" fill="#5C534A">[pointer, block_ptr, TMA]</text>
+    <text x="700" y="215" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#5C534A">3</text>
+
+    <!-- Row 5 -->
+    <rect x="0" y="240" width="180" height="45" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="90" y="270" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">pid_type</text>
+    <rect x="220" y="240" width="350" height="45" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="240" y="270" font-family="Georgia, serif" font-size="13" fill="#5C534A">[flat, xyz, persistent_blocked, ...]</text>
+    <text x="700" y="270" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#5C534A">4</text>
+
+    <!-- Row 6 -->
+    <rect x="0" y="295" width="180" height="45" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="90" y="325" font-family="Georgia, serif" font-size="14" fill="#1A1612" text-anchor="middle">loop_orders</text>
+    <rect x="220" y="295" width="200" height="45" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="240" y="325" font-family="Georgia, serif" font-size="13" fill="#5C534A">[permutations...]</text>
+    <text x="700" y="325" font-family="Georgia, serif" font-size="16" font-weight="600" fill="#5C534A">6+</text>
+  </g>
+
+  <!-- Calculation -->
+  <g transform="translate(100, 520)">
+    <rect x="0" y="0" width="1000" height="110" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+
+    <text x="500" y="35" font-family="Georgia, serif" font-size="18" font-weight="600" fill="#1A1612" text-anchor="middle">Combinatorial Explosion</text>
+
+    <text x="50" y="75" font-family="Georgia, serif" font-size="22" font-weight="600" fill="#C15F3C">64</text>
+    <text x="100" y="75" font-family="Georgia, serif" font-size="22" fill="#B1ADA1">×</text>
+    <text x="130" y="75" font-family="Georgia, serif" font-size="22" font-weight="600" fill="#5C534A">3</text>
+    <text x="165" y="75" font-family="Georgia, serif" font-size="22" fill="#B1ADA1">×</text>
+    <text x="195" y="75" font-family="Georgia, serif" font-size="22" font-weight="600" fill="#5C534A">3</text>
+    <text x="230" y="75" font-family="Georgia, serif" font-size="22" fill="#B1ADA1">×</text>
+    <text x="260" y="75" font-family="Georgia, serif" font-size="22" font-weight="600" fill="#5C534A">3</text>
+    <text x="295" y="75" font-family="Georgia, serif" font-size="22" fill="#B1ADA1">×</text>
+    <text x="325" y="75" font-family="Georgia, serif" font-size="22" font-weight="600" fill="#5C534A">4</text>
+    <text x="360" y="75" font-family="Georgia, serif" font-size="22" fill="#B1ADA1">×</text>
+    <text x="390" y="75" font-family="Georgia, serif" font-size="22" font-weight="600" fill="#5C534A">6</text>
+    <text x="440" y="75" font-family="Georgia, serif" font-size="22" fill="#B1ADA1">=</text>
+
+    <rect x="480" y="50" width="180" height="45" rx="4" fill="#C15F3C"/>
+    <text x="570" y="82" font-family="Georgia, serif" font-size="24" font-weight="700" fill="#FFFFFF" text-anchor="middle">~14,000</text>
+
+    <text x="690" y="82" font-family="Georgia, serif" font-size="18" fill="#5C534A">configurations</text>
+
+    <text x="500" y="100" font-family="Georgia, serif" font-size="12" fill="#8C8279" text-anchor="middle">(simplified example—real kernels have even more parameters)</text>
+  </g>
+
+  <!-- Comparison boxes -->
+  <g transform="translate(100, 660)">
+    <rect x="0" y="0" width="450" height="85" rx="4" fill="#FFFFFF" stroke="#E5E2DC" stroke-width="1"/>
+    <text x="225" y="30" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#5C534A" text-anchor="middle">Grid Search?</text>
+    <text x="225" y="55" font-family="Georgia, serif" font-size="13" fill="#8C8279" text-anchor="middle">Each config takes seconds to benchmark.</text>
+    <text x="225" y="75" font-family="Georgia, serif" font-size="13" fill="#8C8279" text-anchor="middle">14,000 configs = 4+ hours per kernel</text>
+
+    <rect x="480" y="0" width="450" height="85" rx="4" fill="#FBF7F4" stroke="#C15F3C" stroke-width="2"/>
+    <text x="705" y="30" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#C15F3C" text-anchor="middle">Intelligent Search</text>
+    <text x="705" y="55" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">LLM-guided evolution: ~100 evaluations</text>
+    <text x="705" y="75" font-family="Georgia, serif" font-size="13" fill="#5C534A" text-anchor="middle">Find optimal in ~10 minutes</text>
+  </g>
+</svg>

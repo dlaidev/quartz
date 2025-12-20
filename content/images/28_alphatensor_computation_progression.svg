@@ -1,0 +1,253 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000">
+  <!-- Background -->
+  <rect width="1200" height="1000" fill="#F4F3EE"/>
+
+  <!-- Title -->
+  <text x="600" y="45" font-family="Georgia, serif" font-size="32" font-weight="bold" fill="#C15F3C" text-anchor="middle">The AlphaTensor Insight: Why Fewer Multiplications Matter</text>
+  <text x="600" y="80" font-family="Georgia, serif" font-size="16" fill="#5a4a3a" text-anchor="middle">A step-by-step journey from CPU cycles to tensor decomposition</text>
+
+  <!-- STEP 1: The Hardware Reality -->
+  <g transform="translate(50, 110)">
+    <rect x="0" y="0" width="350" height="200" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <rect x="0" y="0" width="350" height="40" fill="#C15F3C" rx="10"/>
+    <rect x="0" y="30" width="350" height="10" fill="#C15F3C"/>
+    <text x="175" y="28" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Step 1: The Hardware Reality</text>
+
+    <!-- CPU cycle table -->
+    <text x="20" y="70" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">CPU Operation Latency (64-bit integers):</text>
+
+    <rect x="20" y="85" width="150" height="35" fill="#d4ecd4" stroke="#5a4a3a" stroke-width="1"/>
+    <text x="95" y="108" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">Addition</text>
+    <rect x="170" y="85" width="80" height="35" fill="#d4ecd4" stroke="#5a4a3a" stroke-width="1"/>
+    <text x="210" y="108" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#2a8a2a" text-anchor="middle">1 cycle</text>
+
+    <rect x="20" y="120" width="150" height="35" fill="#fce4e4" stroke="#5a4a3a" stroke-width="1"/>
+    <text x="95" y="143" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">Multiplication</text>
+    <rect x="170" y="120" width="80" height="35" fill="#fce4e4" stroke="#5a4a3a" stroke-width="1"/>
+    <text x="210" y="143" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#8a2a2a" text-anchor="middle">20 cycles</text>
+
+    <!-- Key insight -->
+    <rect x="20" y="165" width="310" height="25" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" rx="5"/>
+    <text x="175" y="183" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#C15F3C" text-anchor="middle">Multiplication is 20x more expensive!</text>
+  </g>
+
+  <!-- Arrow to Step 2 -->
+  <path d="M405,210 L440,210" fill="none" stroke="#C15F3C" stroke-width="3"/>
+  <polygon points="440,210 430,205 430,215" fill="#C15F3C"/>
+
+  <!-- STEP 2: The Trade-off Insight -->
+  <g transform="translate(450, 110)">
+    <rect x="0" y="0" width="350" height="200" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <rect x="0" y="0" width="350" height="40" fill="#C15F3C" rx="10"/>
+    <rect x="0" y="30" width="350" height="10" fill="#C15F3C"/>
+    <text x="175" y="28" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Step 2: The Trade-off</text>
+
+    <text x="20" y="70" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">Compute a² - b² in two ways:</text>
+
+    <!-- Method 1 -->
+    <rect x="20" y="85" width="150" height="50" fill="#fce4e4" stroke="#C15F3C" stroke-width="1" rx="5"/>
+    <text x="95" y="105" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">a×a - b×b</text>
+    <text x="95" y="125" font-family="Georgia, serif" font-size="11" fill="#8a2a2a" text-anchor="middle">2 mults + 1 add = 41 cycles</text>
+
+    <!-- Method 2 -->
+    <rect x="180" y="85" width="150" height="50" fill="#d4ecd4" stroke="#C15F3C" stroke-width="1" rx="5"/>
+    <text x="255" y="105" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">(a+b) × (a-b)</text>
+    <text x="255" y="125" font-family="Georgia, serif" font-size="11" fill="#2a8a2a" text-anchor="middle">1 mult + 2 adds = 22 cycles</text>
+
+    <!-- Savings -->
+    <rect x="20" y="145" width="310" height="45" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="5"/>
+    <text x="175" y="165" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">Same result, but trade 1 mult for 1 add:</text>
+    <text x="175" y="183" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">Save 19 cycles (46% faster!)</text>
+  </g>
+
+  <!-- Arrow to Step 3 -->
+  <path d="M805,210 L840,210" fill="none" stroke="#C15F3C" stroke-width="3"/>
+  <polygon points="840,210 830,205 830,215" fill="#C15F3C"/>
+
+  <!-- STEP 3: Apply to Matrices -->
+  <g transform="translate(850, 110)">
+    <rect x="0" y="0" width="300" height="200" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <rect x="0" y="0" width="300" height="40" fill="#C15F3C" rx="10"/>
+    <rect x="0" y="30" width="300" height="10" fill="#C15F3C"/>
+    <text x="150" y="28" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Step 3: Scale to Matrices</text>
+
+    <text x="20" y="70" font-family="Georgia, serif" font-size="12" fill="#5a4a3a">Can we do the same for matrices?</text>
+
+    <!-- 2x2 matrix multiplication -->
+    <text x="150" y="95" font-family="Georgia, serif" font-size="14" fill="#C15F3C" text-anchor="middle">[2×2] × [2×2] = [2×2]</text>
+
+    <!-- Standard -->
+    <rect x="20" y="105" width="120" height="40" fill="#fce4e4" stroke="#C15F3C" stroke-width="1" rx="5"/>
+    <text x="80" y="125" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Standard: 8 mults</text>
+    <text x="80" y="140" font-family="Georgia, serif" font-size="10" fill="#8a2a2a" text-anchor="middle">164 cycles</text>
+
+    <!-- Strassen -->
+    <rect x="160" y="105" width="120" height="40" fill="#d4ecd4" stroke="#C15F3C" stroke-width="1" rx="5"/>
+    <text x="220" y="125" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Strassen: 7 mults</text>
+    <text x="220" y="140" font-family="Georgia, serif" font-size="10" fill="#2a8a2a" text-anchor="middle">158 cycles</text>
+
+    <!-- Key insight -->
+    <rect x="20" y="155" width="260" height="35" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="5"/>
+    <text x="150" y="172" font-family="Georgia, serif" font-size="11" fill="#5a4a3a" text-anchor="middle">Strassen (1969): Trade mults for adds!</text>
+    <text x="150" y="185" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#C15F3C" text-anchor="middle">Recursively: O(n³) → O(n^2.807)</text>
+  </g>
+
+  <!-- STEP 4: Standard vs Strassen Formulas -->
+  <g transform="translate(50, 330)">
+    <rect x="0" y="0" width="550" height="280" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <rect x="0" y="0" width="550" height="40" fill="#C15F3C" rx="10"/>
+    <rect x="0" y="30" width="550" height="10" fill="#C15F3C"/>
+    <text x="275" y="28" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Step 4: The Strassen Algorithm</text>
+
+    <!-- Matrix equation -->
+    <text x="275" y="70" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">[a₁ a₂; a₃ a₄] × [b₁ b₂; b₃ b₄] = [c₁ c₂; c₃ c₄]</text>
+
+    <!-- Standard Algorithm -->
+    <g transform="translate(20, 85)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#8a2a2a">Standard (8 mults):</text>
+      <text x="0" y="22" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">m₁ = a₁·b₁    m₂ = a₁·b₂</text>
+      <text x="0" y="40" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">m₃ = a₂·b₃    m₄ = a₂·b₄</text>
+      <text x="0" y="58" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">m₅ = a₃·b₁    m₆ = a₃·b₂</text>
+      <text x="0" y="76" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">m₇ = a₄·b₃    m₈ = a₄·b₄</text>
+      <text x="0" y="100" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">c₁ = m₁ + m₃</text>
+      <text x="0" y="118" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">c₂ = m₂ + m₄</text>
+      <text x="0" y="136" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">c₃ = m₅ + m₇</text>
+      <text x="0" y="154" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">c₄ = m₆ + m₈</text>
+      <rect x="0" y="165" width="140" height="25" fill="#fce4e4" stroke="#8a2a2a" stroke-width="1" rx="3"/>
+      <text x="70" y="182" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#8a2a2a" text-anchor="middle">8×20 + 4×1 = 164</text>
+    </g>
+
+    <!-- Strassen Algorithm -->
+    <g transform="translate(200, 85)">
+      <text x="0" y="0" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a">Strassen (7 mults):</text>
+      <text x="0" y="22" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">m₁ = (a₁+a₄)·(b₁+b₄)</text>
+      <text x="0" y="40" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">m₂ = (a₃+a₄)·b₁</text>
+      <text x="0" y="58" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">m₃ = a₁·(b₂-b₄)</text>
+      <text x="0" y="76" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">m₄ = a₄·(b₃-b₁)</text>
+      <text x="0" y="94" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">m₅ = (a₁+a₂)·b₄</text>
+      <text x="0" y="112" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">m₆ = (a₃-a₁)·(b₁+b₂)</text>
+      <text x="0" y="130" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">m₇ = (a₂-a₄)·(b₃+b₄)</text>
+      <text x="0" y="155" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">c₁ = m₁+m₄-m₅+m₇</text>
+      <text x="0" y="173" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">c₂ = m₃+m₅</text>
+      <rect x="0" y="180" width="140" height="25" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="1" rx="3"/>
+      <text x="70" y="197" font-family="Georgia, serif" font-size="11" font-weight="bold" fill="#2a8a2a" text-anchor="middle">7×20 + 18×1 = 158</text>
+    </g>
+
+    <!-- Savings callout -->
+    <g transform="translate(380, 100)">
+      <rect x="0" y="0" width="150" height="130" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="10"/>
+      <text x="75" y="30" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">Savings</text>
+      <text x="75" y="55" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">-1 multiplication</text>
+      <text x="75" y="75" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">+14 additions</text>
+      <line x1="20" y1="90" x2="130" y2="90" stroke="#C15F3C" stroke-width="1"/>
+      <text x="75" y="115" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">6 cycles saved</text>
+    </g>
+  </g>
+
+  <!-- Arrow down -->
+  <path d="M325,620 L325,660" fill="none" stroke="#C15F3C" stroke-width="3"/>
+  <polygon points="325,660 320,650 330,650" fill="#C15F3C"/>
+
+  <!-- STEP 5: The Tensor Representation -->
+  <g transform="translate(620, 330)">
+    <rect x="0" y="0" width="530" height="280" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <rect x="0" y="0" width="530" height="40" fill="#C15F3C" rx="10"/>
+    <rect x="0" y="30" width="530" height="10" fill="#C15F3C"/>
+    <text x="265" y="28" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Step 5: The Tensor Representation</text>
+
+    <text x="20" y="70" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">Matrix multiplication can be encoded as a 3D tensor T:</text>
+
+    <!-- 3D Tensor visualization -->
+    <g transform="translate(20, 85)">
+      <!-- Axis labels -->
+      <text x="0" y="10" font-family="Georgia, serif" font-size="12" fill="#C15F3C">Dimensions:</text>
+      <text x="0" y="30" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">• a-axis: entries of matrix A</text>
+      <text x="0" y="48" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">• b-axis: entries of matrix B</text>
+      <text x="0" y="66" font-family="Georgia, serif" font-size="11" fill="#5a4a3a">• c-axis: entries of result C</text>
+
+      <!-- Simple 3D cube representation -->
+      <g transform="translate(200, 0)">
+        <!-- Back face -->
+        <rect x="30" y="0" width="60" height="60" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" opacity="0.5"/>
+        <!-- Side face -->
+        <polygon points="90,0 120,15 120,75 90,60" fill="#d4c4b0" stroke="#C15F3C" stroke-width="1" opacity="0.7"/>
+        <!-- Top face -->
+        <polygon points="30,0 60,15 120,15 90,0" fill="#C15F3C" stroke="#C15F3C" stroke-width="1" opacity="0.3"/>
+        <!-- Front face -->
+        <rect x="30" y="15" width="60" height="60" fill="#fff" stroke="#C15F3C" stroke-width="2"/>
+
+        <!-- Purple cells (1s) -->
+        <rect x="30" y="15" width="15" height="15" fill="#8B5CF6" opacity="0.8"/>
+        <rect x="60" y="30" width="15" height="15" fill="#8B5CF6" opacity="0.8"/>
+        <rect x="45" y="60" width="15" height="15" fill="#8B5CF6" opacity="0.8"/>
+
+        <!-- Axis arrows -->
+        <line x1="30" y1="80" x2="100" y2="80" stroke="#5a4a3a" stroke-width="2"/>
+        <text x="105" y="85" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">a</text>
+        <line x1="25" y1="75" x2="25" y2="10" stroke="#5a4a3a" stroke-width="2"/>
+        <text x="20" y="5" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">b</text>
+        <line x1="95" y1="55" x2="125" y2="40" stroke="#5a4a3a" stroke-width="2"/>
+        <text x="130" y="40" font-family="Georgia, serif" font-size="10" fill="#5a4a3a">c</text>
+      </g>
+    </g>
+
+    <!-- Key insight -->
+    <rect x="20" y="160" width="490" height="50" fill="#e8e4dc" stroke="#C15F3C" stroke-width="1" rx="5"/>
+    <text x="265" y="180" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">T[a,b,c] = 1 means: "entry a of A times entry b of B contributes to entry c of C"</text>
+    <text x="265" y="198" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">Example: c₁ = a₁b₁ + a₂b₃ → T[a₁,b₁,c₁]=1 and T[a₂,b₃,c₁]=1</text>
+
+    <!-- Decomposition insight -->
+    <rect x="20" y="220" width="490" height="50" fill="#d4c4b0" stroke="#C15F3C" stroke-width="2" rx="5"/>
+    <text x="265" y="240" font-family="Georgia, serif" font-size="13" font-weight="bold" fill="#C15F3C" text-anchor="middle">Key Insight: T can be decomposed into rank-R sum</text>
+    <text x="265" y="258" font-family="Georgia, serif" font-size="12" fill="#5a4a3a" text-anchor="middle">T = Σᵣ uᵣ ⊗ vᵣ ⊗ wᵣ   where R = number of multiplications!</text>
+  </g>
+
+  <!-- STEP 6: U, V, W Decomposition -->
+  <g transform="translate(50, 680)">
+    <rect x="0" y="0" width="1100" height="290" fill="#fff" stroke="#C15F3C" stroke-width="2" rx="10"/>
+    <rect x="0" y="0" width="1100" height="40" fill="#C15F3C" rx="10"/>
+    <rect x="0" y="30" width="1100" height="10" fill="#C15F3C"/>
+    <text x="550" y="28" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#fff" text-anchor="middle">Step 6: The U, V, W Factor Matrices (Strassen Decomposition)</text>
+
+    <!-- Explanation -->
+    <text x="20" y="70" font-family="Georgia, serif" font-size="13" fill="#5a4a3a">Each multiplication mᵣ is defined by three vectors: uᵣ (how to combine A entries), vᵣ (how to combine B entries), wᵣ (where result goes in C)</text>
+
+    <!-- U Matrix -->
+    <g transform="translate(30, 90)">
+      <rect x="0" y="0" width="320" height="130" fill="#d4ecd4" stroke="#2a8a2a" stroke-width="2" rx="8"/>
+      <text x="160" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#2a8a2a" text-anchor="middle">U Matrix (4×7) - A coefficients</text>
+      <text x="20" y="50" font-family="monospace" font-size="10" fill="#5a4a3a">     m₁  m₂  m₃  m₄  m₅  m₆  m₇</text>
+      <text x="20" y="68" font-family="monospace" font-size="10" fill="#5a4a3a">a₁ [  1   0   1   0   1  -1   0 ]</text>
+      <text x="20" y="86" font-family="monospace" font-size="10" fill="#5a4a3a">a₂ [  0   0   0   0   1   0   1 ]</text>
+      <text x="20" y="104" font-family="monospace" font-size="10" fill="#5a4a3a">a₃ [  0   1   0   0   0   1   0 ]</text>
+      <text x="20" y="122" font-family="monospace" font-size="10" fill="#5a4a3a">a₄ [  1   1   0   1   0   0  -1 ]</text>
+    </g>
+
+    <!-- V Matrix -->
+    <g transform="translate(390, 90)">
+      <rect x="0" y="0" width="320" height="130" fill="#e8d4ec" stroke="#8B5CF6" stroke-width="2" rx="8"/>
+      <text x="160" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#8B5CF6" text-anchor="middle">V Matrix (4×7) - B coefficients</text>
+      <text x="20" y="50" font-family="monospace" font-size="10" fill="#5a4a3a">     m₁  m₂  m₃  m₄  m₅  m₆  m₇</text>
+      <text x="20" y="68" font-family="monospace" font-size="10" fill="#5a4a3a">b₁ [  1   1   0  -1   0   1   0 ]</text>
+      <text x="20" y="86" font-family="monospace" font-size="10" fill="#5a4a3a">b₂ [  0   0   1   0   0   1   0 ]</text>
+      <text x="20" y="104" font-family="monospace" font-size="10" fill="#5a4a3a">b₃ [  0   0   0   1   0   0   1 ]</text>
+      <text x="20" y="122" font-family="monospace" font-size="10" fill="#5a4a3a">b₄ [  1   0  -1   0   1   0   1 ]</text>
+    </g>
+
+    <!-- W Matrix -->
+    <g transform="translate(750, 90)">
+      <rect x="0" y="0" width="320" height="130" fill="#fce4d4" stroke="#C15F3C" stroke-width="2" rx="8"/>
+      <text x="160" y="25" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#C15F3C" text-anchor="middle">W Matrix (4×7) - C destinations</text>
+      <text x="20" y="50" font-family="monospace" font-size="10" fill="#5a4a3a">     m₁  m₂  m₃  m₄  m₅  m₆  m₇</text>
+      <text x="20" y="68" font-family="monospace" font-size="10" fill="#5a4a3a">c₁ [  1   0   0   1  -1   0   1 ]</text>
+      <text x="20" y="86" font-family="monospace" font-size="10" fill="#5a4a3a">c₂ [  0   0   1   0   1   0   0 ]</text>
+      <text x="20" y="104" font-family="monospace" font-size="10" fill="#5a4a3a">c₃ [  0   1   0   1   0   0   0 ]</text>
+      <text x="20" y="122" font-family="monospace" font-size="10" fill="#5a4a3a">c₄ [  1  -1   1   0   0   1   0 ]</text>
+    </g>
+
+    <!-- Final insight -->
+    <rect x="30" y="230" width="1040" height="50" fill="#d4c4b0" stroke="#C15F3C" stroke-width="3" rx="10"/>
+    <text x="550" y="252" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#C15F3C" text-anchor="middle">AlphaTensor's Goal: Find U, V, W with minimum R (fewest columns = fewest multiplications)</text>
+    <text x="550" y="272" font-family="Georgia, serif" font-size="14" fill="#5a4a3a" text-anchor="middle">Standard: R=8 → Strassen: R=7 → AlphaTensor 4×4: R=47 (vs 49 previously known!)</text>
+  </g>
+</svg>
