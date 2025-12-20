@@ -1320,6 +1320,6 @@ The hackathon projects were done in collaboration with Ameen Patel, Emily Shen, 
     year         = {2025},
     month        = dec,
     note         = {Last updated: December 2025},
-    url          = {https://github.com/mycpuorg/algo-super-intelligence/blob/main/blog_post_llm_kernel_optimization.md}
+    url          = {https://mlai.blog/2025-12-20-llm-kernel-optimization}
 }
 ```
