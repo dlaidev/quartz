@@ -2,6 +2,11 @@
 
 // put your custom CSS here!
 
+// Explorer collapsed by default on desktop
+.explorer.collapsed .explorer-content {
+  display: none;
+}
+
 // Syntax-highlighted code blocks (dark theme)
 pre:has(code[data-theme]) {
   background-color: #2d2a24 !important;
