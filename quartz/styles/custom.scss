@@ -1,3 +1,35 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+
+// Syntax-highlighted code blocks (dark theme)
+pre:has(code[data-theme]) {
+  background-color: #2d2a24 !important;
+  border-color: #3d3830 !important;
+}
+
+code[data-theme*=" "] {
+  background-color: #2d2a24 !important;
+  color: #e8e0d0 !important;
+}
+
+code[data-theme*=" "] span {
+  color: var(--shiki-dark) !important;
+}
+
+// Plain code blocks without syntax highlighting (light sepia theme)
+pre:not(:has(code[data-theme])) {
+  background-color: #f0e6d3 !important;
+  border-color: #e4d8c4 !important;
+}
+
+pre:not(:has(code[data-theme])) > code {
+  background-color: #f0e6d3 !important;
+  color: #3b2f2f !important;
+}
+
+// Inline code
+:not(pre) > code {
+  background-color: #e5dcc8 !important;
+  color: #3b2f2f !important;
+}

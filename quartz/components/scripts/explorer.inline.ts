@@ -269,30 +269,32 @@ document.addEventListener("nav", async (e: CustomEventMap["nav"]) => {
   const currentSlug = e.detail.url
   await setupExplorer(currentSlug)
 
-  // if mobile hamburger is visible, collapse by default
+  // collapse explorer by default on both mobile and desktop
   for (const explorer of document.getElementsByClassName("explorer")) {
     const mobileExplorer = explorer.querySelector(".mobile-explorer")
     if (!mobileExplorer) return
 
-    if (mobileExplorer.checkVisibility()) {
-      explorer.classList.add("collapsed")
-      explorer.setAttribute("aria-expanded", "false")
+    // Collapse by default (both mobile and desktop)
+    explorer.classList.add("collapsed")
+    explorer.setAttribute("aria-expanded", "false")
 
-      // Allow <html> to be scrollable when mobile explorer is collapsed
-      document.documentElement.classList.remove("mobile-no-scroll")
-    }
+    // Allow <html> to be scrollable when explorer is collapsed
+    document.documentElement.classList.remove("mobile-no-scroll")
 
     mobileExplorer.classList.remove("hide-until-loaded")
   }
 })
 
 window.addEventListener("resize", function () {
-  // Desktop explorer opens by default, and it stays open when the window is resized
-  // to mobile screen size. Applies `no-scroll` to <html> in this edge case.
+  // Handle scroll lock when explorer is open and window is resized
   const explorer = document.querySelector(".explorer")
-  if (explorer && !explorer.classList.contains("collapsed")) {
+  if (!explorer) return
+
+  const mobileExplorer = explorer.querySelector(".mobile-explorer")
+  if (mobileExplorer?.checkVisibility() && !explorer.classList.contains("collapsed")) {
     document.documentElement.classList.add("mobile-no-scroll")
-    return
+  } else {
+    document.documentElement.classList.remove("mobile-no-scroll")
   }
 })
 

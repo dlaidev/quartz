@@ -22,22 +22,6 @@ Some of the ideas in this article were tested in public: an earlier version plac
 
 ---
 
-## Table of Contents
-
-1. [Introduction: The Kernel Optimization Crisis](#introduction)
-2. [The Computational Foundation](#computational-foundation)
-3. [From Strassen to Tensors: The Mathematical Framework](#mathematical-framework)
-4. [DeepMind's Journey: AlphaTensor → AlphaEvolve](#deepmind-journey)
-5. [AlphaEvolve Architecture Deep Dive](#alphaevolve-architecture)
-6. [The Helion Integration: From DSL to Optimized Kernels](#helion-integration)
-7. [Prompt Engineering for Kernel Evolution](#prompt-engineering)
-8. [Diff-Based Code Generation](#diff-generation)
-9. [The GEMM Case Study: Production Results](#gemm-case-study)
-10. [Implications and Future Directions](#future-directions)
-
----
-
-
 ```
 Note: References to AlphaEvolve below refer to OpenEvolve, the open-source implementation of the AlphaEvolve paper: https://github.com/algorithmicsuperintelligence/openevolve
 
