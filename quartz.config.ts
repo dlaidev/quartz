@@ -25,7 +25,7 @@ const config: QuartzConfig = {
       typography: {
         title: "Cormorant Garamond",
         header: "Cormorant Garamond",
-        body: "Source Sans Pro",
+        body: "Cormorant Garamond",
         code: "IBM Plex Mono",
       },
       colors: {
