@@ -7,6 +7,50 @@
   display: none;
 }
 
+// Larger heading sizes for script font (only in article content)
+.article-title {
+  font-size: 4.5rem !important;
+}
+
+article h1 {
+  font-size: 3rem !important;
+}
+
+article h2 {
+  font-size: 2.5rem !important;
+}
+
+article h3 {
+  font-size: 2rem !important;
+}
+
+// Blog title
+.page-title {
+  font-size: 2.5rem !important;
+}
+
+// Sidebar headings
+.toc h3 {
+  font-size: 1.4rem !important;
+}
+
+// Explorer title - prevent cropping
+.explorer h2,
+button.desktop-explorer h2 {
+  font-size: 1.4rem !important;
+  overflow: visible !important;
+  line-height: 1.8 !important;
+}
+
+.explorer {
+  overflow: visible !important;
+}
+
+.explorer .title-button {
+  overflow: visible !important;
+  height: auto !important;
+}
+
 // Syntax-highlighted code blocks (dark theme)
 pre:has(code[data-theme]) {
   background-color: #2d2a24 !important;

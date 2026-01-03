@@ -18,13 +18,13 @@ const config: QuartzConfig = {
     locale: "en-US",
     baseUrl: "http://www.dlai.dev",
     ignorePatterns: ["private", "templates", ".obsidian"],
-    defaultDateType: "modified",
+    defaultDateType: "created",
     theme: {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        title: "Playfair Display",
-        header: "Playfair Display",
+        title: "Cormorant Garamond",
+        header: "Cormorant Garamond",
         body: "Source Sans Pro",
         code: "IBM Plex Mono",
       },
