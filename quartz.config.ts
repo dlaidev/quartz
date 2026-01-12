@@ -23,9 +23,9 @@ const config: QuartzConfig = {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        title: "Cormorant Garamond",
-        header: "Cormorant Garamond",
-        body: "Cormorant Garamond",
+        title: "EB Garamond",
+        header: "EB Garamond",
+        body: "EB Garamond",
         code: "IBM Plex Mono",
       },
       colors: {
