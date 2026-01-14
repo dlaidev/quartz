@@ -44,7 +44,7 @@ const config: QuartzConfig = {
 //   --link-hover:   #5a3923;
 //   --hljs-bg:      #f4e8d4;
 // }
-          light:        "#f7f2e6", // main sepia
+          light:        "#fcfbf9", // subtle sepia
           lightgray: "#e5e5e5",
           gray: "#b8b8b8",
           darkgray: "#4e4e4e",
@@ -55,7 +55,7 @@ const config: QuartzConfig = {
           textHighlight: "#fff23688",
         },
         darkMode: {
-          light:        "#f7f2e6", // main sepia
+          light:        "#fcfbf9", // subtle sepia
           lightgray: "#e5e5e5",
           gray: "#b8b8b8",
           darkgray: "#4e4e4e",

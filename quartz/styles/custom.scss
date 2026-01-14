@@ -71,15 +71,15 @@ code[data-theme*=" "] span {
   color: var(--shiki-dark) !important;
 }
 
-// Plain code blocks without syntax highlighting (light sepia theme)
+// Plain code blocks without syntax highlighting (dark theme to match syntax-highlighted)
 pre:not(:has(code[data-theme])) {
-  background-color: #f0e6d3 !important;
-  border-color: #e4d8c4 !important;
+  background-color: #2d2a24 !important;
+  border-color: #3d3830 !important;
 }
 
 pre:not(:has(code[data-theme])) > code {
-  background-color: #f0e6d3 !important;
-  color: #3b2f2f !important;
+  background-color: #2d2a24 !important;
+  color: #e8e0d0 !important;
 }
 
 // Inline code
