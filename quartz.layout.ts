@@ -7,9 +7,7 @@ export const sharedPageComponents: SharedLayout = {
   header: [],
   afterBody: [],
   footer: Component.Footer({
-    links: {
-      GitHub: "https://github.com/dlaidev/quartz",
-    },
+    links: {},
   }),
 }
 
@@ -42,6 +40,7 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Graph(),
     Component.DesktopOnly(Component.TableOfContents()),
     Component.Backlinks(),
+    Component.RecentReads({ limit: 5 }),
   ],
 }
 

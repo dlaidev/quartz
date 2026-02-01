@@ -1,0 +1,60 @@
+.recent-reads {
+  & > h3 {
+    margin: 0.5rem 0 0 0;
+    font-size: 1rem;
+  }
+
+  & > ul.reads-ul {
+    list-style: none;
+    margin-top: 1rem;
+    padding-left: 0;
+
+    & > li {
+      margin: 1rem 0;
+
+      .read-title {
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin: 0;
+
+        a {
+          background-color: transparent;
+          color: var(--dark);
+          text-decoration: none;
+
+          &:hover {
+            color: var(--secondary);
+          }
+        }
+      }
+
+      .read-meta {
+        margin: 0.2rem 0 0 0;
+        opacity: 0.6;
+        font-size: 0.75rem;
+      }
+
+      .read-category {
+        display: inline-block;
+        font-size: 0.7rem;
+        padding: 0.1rem 0.4rem;
+        border-radius: 0.25rem;
+        background: var(--lightgray);
+        color: var(--darkgray);
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  .reads-loading,
+  .reads-error {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    margin-top: 0.5rem;
+  }
+
+  .reads-more {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+  }
+}
