@@ -34,7 +34,7 @@ document.addEventListener("nav", async () => {
         })
         const author = item.author ? ` · ${item.author}` : ""
         // Link to reading notes on reading.mlai.blog subdomain
-        const noteUrl = `https://reading.mlai.blog/${item.id}`
+        const noteUrl = `https://reading.mlai.blog/read/${item.id}`
         return `<li>
           <p class="read-title"><a href="${noteUrl}">${item.title}</a></p>
           <p class="read-meta">${date}${author}</p>
