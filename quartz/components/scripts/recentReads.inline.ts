@@ -33,8 +33,8 @@ document.addEventListener("nav", async () => {
           day: "numeric",
         })
         const author = item.author ? ` · ${item.author}` : ""
-        // Link to internal reading notes page, not the external source
-        const noteUrl = `/reading/${item.id}`
+        // Link to reading notes on reading.mlai.blog subdomain
+        const noteUrl = `https://reading.mlai.blog/${item.id}`
         return `<li>
           <p class="read-title"><a href="${noteUrl}">${item.title}</a></p>
           <p class="read-meta">${date}${author}</p>
