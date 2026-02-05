@@ -1,0 +1,145 @@
+<svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: Georgia, serif; font-size: 24px; fill: #C15F3C; font-weight: bold; }
+      .subtitle { font-family: Georgia, serif; font-size: 16px; fill: #666; font-style: italic; }
+      .label { font-family: Georgia, serif; font-size: 14px; fill: #333; }
+      .label-bold { font-family: Georgia, serif; font-size: 14px; fill: #333; font-weight: bold; }
+      .math { font-family: Georgia, serif; font-size: 16px; fill: #333; }
+      .math-large { font-family: Georgia, serif; font-size: 20px; fill: #C15F3C; font-weight: bold; }
+      .insight { font-family: Georgia, serif; font-size: 13px; fill: #555; }
+      .cost-high { fill: #C15F3C; }
+      .cost-low { fill: #7A9B76; }
+      .block { fill: #F4F3EE; stroke: #C15F3C; stroke-width: 2; }
+      .block-mult { fill: #F4E4DF; stroke: #C15F3C; stroke-width: 2; }
+      .block-add { fill: #E8F0E7; stroke: #7A9B76; stroke-width: 2; }
+      .arrow { fill: none; stroke: #666; stroke-width: 2; marker-end: url(#arrowhead); }
+      .divider { stroke: #DDD; stroke-width: 1; stroke-dasharray: 4,4; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="600" fill="#FAFAF8"/>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" class="title">Why Strassen Wins: Multiplications Dominate</text>
+  <text x="450" y="58" text-anchor="middle" class="subtitle">Trading superquadratic ops for quadratic ones</text>
+
+  <!-- Divider -->
+  <line x1="50" y1="75" x2="850" y2="75" class="divider"/>
+
+  <!-- Section 1: Block Matrix View -->
+  <text x="70" y="105" class="label-bold">The Key Insight: Block Matrix Perspective</text>
+
+  <!-- 2N x 2N matrix as 2x2 blocks -->
+  <rect x="70" y="125" width="160" height="160" class="block"/>
+  <line x1="150" y1="125" x2="150" y2="285" stroke="#C15F3C" stroke-width="1"/>
+  <line x1="70" y1="205" x2="230" y2="205" stroke="#C15F3C" stroke-width="1"/>
+
+  <text x="110" y="170" text-anchor="middle" class="math">A₁₁</text>
+  <text x="190" y="170" text-anchor="middle" class="math">A₁₂</text>
+  <text x="110" y="250" text-anchor="middle" class="math">A₂₁</text>
+  <text x="190" y="250" text-anchor="middle" class="math">A₂₂</text>
+
+  <text x="150" y="305" text-anchor="middle" class="label">2N × 2N matrix</text>
+  <text x="150" y="322" text-anchor="middle" class="insight">= 2×2 of N×N blocks</text>
+
+  <!-- Arrow -->
+  <path d="M 250 205 L 290 205" class="arrow"/>
+
+  <!-- Cost comparison box -->
+  <rect x="310" y="125" width="250" height="160" rx="8" fill="#F9F9F7" stroke="#DDD" stroke-width="1"/>
+
+  <text x="435" y="150" text-anchor="middle" class="label-bold">Operation Costs (N×N blocks)</text>
+
+  <!-- Multiplication cost -->
+  <rect x="330" y="165" width="20" height="50" class="block-mult"/>
+  <text x="360" y="185" class="math">Block multiply</text>
+  <text x="360" y="205" class="math-large">&gt; O(N²)</text>
+  <text x="360" y="222" class="insight">superquadratic</text>
+
+  <!-- Addition cost -->
+  <rect x="330" y="235" width="20" height="25" class="block-add"/>
+  <text x="360" y="255" class="math">Block add</text>
+  <text x="360" y="272" class="cost-low" style="font-family: Georgia; font-size: 16px; font-weight: bold;">O(N²)</text>
+
+  <!-- Ratio indicator -->
+  <text x="520" y="200" class="insight" text-anchor="middle">As N grows,</text>
+  <text x="520" y="218" class="insight" text-anchor="middle">multiply cost</text>
+  <text x="520" y="236" class="insight" text-anchor="middle">dominates</text>
+  <text x="520" y="260" class="math-large" text-anchor="middle">∞</text>
+
+  <!-- Section 2: The Trade-off -->
+  <line x1="50" y1="345" x2="850" y2="345" class="divider"/>
+
+  <text x="70" y="375" class="label-bold">The Trade: 8 Multiplications → 7 Multiplications</text>
+
+  <!-- Standard algorithm -->
+  <rect x="70" y="395" width="180" height="90" rx="6" fill="#FDF5F3" stroke="#C15F3C" stroke-width="1"/>
+  <text x="160" y="420" text-anchor="middle" class="label-bold">Standard</text>
+
+  <!-- 8 multiplication boxes -->
+  <g transform="translate(85, 430)">
+    <rect x="0" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="22" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="44" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="66" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="88" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="110" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="132" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="154" y="0" width="18" height="35" class="block-mult"/>
+  </g>
+  <text x="160" y="480" text-anchor="middle" class="math">8 × mult + 4 × add</text>
+
+  <!-- Arrow -->
+  <path d="M 270 440 L 310 440" class="arrow"/>
+  <text x="290" y="430" text-anchor="middle" class="insight">trade</text>
+
+  <!-- Strassen algorithm -->
+  <rect x="330" y="395" width="220" height="90" rx="6" fill="#F5FAF4" stroke="#7A9B76" stroke-width="1"/>
+  <text x="440" y="420" text-anchor="middle" class="label-bold" style="fill: #7A9B76;">Strassen</text>
+
+  <!-- 7 multiplication boxes -->
+  <g transform="translate(345, 430)">
+    <rect x="0" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="22" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="44" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="66" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="88" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="110" y="0" width="18" height="35" class="block-mult"/>
+    <rect x="132" y="0" width="18" height="35" class="block-mult"/>
+  </g>
+  <!-- Addition boxes (smaller) -->
+  <g transform="translate(345, 468)">
+    <rect x="155" y="-38" width="10" height="12" class="block-add"/>
+    <rect x="167" y="-38" width="10" height="12" class="block-add"/>
+    <rect x="179" y="-38" width="10" height="12" class="block-add"/>
+    <rect x="155" y="-24" width="10" height="12" class="block-add"/>
+    <rect x="167" y="-24" width="10" height="12" class="block-add"/>
+    <rect x="179" y="-24" width="10" height="12" class="block-add"/>
+  </g>
+  <text x="440" y="480" text-anchor="middle" class="math">7 × mult + 18 × add</text>
+
+  <!-- Section 3: Why it works -->
+  <rect x="580" y="395" width="270" height="155" rx="8" fill="#F4F3EE" stroke="#C15F3C" stroke-width="2"/>
+
+  <text x="715" y="420" text-anchor="middle" class="label-bold">Why This Works</text>
+
+  <text x="595" y="445" class="insight">At scale:</text>
+  <text x="595" y="463" class="math" style="font-size: 14px;">• Multiply: O(N^α), α &gt; 2</text>
+  <text x="595" y="481" class="math" style="font-size: 14px;">• Add: O(N²)</text>
+  <text x="595" y="502" class="insight">Additions become free.</text>
+  <text x="595" y="520" class="insight">Each mult saved = one fewer</text>
+  <text x="595" y="538" class="insight">recursive subproblem.</text>
+
+  <!-- Bottom: Result -->
+  <rect x="70" y="540" width="480" height="45" rx="6" fill="#C15F3C" opacity="0.1" stroke="#C15F3C" stroke-width="1"/>
+  <text x="310" y="568" text-anchor="middle" class="math-large">T(N) = 7·T(N/2) + O(N²)  →  O(N^log₂7) ≈ O(N^2.807)</text>
+
+  <!-- Attribution -->
+  <text x="850" y="590" text-anchor="end" style="font-family: Georgia, serif; font-size: 11px; fill: #999; font-style: italic;">Insight via Benoit Jacob</text>
+
+</svg>

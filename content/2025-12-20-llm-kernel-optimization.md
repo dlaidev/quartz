@@ -215,6 +215,8 @@ The additions become asymptotically free.
 That's why 7 multiplications with 18 additions beats 8 multiplications with 4 additions, not because of instruction-level cycle counts, but because at scale,
 the multiplications dominate and each one you eliminate saves an entire recursive subproblem.
 
+![Strassen Asymptotic Insight](images/33_strassen_asymptotic_insight.svg)
+
 Lower exponents require different multiplication algorithms.
 
 ### The Tensor Decomposition Framework
@@ -1239,6 +1241,7 @@ All visualizations referenced in this post, organized by topic:
 ### Mathematical Framework
 | # | File | Description |
 |---|------|-------------|
+| 33 | `33_strassen_asymptotic_insight.svg` | Why Strassen wins: block matrix perspective |
 | 13 | `13_tensor_decomposition.svg` | U, V, W tensor decomposition |
 | 28 | `28_alphatensor_computation_progression.svg` | Step-by-step mathematical progression |
 | 29 | `29_tensor_3d_visualization.svg` | 3D tensor slices and AlphaTensor game |
