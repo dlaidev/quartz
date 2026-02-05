@@ -151,21 +151,6 @@ For the purpose of motivating the rest of this discussion, we'll continue with t
 
 If the same result can be computed with fewer multiplications, additional additions may be acceptable.
 
-### The Cost of Operations
-
-The relative cost of operations constrains algorithm design:
-
-![CPU Operation Latency](images/12_strassen_motivation.svg)
-
-On modern CPUs, a 64-bit integer multiplication takes approximately **20 cycles**. An addition? Just **1 cycle**. That's a 20× difference.
-
-An astute reader: [Benoit Jacob](https://libeigen.gitlab.io/#credits) who happens to know a thing or two about Linear Algebra on CPU, pointed that, we are going to take the somewhat naive but simpler to comparing instruction latencies here.
-Though heavily optimized numerical CPU code might be faster than 20x difference (maybe under 5x).
-
-However, using 64-bit here skews the argument heavily in the favor of this example while using a smaller data type such as f32 would show a little to no difference in instruction cycle count. But for the ease of motivating the rest of the paper we will continue with our current assumptions.
-
-If the same result can be computed with fewer multiplications, additional additions may be acceptable.
-
 Consider computing a² - b²:
 
 **Method 1**: a×a - b×b
@@ -219,7 +204,7 @@ That's 7 multiplications and 18 additions. Total: 7×20 + 18×1 = **158 cycles**
 
 The savings for 2×2 is small, but Strassen's algorithm is recursive. Applied to blocks, the complexity drops from O(n³) to O(n^log₂7) ≈ O(n^2.807).
 
-Benoit Jacob also offered a cleaner way to see why Strassen's algorithm reduces
+Benoit Jacob also offered a cleaner way to see why Strassen's algorithm reduces 
 asymptotic complexity despite introducing more additions. When you apply Strassen to a large 2N×2N matrix,
 you treat it as a 2×2 block matrix whose "scalars" are N×N submatrices.
 Addition of two N×N matrices is O(N²), you just walk through the entries.
