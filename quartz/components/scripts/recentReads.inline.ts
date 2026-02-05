@@ -33,8 +33,10 @@ document.addEventListener("nav", async () => {
           day: "numeric",
         })
         const author = item.author ? ` · ${item.author}` : ""
+        // Link to internal reading notes page, not the external source
+        const noteUrl = `/reading/${item.id}`
         return `<li>
-          <p class="read-title"><a href="${item.url}" target="_blank" rel="noopener">${item.title}</a></p>
+          <p class="read-title"><a href="${noteUrl}">${item.title}</a></p>
           <p class="read-meta">${date}${author}</p>
           <span class="read-category">${item.parent_category}</span>
         </li>`
