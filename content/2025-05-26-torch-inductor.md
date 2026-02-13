@@ -13,7 +13,7 @@ tags:
 draft: false
 ---
 
-# PyTorch 2.x and Backends (WIP, come back in a couple of days)
+# PyTorch 2.x and Backends
 
 **Disclaimer**: Human "generated" text as a labor of love.
 
@@ -223,6 +223,298 @@ foo(torch.randn([8192, 8192], device='cuda'))
 
 
 
+### Understanding the Debug Output Files
+
+Each of these files provides a window into a different stage of the compilation pipeline:
+
+| File | Purpose |
+|------|---------|
+| `fx_graph_readable.py` | Human-readable FX graph showing ATen ops |
+| `fx_graph_runnable.py` | Standalone executable version of the graph |
+| `fx_graph_transformed.py` | Graph after intermediate transformations |
+| `ir_pre_fusion.txt` | TorchInductor IR before fusion optimizations |
+| `ir_post_fusion.txt` | IR after operator fusion |
+| `output_code.py` | Final generated code (Triton for GPU, C++ for CPU) |
+
+#### fx_graph_readable.py
+
+This file shows how your PyTorch operations are decomposed into lower-level ATen operations. For our `sin().cos()` example, you'd see something like:
+
 ```python
+def forward(self, arg0_1: "f32[s0, s1]"):
+    # arg0_1: "f32[s0, s1]"
+    sin: "f32[s0, s1]" = torch.ops.aten.sin.default(arg0_1);  arg0_1 = None
+    cos: "f32[s0, s1]" = torch.ops.aten.cos.default(sin)
+    return (sin, cos)
+```
+
+Notice the symbolic shapes `s0, s1` — this is because we compiled with `dynamic=True`.
+
+#### ir_pre_fusion.txt and ir_post_fusion.txt
+
+These files reveal TorchInductor's intermediate representation. The IR is a "define-by-run loop level IR" with roughly ~50 operators. The key insight here is watching operations get fused.
+
+**Pre-fusion**: Each operation is separate
+```
+buf0: SchedulerNode(ComputedBuffer)
+buf0.writes = [MemoryDep('buf0', c0, {c0: 67108864})]
+buf0.reads = [MemoryDep('arg0_1', c0, {c0: 67108864})]
+# sin operation
+
+buf1: SchedulerNode(ComputedBuffer)
+buf1.writes = [MemoryDep('buf1', c0, {c0: 67108864})]
+buf1.reads = [MemoryDep('buf0', c0, {c0: 67108864})]
+# cos operation
+```
+
+**Post-fusion**: Operations are merged
+```
+buf0_buf1_fused: SchedulerNode(FusedSchedulerNode)
+# Both sin and cos fused into single kernel
+```
+
+This fusion is the core optimization — instead of:
+1. Read tensor from global memory
+2. Compute sin, write to global memory
+3. Read result from global memory
+4. Compute cos, write to global memory
+
+We get:
+1. Read tensor from global memory
+2. Compute sin (keep in registers)
+3. Compute cos
+4. Write both results to global memory
+
+This reduces memory traffic significantly.
+
+#### output_code.py — The Generated Triton Kernel
+
+This is where the magic happens. For GPU targets, TorchInductor generates Triton code:
+
+```python
+@triton.jit
+def triton_poi_fused_cos_sin_0(in_ptr0, out_ptr0, out_ptr1, xnumel, XBLOCK: tl.constexpr):
+    xoffset = tl.program_id(0) * XBLOCK
+    xindex = xoffset + tl.arange(0, XBLOCK)[:]
+    xmask = xindex < xnumel
+    x0 = xindex
+    tmp0 = tl.load(in_ptr0 + (x0), xmask)
+    tmp1 = tl.sin(tmp0)
+    tmp2 = tl.cos(tmp1)
+    tl.store(out_ptr0 + (x0), tmp1, xmask)
+    tl.store(out_ptr1 + (x0), tmp2, xmask)
+```
+
+Notice how both `sin` and `cos` are computed in a single kernel (`fused_cos_sin`). The `poi` prefix stands for "pointwise" — indicating this is an element-wise operation.
+
+---
+
+## Deep Dive: The TorchDynamo + TorchInductor Pipeline
+
+Now that we've seen the debug output, let's understand the full compilation stack:
 
 ```
+┌─────────────────────────────────────────────────────────────────┐
+│                     User Python Code                             │
+│                  @torch.compile(backend="inductor")              │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      TorchDynamo                                 │
+│  • Hooks into CPython's frame evaluation (PEP 523)               │
+│  • Rewrites bytecode to extract PyTorch ops                      │
+│  • Creates FX Graph + Guards + Residual Bytecode                 │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                       FX Graph                                   │
+│  • ATen operations in graph form                                 │
+│  • Symbolic shapes for dynamic compilation                       │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     TorchInductor                                │
+│  1. Graph Lowering → Convert FX nodes to Inductor IR             │
+│  2. Scheduling → Determine fusion opportunities                  │
+│  3. Fusion → Merge compatible operations                         │
+│  4. Code Generation → Emit Triton (GPU) or C++ (CPU)             │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    Triton Compiler                               │
+│  • Compiles Triton DSL to PTX assembly                           │
+│  • Handles memory coalescing, tiling, shared memory              │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     CUDA Driver                                  │
+│  • JIT compiles PTX to SASS (device code)                        │
+│  • Executes on GPU                                               │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### TorchDynamo: Graph Capture via Bytecode Rewriting
+
+TorchDynamo is remarkably clever. It doesn't require you to change your code or use a special tracing mode. Instead, it:
+
+1. **Intercepts Python Execution**: Using CPython's PEP 523 frame evaluation hooks
+2. **Analyzes Bytecode**: Identifies sequences of PyTorch operations
+3. **Extracts FX Graphs**: Converts operation sequences into compilable graphs
+4. **Handles Control Flow**: Creates "graph breaks" when it encounters unsupported Python features
+
+The key innovation is the **guard system**. When Dynamo compiles a graph, it also generates guards — conditions that must be true for the compiled graph to be valid:
+
+```python
+# Example guards (conceptual)
+guards = [
+    tensor.dtype == torch.float32,
+    tensor.device == cuda:0,
+    tensor.ndim == 2,
+    tensor.size(0) == 8192,  # or symbolic if dynamic=True
+    tensor.requires_grad == False,
+]
+```
+
+If any guard fails on subsequent calls, Dynamo recompiles.
+
+### Graph Breaks: When Dynamo Can't Continue
+
+Remember our `toy_example` with the `if` statement? That's a graph break. Dynamo creates multiple subgraphs:
+
+```python
+def toy_example(a, b):
+    x = a / (torch.abs(a) + 1)  # Graph 1
+    if b.sum() < 0:             # Graph break (data-dependent control flow)
+        b = b * -1              # Graph 2 (taken branch)
+    return x * b                # Graph 3
+```
+
+Each graph is compiled separately, with "resume functions" handling the transitions.
+
+### TorchInductor: From FX Graph to Optimized Kernels
+
+TorchInductor has lowerings for **433 PyTorch operators** (1605 including overloads). The lowering process converts high-level ATen ops to Inductor's loop-level IR.
+
+#### The Scheduler and Fusion
+
+The `Scheduler` class determines which operations can be fused. Fusion scoring considers:
+
+1. **Fusion category**: pointwise, reduction, or template operations
+2. **Memory traffic**: estimated bytes of read/write operations
+3. **Compatibility**: operations must have compatible iteration domains
+
+```python
+# Conceptual fusion decision
+def score_fusion(node1, node2):
+    if not compatible_iteration_domain(node1, node2):
+        return -inf
+    memory_saved = estimate_memory_traffic_reduction(node1, node2)
+    return fusion_category_score + memory_saved
+```
+
+#### Why Fusion Matters
+
+Consider computing `y = relu(x @ W + b)`:
+
+**Without fusion** (3 kernels):
+```
+Kernel 1: matmul      → read x, W, write temp1
+Kernel 2: add bias    → read temp1, b, write temp2
+Kernel 3: relu        → read temp2, write y
+```
+Memory traffic: ~6 tensor reads/writes
+
+**With fusion** (1-2 kernels):
+```
+Kernel 1: matmul      → read x, W, write temp1
+Kernel 2: add+relu    → read temp1, b, write y (fused)
+```
+Memory traffic: ~4 tensor reads/writes
+
+For large tensors, this memory bandwidth reduction is substantial.
+
+---
+
+## Compilation Modes
+
+`torch.compile` offers several compilation modes:
+
+```python
+# Default: balance between compile time and runtime performance
+torch.compile(model)
+
+# Reduce overhead: minimize Python overhead, slightly less optimization
+torch.compile(model, mode="reduce-overhead")
+
+# Maximum autotune: try many kernel configurations, longer compile time
+torch.compile(model, mode="max-autotune")
+
+# Maximum autotune without CUDA graphs
+torch.compile(model, mode="max-autotune-no-cudagraphs")
+```
+
+### max-autotune Mode
+
+This mode enables:
+- Triton-based matrix multiplication autotuning
+- CUDA graphs by default (batches multiple kernel launches)
+- Extended search over kernel configurations
+
+The tradeoff is significantly longer compilation time for better runtime performance.
+
+---
+
+## Practical Tips
+
+### When to Use torch.compile
+
+✅ **Good candidates**:
+- Inference workloads with consistent input shapes
+- Training loops after warmup
+- Models with many element-wise operations (benefits from fusion)
+
+⚠️ **Be careful with**:
+- Highly dynamic control flow
+- Constantly changing input shapes (causes recompilation)
+- Very small tensors (kernel launch overhead dominates)
+
+### Debugging Compilation Issues
+
+```python
+import torch._dynamo as dynamo
+
+# See what's happening
+dynamo.config.verbose = True
+
+# Get explanation of graph breaks
+torch._dynamo.explain(model)(sample_input)
+
+# Disable compilation for debugging
+torch._dynamo.config.suppress_errors = True
+```
+
+### Reducing Recompilation
+
+```python
+# Use dynamic shapes to avoid recompilation on shape changes
+compiled_model = torch.compile(model, dynamic=True)
+
+# Or mark specific dimensions as dynamic
+torch._dynamo.mark_dynamic(tensor, dim=0)
+```
+
+---
+
+## References
+
+- [PyTorch 2.x Official Documentation](https://pytorch.org/get-started/pytorch-2-x/)
+- [TorchDynamo Overview](https://docs.pytorch.org/docs/stable/user_guide/torch_compiler/torch.compiler_dynamo_overview.html)
+- [TorchInductor CPU Debugging](https://docs.pytorch.org/tutorials/intermediate/inductor_debug_cpu.html)
+- [PyTorch 2 ASPLOS 2024 Paper](https://dl.acm.org/doi/pdf/10.1145/3620665.3640366)
+- [Dissecting torch.compile - The ML Surgeon](https://themlsurgeon.substack.com/p/dissecting-torchcompile-surgical)
+- [TorchInductor DeepWiki](https://deepwiki.com/pytorch/pytorch/2.2-torchinductor)
