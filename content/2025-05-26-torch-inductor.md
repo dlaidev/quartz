@@ -15,8 +15,6 @@ draft: false
 
 # PyTorch 2.x and Backends
 
-**Disclaimer**: Human "generated" text as a labor of love.
-
 ## The Great ML Framework Debate
 Centuries ago (2020), I contributed to PyTorch library, specifically, TorchServe which used to be the default model serving library for PyTorch Models.
 
@@ -473,12 +471,12 @@ The tradeoff is significantly longer compilation time for better runtime perform
 
 ### When to Use torch.compile
 
-✅ **Good candidates**:
+**Good candidates**:
 - Inference workloads with consistent input shapes
 - Training loops after warmup
 - Models with many element-wise operations (benefits from fusion)
 
-⚠️ **Be careful with**:
+**Be careful with**:
 - Highly dynamic control flow
 - Constantly changing input shapes (causes recompilation)
 - Very small tensors (kernel launch overhead dominates)
