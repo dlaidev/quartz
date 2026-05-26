@@ -1,5 +1,5 @@
 ---
-title: "Giving Hermes a research reflex with khoj-cli"
+title: "Hermes Research with khoj-cli"
 date: 2026-05-26
 description: "How a small Exa-powered terminal search tool becomes much more useful when wrapped as a Hermes skill."
 tags:
@@ -12,7 +12,7 @@ tags:
 draft: false
 ---
 
-# Giving Hermes a research reflex with khoj-cli
+# Hermes Research with khoj-cli
 
 I keep wanting the same thing from an AI assistant: do not just answer from vibes. Go look. Find the source. Compare the claims. Tell me what changed recently. Then give me the short version with links.
 

@@ -1,5 +1,5 @@
 ---
-title: "Understanding CUDA Thread and Block Patterns: A Visual Analysis"
+title: "CUDA Threads and Blocks"
 date: 2025-05-17
 description: "An in-depth exploration of CUDA configurations and their impact on thread/block patterns for optimal performance"
 tags: ["CUDA", "GPU Programming", "Parallel Computing", "Performance Optimization", "AI Inference"]

@@ -1,5 +1,5 @@
 ---
-title: "LLM-Guided Evolutionary Kernel Optimization: From Research to Production Kernels"
+title: "LLM-Guided Kernel Optimization"
 date: 2025-12-20
 description: "A technical discussion of how large language models can speed up GPU kernel optimization, from research ideas to production kernels."
 tags:

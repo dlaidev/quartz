@@ -1,5 +1,5 @@
 ---
-title: "Understanding Value Data‑flow Analysis in Triton (MLIR)"
+title: "Triton Value Dataflow"
 date: 2025-05-26
 tags:
   - PyTorch
@@ -15,7 +15,7 @@ tags:
 draft: true
 ---
 
-# Building a Value Data‑flow Analysis Pass in Triton (MLIR)
+# Triton Value Dataflow
 
 ## 1. Motivation & Goals
 

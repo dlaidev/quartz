@@ -1,5 +1,5 @@
 ---
-title: "Understanding Linear Layouts in Triton"
+title: "Triton Linear Layouts"
 date: 2025-06-22
 description: "Exploring the concept of linear layouts in Triton, a programming language for writing high-performance GPU code, and how it simplifies memory management and data access patterns."
 tags:
@@ -18,7 +18,7 @@ draft: false
 
 Back in 1637, René Descartes introduced the <fades into the distance> the Cartesian coordinate system, revolutionizing mathematics and science. Fast forward to 2025, and we have Triton, a programming language that brings a similar revolution to GPU programming with its linear layouts. This article explores the concept of linear layouts in Triton, their benefits, and how they can be used to optimize memory management and data access patterns in high-performance computing applications. </fades into the distance>
 
-# Linear Layouts in Triton
+# Triton Linear Layouts
 **Disclaimer**: Human "generated" text as a labor of love.
 
 Linear layouts in Triton are a powerful feature that simplifies memory management and data access patterns in GPU programming. They allow developers to define how data is laid out in memory, making it easier to work with large datasets and complex algorithms. By using linear layouts, developers can optimize memory access patterns, reduce cache misses, and improve overall performance of their GPU applications.

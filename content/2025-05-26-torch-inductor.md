@@ -1,5 +1,5 @@
 ---
-title: "Understanding PyTorch 2.x Backends"
+title: "PyTorch 2.x Backends"
 date: 2025-05-26
 tags:
   - PyTorch
@@ -13,7 +13,7 @@ tags:
 draft: false
 ---
 
-# PyTorch 2.x and Backends
+# PyTorch 2.x Backends
 
 ## The Great ML Framework Debate
 Centuries ago (2020), I contributed to PyTorch library, specifically, TorchServe which used to be the default model serving library for PyTorch Models.

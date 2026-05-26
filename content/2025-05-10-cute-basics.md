@@ -1,5 +1,5 @@
 ---
-title: "Understanding Basics of CuTe / CUTLASS"
+title: "CuTe and CUTLASS Basics"
 date: 2025-05-10
 tags:
   - CUDA
@@ -12,7 +12,7 @@ tags:
 draft: false
 ---
 
-# Demystifying CuTe Layouts: From Fundamentals to Nsight Profiling
+# CuTe Layouts, From Basics to Profiling
 
 A hands-on walkthrough exploring layout algebra with CuTe and profiling GPU Memory Accesses.
 
