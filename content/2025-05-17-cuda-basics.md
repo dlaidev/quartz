@@ -1,302 +1,219 @@
 ---
 title: "CUDA Threads and Blocks"
 date: 2025-05-17
-description: "An in-depth exploration of CUDA configurations and their impact on thread/block patterns for optimal performance"
+description: "Map CUDA threads to data, count partial warps, and distinguish launch coverage from occupancy."
 tags: ["CUDA", "GPU Programming", "Parallel Computing", "Performance Optimization", "AI Inference"]
 categories: ["CUDA", "GPU Optimization"]
-showToc: false 
+showToc: false
 TocOpen: true
 ---
 
-## TL;DR
+A CUDA launch specifies a grid of blocks and a fixed shape for every block. Those dimensions determine thread IDs. The kernel maps thread IDs to data. This separation matters when counting tails, reasoning about memory addresses, and choosing a block size.
 
-* Thread and block configurations significantly impact CUDA kernel performance
-* Power-of-2 sizes provide most efficient execution patterns
-* Warp alignment (multiples of 32 threads) optimizes memory coalescing
-* Block size involves trade-offs between thread cooperation and SM distribution
-* Visual analysis helps understand how different configurations affect execution
+The [[tools/cuda-visualizer|thread/block visualizer]] draws a one-dimensional mapping. Its documentation lists several incorrect performance labels in the current interface. Use it to inspect grouping and compare the arithmetic below, rather than to predict execution time.
 
-## Interactive Exploration
+## Threads, warps, blocks, and grids
 
-Before diving into the technical details, try out our interactive CUDA visualizer to get a hands-on understanding of thread and block patterns:
+A thread executes one instance of a kernel. Threads in a block can exchange data through shared memory and synchronize with block barriers. Blocks form the grid passed to the launch.[3]
 
-**[→ Visit Interactive CUDA Thread/Block Visualizer](tools/cuda-visualizer)**
-
-
-## CUDA Architecture Overview
-
-Before diving into configurations, let's understand key CUDA concepts:
-
-### Thread Hierarchy
-```
-Grid
-├── Block 0
-│   ├── Thread (0,0)
-│   ├── Thread (0,1)
-│   └── ...
-├── Block 1
-│   ├── Thread (1,0)
-│   └── ...
-└── ...
+```text
+Grid: G blocks
+  Block 0: B threads, grouped into ceil(B/32) warps
+  Block 1: B threads, grouped into ceil(B/32) warps
+  ...
+  Block G-1: B threads, grouped into ceil(B/32) warps
 ```
 
-- **Threads**: Basic execution units
-- **Warps**: Groups of 32 threads executed simultaneously
-- **Blocks**: Collections of threads that can cooperate
-- **Grid**: Collection of blocks executing the same kernel
+A warp contains 32 lanes. The hardware forms warps from consecutive linear thread IDs within a block; a warp never combines threads from different blocks.[3] If a block has seven threads, it occupies one partial warp. Fifteen such blocks contain fifteen warps, even though their combined thread count would fit into fewer full warps.
 
-### Hardware Constraints
-- Maximum threads per block: 1024
-- Warp size: 32 threads
-- Typical SM can handle multiple blocks simultaneously
-- Memory access is coalesced within warps
+Warp instructions execute for their active lanes under CUDA's SIMT model. Threads can take different paths. Independent Thread Scheduling on Volta and later GPUs means code must use the required synchronization primitives rather than assume implicit lockstep for communication.[3] "Thirty-two threads simultaneously" is therefore an insufficient description of the execution model.
 
-## CUDA Architecture Deep Dive
+A block resides on one streaming multiprocessor (SM). An SM may hold several blocks if resources permit. Ordinary blocks must be independently schedulable, and block IDs do not specify an SM or an execution order.[3] Optional cluster and cooperative-launch features have additional rules; the examples here use ordinary launches.
 
-### Hardware Architecture (SM89)
-```
-Streaming Multiprocessor (SM)
-├── Warp Schedulers: 4 per SM
-├── CUDA Cores: 128 per SM
-├── Shared Memory: 64KB per SM
-├── L1 Cache: 128KB per SM
-└── Register File: 64K 32-bit registers
-```
+## Map a one-dimensional launch
 
-### Memory Hierarchy
-```
-Device Memory (Global Memory)
-├── L2 Cache (Shared by all SMs)
-│   └── Cache Line Size: 128 bytes
-├── L1 Cache (Per SM)
-│   └── Cache Line Size: 128 bytes
-├── Shared Memory (Per SM)
-│   └── Bank Width: 32-bit
-└── Register File (Per SM)
-    └── Access Latency: 1 cycle
-```
-
-### Theoretical Performance Metrics
-- Global Memory Bandwidth: 912 GB/s
-- Shared Memory Bandwidth: ~19 TB/s per SM
-- Register Bandwidth: ~39 TB/s per SM
-- Warp Scheduling Rate: 1 instruction per clock
-
-## Experimental Setup
-
-Our test kernel uses unified memory and records detailed execution patterns:
+For `add<<<G,B>>>(...)`, the kernel computes:
 
 ```cpp
-// Structure to store thread processing info
+size_t i = size_t(blockIdx.x) * blockDim.x + threadIdx.x;
+```
+
+`threadIdx.x` ranges from zero through `B-1`. `blockIdx.x` ranges from zero through `G-1`. `blockDim.x` is B; `gridDim.x` is G. The grid dimension counts blocks, rather than useful data elements.[3]
+
+For a single element per thread and positive N:
+
+$$
+G = \lceil N/B \rceil,\qquad T = GB.
+$$
+
+Every block has B threads, including the final block. The last block's useful thread count is `N - (G-1)*B`. Extra threads must avoid out-of-bounds data access.
+
+This kernel retains the original mapping record:
+
+```cpp
 struct ThreadInfo {
-    int index;      // Global array index
-    int blockId;    // Block identifier
-    int threadId;   // Thread identifier within block
-    float value;    // Computed value
+    size_t index;
+    unsigned block;
+    unsigned thread;
+    float value;
 };
 
-__global__
-void add(int n, float *x, float *y, ThreadInfo *info) {
-    int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < n) {
-        y[idx] += x[idx];
-        // Record thread/block information
-        info[idx].index = idx;
-        info[idx].blockId = blockIdx.x;
-        info[idx].threadId = threadIdx.x;
-        info[idx].value = y[idx];
+__global__ void add(size_t n, const float *x, float *y, ThreadInfo *info)
+{
+    size_t i = size_t(blockIdx.x) * blockDim.x + threadIdx.x;
+    if (i < n) {
+        y[i] += x[i];
+        info[i] = {i, blockIdx.x, threadIdx.x, y[i]};
     }
 }
 ```
 
-## 1. Power-of-2 Configurations
+The host supplies initialized, device-accessible arrays `x`, `y`, and `info`, each with N elements. For these small examples, the launch calculation is:
 
-### Standard Case (N=256, Block=32)
 ```cpp
-// Launch configuration
-int N = 256;
-int blockSize = 32;  // One warp
-int numBlocks = (N + blockSize - 1) / blockSize;  // 8 blocks
-add<<<numBlocks, blockSize>>>(N, x, y, info);
+unsigned b = 128;
+size_t blocks = n / b + (n % b != 0);
+if (n != 0)
+    add<<<static_cast<unsigned>(blocks), b>>>(n, x, y, info);
 ```
 
-**Technical Analysis:**
-- Block size matches warp size (32 threads)
-- Perfect memory coalescing within warps
-- 8 blocks distribute evenly across SMs
-- 100% thread utilization: 256/(32*8) = 1.0
+The division form avoids overflow in `n + b - 1`. Before the cast, a general-purpose caller must check the device's grid limit. Skip the launch when N is zero. Check allocation and launch errors, synchronize before reading results on the host, and release allocations after use.[3][4]
 
-**Performance Implications:**
-- Optimal warp execution efficiency
-- No partial warps
-- Good SM occupancy
-- Minimal scheduling overhead
+The snippets explain the kernel interface; they are not a complete CUDA executable. Recording `ThreadInfo` adds memory traffic, so its timing would not describe a plain vector-add kernel. Unified Memory would also require a stated migration and timing policy.
 
-### Large Blocks (N=1024, Block=256)
+## Two-dimensional blocks
+
+Within a block, x varies fastest. The linear thread ID for a three-dimensional block is:[3]
+
 ```cpp
-// 256 threads per block = 8 warps per block
-add<<<4, 256>>>(1024, x, y, info);
+unsigned t = threadIdx.x
+           + blockDim.x * (threadIdx.y + blockDim.y * threadIdx.z);
+unsigned warp = t / 32;
+unsigned lane = t % 32;
 ```
 
-**Technical Analysis:**
-- 8 warps per block (256/32)
-- 4 blocks total
-- Higher register pressure per block
-- More thread cooperation possible within blocks
+For `dim3 block(16,16)`, warp zero contains x=0..15 at y=0, followed by x=0..15 at y=1. For `dim3 block(32,8)`, warp zero covers x=0..31 at y=0. Both blocks have 256 threads and eight warps, but their mappings to matrix rows differ.
 
-**Performance Considerations:**
-- May limit SM occupancy due to resource usage
-- Better for compute-bound kernels with thread cooperation
-- Reduced block scheduling overhead
+A row-major matrix kernel often maps x to the column:
 
-## 2. Small Block Configurations
-
-### Minimal Blocks (N=100, Block=8)
 ```cpp
-// Sub-warp block size
-add<<<13, 8>>>(100, x, y, info);
+size_t col = size_t(blockIdx.x) * blockDim.x + threadIdx.x;
+size_t row = size_t(blockIdx.y) * blockDim.y + threadIdx.y;
+if (row < rows && col < cols)
+    output[row * cols + col] = input[row * cols + col];
 ```
 
-**Technical Deep Dive:**
-- Block size (8) is 1/4 of a warp
-- Each warp underutilized (75% idle threads)
-- 13 blocks for 100 elements
-- Thread utilization: 100/(8*13) ≈ 96.2%
+Ceiling-divide columns by `block.x` and rows by `block.y` to construct the grid. The row length and element size determine whether adjacent pieces of a warp's access touch adjacent memory sectors. A two-dimensional block shape alone cannot establish coalescing.
 
-**Performance Impact:**
-- Poor warp execution efficiency
-- Higher block scheduling overhead
-- Better load balancing across SMs
-- Worse memory coalescing
+## Count useful threads and warp lanes separately
 
-## 3. Prime Numbers and Odd Sizes
+For these one-dimensional, single-pass kernels, define:
 
-### Prime Array Size (N=97, Block=32)
-```cpp
-// Prime number of elements with warp-sized blocks
-add<<<4, 32>>>(97, x, y, info);
+$$
+W_b = \lceil B/32 \rceil,\quad W = G W_b,
+\quad U_t = \frac{N}{GB},\quad U_l = \frac{N}{32W}.
+$$
+
+`Ut` is the fraction of launched threads assigned a valid element. `Ul` compares useful elements with all lane slots in the launch's warps. These are arithmetic coverage ratios, without any claim about elapsed cycles or SM residency.
+
+|    N |   B | Blocks | Warps | Useful threads | Useful lane slots |
+| ---: | --: | -----: | ----: | -------------: | ----------------: |
+|  256 |  32 |      8 |     8 |         100.0% |            100.0% |
+| 1024 | 256 |      4 |    32 |         100.0% |            100.0% |
+|  100 |   8 |     13 |    13 |          96.2% |             24.0% |
+|   97 |  32 |      4 |     4 |          75.8% |             75.8% |
+|  100 |   7 |     15 |    15 |          95.2% |             20.8% |
+|  129 | 128 |      2 |     8 |          50.4% |             50.4% |
+
+The [CPU companion](/code/cuda-basics/checks.py) generated these values and verified coverage by enumerating each `(block,thread)` pair. Run:
+
+```sh
+uv run --no-project python content/code/cuda-basics/checks.py
 ```
 
-**Warp-Level Analysis:**
-- Full warps except last block
-- Last block: 97 - (3*32) = 1 element
-- Last warp: 31/32 threads idle
-- Overall thread utilization: 97/(32*4) ≈ 75.8%
+### Full blocks: N=256, B=32
 
-**Memory Access Patterns:**
-- First 3 blocks: Coalesced access
-- Last block: Highly divergent
-- Potential for bank conflicts
+Eight blocks cover all elements. Each block contains one full warp. This establishes complete launch coverage. It does not establish high occupancy: the device may have more SMs than this grid has blocks, and one-warp blocks can encounter a per-SM block limit before a warp limit.
 
-## 4. Memory Access Pattern Visualizations
+### Sub-warp blocks: N=100, B=8
 
-### Coalesced vs Non-Coalesced Access
-```
-Coalesced Access (Efficient):
-Thread   0   1   2   3  ...  31    // One warp
-Memory  [0] [1] [2] [3] ... [31]   // One transaction
-         └───────────128B───────┘
+The launch has thirteen blocks and 104 threads. Twelve blocks handle eight elements each; the final block handles four. Each block consumes one warp, so useful work covers only `100 / (13*32)` of the available lane slots. Unused lanes in a partial block warp cannot be filled by another block's threads.[3]
 
-Non-Coalesced Access (Inefficient):
-Thread   0   1   2   3  ...  31    // One warp
-Memory  [0] [32][64][96]... [992]  // Multiple transactions
-         ↑   ↑   ↑   ↑      ↑
-         └───┴───┴───┴──...─┘
-         32 separate transactions
-```
+### A prime length: N=97, B=32
 
-### Memory Bank Access Patterns
-```
-Shared Memory Banks (32 Banks):
-Bank0  Bank1  Bank2  Bank3 ... Bank31
-[0]    [1]    [2]    [3]  ... [31]
-[32]   [33]   [34]   [35] ... [63]
-[64]   [65]   [66]   [67] ... [95]
+The first three blocks handle 96 elements. The final block launches 32 threads; only its lane zero passes the bounds check. Primality has no special hardware consequence here. The remainder determines the tail.
 
-Sequential Access (No Conflicts):
-Thread0 → Bank0  [0]
-Thread1 → Bank1  [1]
-Thread2 → Bank2  [2]
-...
-Thread31→ Bank31 [31]
+### A tail spanning several warps: N=129, B=128
 
-Strided Access (2-way Bank Conflicts):
-Thread0 → Bank0  [0]
-Thread1 → Bank0  [32] ⚠️ Conflict!
-Thread2 → Bank1  [2]
-Thread3 → Bank1  [34] ⚠️ Conflict!
+Two blocks launch eight warps. In the second block, one lane in its first warp performs the addition; its other three warps have no valid elements. Those threads still execute enough of the kernel to evaluate the guard. A drawing that omits fully masked warps understates the launch footprint.
+
+## Occupancy is a residency ratio
+
+Occupancy is the ratio of resident warps on an SM to the maximum number of resident warps supported by that SM. Resident warps include warps waiting on dependencies. Occupancy is distinct from the fraction of lanes doing useful arithmetic.[4]
+
+Limits include resident blocks, threads, warps, registers, and shared memory. The compiled kernel supplies register and static shared-memory requirements; the launch supplies dynamic shared memory. Allocation granularity and architecture-specific limits also matter.[3][4]
+
+For a deliberately simplified resource model, assume an SM permits:
+
+- 16 resident blocks;
+- 2048 resident threads, or 64 warps;
+- 65,536 32-bit registers;
+- 65,536 bytes of shared memory.
+
+Assume each 256-thread block uses eight warps, 32 registers per thread, and 16,384 bytes of shared memory. Ignore allocation rounding for this illustration. The block bounds are:
+
+```text
+block limit:          16
+thread limit:         2048 / 256       = 8
+warp limit:           64 / 8           = 8
+register limit:       65536 / (32*256) = 8
+shared-memory limit:  65536 / 16384    = 4
 ```
 
-## Performance Optimization Guidelines
+The minimum is four blocks. That permits 32 resident warps, or 50% occupancy in this model. The companion asserts these calculations. These invented resource limits explain the formula; they are not specifications or measurements of a named GPU.
 
-1. **Warp Alignment**
-   ```cpp
-   // Prefer warp-aligned block sizes
-   blockSize = 32 * N; // Where N is 1, 2, 4, 8
-   ```
+For an actual device, query properties with `cudaGetDeviceProperties`. Use `cudaOccupancyMaxActiveBlocksPerMultiprocessor` with the compiled kernel, block size, and dynamic shared-memory byte count to estimate the residency bound.[3] The estimate assumes enough blocks are available. A short grid can leave SMs idle, and a profiler's achieved occupancy can be lower over the kernel's lifetime.
 
-2. **Occupancy Optimization**
-   - Balance block size vs. number of blocks
-   - Consider register usage
-   - Account for shared memory requirements
+Higher occupancy does not necessarily improve performance. A kernel can already have enough active warps to hide latency, or an attempt to increase occupancy can cause register spilling and extra memory traffic.[4]
 
-3. **Memory Access Patterns**
-   ```cpp
-   // Ensure coalesced access within warps
-   int idx = blockIdx.x * blockDim.x + threadIdx.x;
-   // Access pattern follows thread index
-   y[idx] += x[idx];
-   ```
+## Global-memory coalescing
 
-4. **Block Size Selection**
-   ```cpp
-   // Rule of thumb for compute-bound kernels
-   const int threadsPerBlock = 256;  // 8 warps
-   // Rule of thumb for memory-bound kernels
-   const int threadsPerBlock = 128;  // 4 warps
-   ```
+For compute capability 6.0 and later, NVIDIA describes global-memory coalescing in terms of the 32-byte transactions needed to service a warp's addresses.[4] For one scalar float load per active lane and a suitably aligned base:
 
-## Hands-On Learning
+```text
+lane:                 0    1    2    ...   31
+contiguous element:   0    1    2    ...   31
+stride-32 element:    0   32   64    ...  992
+```
 
-To solidify your understanding of these concepts, experiment with our interactive visualizer:
+The contiguous case requests 128 bytes across four 32-byte sectors. Shifting the first float by one element spans five sectors. The stride-32 case touches 32 distinct sectors. These counts describe requested address coverage; cache hits and reuse affect traffic reaching device memory and elapsed time.[4]
 
-**[→ Try Different Configurations](/tools/cuda-visualizer)**
+A multiple-of-32 block size avoids structural partial warps. Coalescing still depends on the addresses used by each instruction. A warp-sized block can make scattered accesses, while a partial warp can access adjacent words efficiently within the sectors it touches.
 
-Observe how different grid and block sizes affect:
-- Thread utilization efficiency
-- Memory coalescing potential
-- Warp-level execution patterns
+## Shared-memory banks
 
-## Conclusions
+Shared-memory bank conflicts are a different problem from global-memory coalescing. Under the standard 32-bank mapping for 32-bit words, bank selection is `word_index % 32`. Different words in the same bank can serialize a warp's request; reads of the same word can be broadcast.[4]
 
-This analysis reveals several key insights for CUDA optimization:
+For one 32-bit shared-memory access per lane:
 
-1. **Block Size Selection**
-   - Match warp size (32) or multiples
-   - Consider resource limits
-   - Balance with total thread count
+- `shared[lane]` addresses each bank once.
+- `shared[2*lane]` addresses sixteen banks twice, giving two-way conflicts.
+- `shared[32*lane]` addresses different words in one bank, giving a 32-way conflict.
 
-2. **Thread Utilization**
-   - Power-of-2 sizes optimize efficiency
-   - Handle irregular sizes carefully
-   - Consider warp-level effects
+A guarded vector add that uses only global memory cannot acquire a shared-memory bank conflict merely because N has a tail. Wider types and vector instructions require analysis of the actual accesses.
 
-3. **Performance Trade-offs**
-   - Block size affects resource usage
-   - Thread count impacts memory patterns
-   - Configuration affects SM utilization
+## Select and verify a launch
 
-These insights help in selecting optimal configurations for different CUDA workloads, balancing factors like:
-- Memory access patterns
-- Thread cooperation needs
-- SM utilization
-- Scheduling overhead
+Start with a legal block shape that matches data indexing and cooperation. A multiple of the warp size is a useful candidate; power-of-two sizes are not a general requirement. Query per-block and per-dimension limits rather than assume every kernel can launch 1024 threads.[3][4]
 
-## What's Next?
+Test several candidates with the same problem and input data. Check every output before timing. Record compiler resource usage and keep setup costs separate from kernel timing. A launch with fewer blocks can reduce available device-wide parallelism even when every block is full.
 
-In upcoming articles, I'll expand on:
+For a grid-stride loop, each thread visits `i`, then `i + blockDim.x*gridDim.x`, and so on. That allows the grid size to be chosen independently of the number of elements. It changes the single-pass coverage model used in the table and visualizer.
 
-1. Dynamic parallelism strategies 
-2. Tensor Core utilization for AI inference
-3. Memory throughput optimization techniques
-4. Register pressure vs. occupancy trade-offs
+The local checks validate indexing, tails, sector counts, and the illustrative occupancy calculation. GPU compilation, execution, and timing remain separate tests; this article reports none of those measurements.
+
+## Sources
+
+[3] https://docs.nvidia.com/cuda/archive/12.9.0/cuda-c-programming-guide/index.html
+
+[4] https://docs.nvidia.com/cuda/archive/12.9.0/cuda-c-best-practices-guide/index.html

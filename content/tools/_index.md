@@ -1,34 +1,24 @@
 ---
 title: "Interactive Tools"
-description: "Hands-on tools for understanding GPU programming and AI optimization"
+description: "Browser examples for thread indexing and online softmax, with links to the underlying equations."
 ---
 
-# Interactive Tools
+These browser examples illustrate indexing and arithmetic. They do not execute GPU kernels or predict device performance.
 
-Learn GPU programming and AI optimization concepts through hands-on exploration with these interactive tools.
+## CUDA thread and block indexing
 
-## Available Tools
+The [CUDA visualizer](cuda-visualizer.md) shows how a one-dimensional launch maps threads to array elements. Change the array length and block size. Inspect the inactive tail of the final block and the thread groups within each block.
 
-### [CUDA Thread/Block Visualizer](/tools/cuda-visualizer/)
-Experiment with different CUDA thread and block configurations to visualize execution patterns. Perfect for understanding:
-- Memory coalescing patterns
-- Warp utilization efficiency
-- Block size trade-offs
-- Grid configuration impact
+Read [CUDA threads and blocks](../2025-05-17-cuda-basics.md) for the indexing equations and the distinction between active lanes and hardware occupancy.
 
-### [Triton Linear Layout Visualizer](/tools/linear-layout/)
-Explore Triton's linear layouts and their impact on memory access patterns. This tool helps you:
-- Visualize how data is laid out in memory
-- Understand the relationship between logical tensors and physical memory
-- Analyze memory access patterns for optimization
+## Online softmax
 
-## Coming Soon
+<a href="/static/tensor-kernels/#online-softmax-demo" data-router-ignore>Open the online-softmax example</a> and advance through the score blocks. The display tracks the running maximum, exponential sum, and weighted sum. Rescaling the old sums preserves their meaning when a larger score arrives.
 
-- **Memory Access Pattern Analyzer** - Visualize memory coalescing and bank conflicts
-- **Tensor Core Operation Visualizer** - See how matrix operations map to Tensor Cores
-- **Kernel Occupancy Calculator** - Determine optimal thread/block configurations for maximum occupancy
-- **Dynamic Parallelism Explorer** - Understand parent-child kernel relationships
+The [tensor-equations article](../2026-09-13-from-tensor-equations-to-fast-kernels.md) derives the update and includes a CPU verification script.
 
-## Feedback
+## Memory-layout examples
 
-Have ideas for new interactive tools? [Get in touch](/about/) - I'd love to hear your suggestions!
+[CuTe layouts](../2025-05-10-cute-basics.md) explains shape-and-stride maps. [Triton linear layouts](../2025-06-22-linear-layouts.md) explains binary basis maps between execution coordinates and tensor coordinates. These articles contain worked examples; they describe different layout representations.
+
+Use a profiler and the generated kernel when you need measured memory traffic, bank conflicts, or occupancy.

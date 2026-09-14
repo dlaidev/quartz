@@ -6,6 +6,17 @@ Use tight, direct, K&R-style technical prose. State the mechanism, evidence, or 
 
 Apply these rules when drafting or editing posts. Do not rewrite the existing archive unless asked. Before returning a draft, review the prose for the patterns below and rewrite rhetorical filler into concrete statements or delete it.
 
+## Preserve evidence and structure
+
+- Complete unfinished posts by augmentation, not condensation. Use the committed post as the baseline and add missing explanations, worked steps, and implementation details. Do not substitute a shorter article, summary, or reference sheet for the existing work.
+- Preserve experiment tables, profiler output, compiler dumps, numeric examples, and plots. Edit the explanation around them; do not replace the evidence with a prose summary.
+- Preserve ASCII/box-drawing flow diagrams and their placement. Do not replace flows with prose or tables. Correct or extend a diagram in place only when needed for technical accuracy; ask before removing it.
+- Keep the author's recorded measurements even when a fresh run is unavailable. Use a short provenance note where needed. Separate recorded observations from independently reproduced results.
+- Correct an interpretation without deleting the underlying observation. Ask before removing experimental records or changing their values.
+- Prefer tables for results, configurations, comparisons, and failure summaries. Put the result before its explanation.
+- Keep paragraphs short. K&R-style prose means concise explanation beside concrete examples, not long methodological essays or repeated caveats.
+- Preserve complete implementation walkthroughs and the author's use cases. Tighten sentences without collapsing an article into a command reference or deleting its sections. Check the original code excerpts, commands, diagrams, and results against the edited version before returning it.
+
 ## Avoid rhetorical tics
 
 - Repeated negation chains: "No X, no Y" and "did not X, did not Y" (including contractions).

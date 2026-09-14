@@ -17,7 +17,7 @@ An attention compiler must choose where to store intermediate values and how to 
 
 Neural Circuit Diagrams describe tensor operations and their indexing. Equality saturation retains equivalent expressions so a compiler can compare their cost. Together, they could let a compiler search over attention algorithms.
 
-I am considering an integration between [pyncd](https://github.com/mit-zardini-lab/pyncd) and EggEvolve, a kernel-search project. This post works through the indexing and streaming rules that integration would need. The export from pyncd, algorithm-level rewrites, and GPU lowering remain implementation work.
+I am considering an integration between [pyncd](https://github.com/mit-zardini-lab/pyncd) and [EggEvolve](2026-09-13-eggvolve.md). This post derives the indexing and streaming rules that integration would need. EggEvolve currently explores configuration tuples. The pyncd export, algorithm-level rewrites, and GPU lowering described here are proposed work.
 
 The examples assume familiarity with tensors, softmax, and the GPU memory hierarchy.
 
@@ -203,6 +203,42 @@ A GPU kernel loads a K/V block and computes a score tile. It updates the state a
 
 The equations above describe real-number equality. For masked attention, exclude masked logits before computing each block's maximum and exponential contributions. Implementations also need rounding rules and defined behavior for empty or fully masked rows, where evaluating $-\infty-(-\infty)$ produces an undefined result.
 
+### Merge independently computed blocks
+
+Each block can compute its own summary. Let the summaries of two disjoint key sets be $(m_A,\ell_A,o_A)$ and $(m_B,\ell_B,o_B)$. Merge them with
+
+$$
+\begin{aligned}
+m &= \max(m_A,m_B),\\
+\ell &= e^{m_A-m}\ell_A+e^{m_B-m}\ell_B,\\
+o &= e^{m_A-m}o_A+e^{m_B-m}o_B.
+\end{aligned}
+$$
+
+Each term now uses the same maximum. The merged denominator and numerator contain exactly the contributions from the union of the two key sets. Over real arithmetic, any merge tree over disjoint blocks gives the same summary. Floating-point rounding can make different trees produce different bits.
+
+This form separates the summary's meaning from its schedule. A serial kernel can update one state as it reads blocks. A parallel implementation can compute several summaries and reduce them. The second schedule requires storage and communication for those summaries; the algebra alone does not establish a speedup.
+
+Represent an empty block by a separate empty-state case, or by a zero denominator that the merge checks before evaluating exponentials. The following scalar-value implementation handles that case:
+
+```python
+def merge(left, right):
+    if left[1] == 0:
+        return right
+    if right[1] == 0:
+        return left
+    maximum = max(left[0], right[0])
+    a = math.exp(left[0] - maximum)
+    b = math.exp(right[0] - maximum)
+    return (
+        maximum,
+        a * left[1] + b * right[1],
+        a * left[2] + b * right[2],
+    )
+```
+
+The [complete CPU example](code/tensor-equations/verify_examples.py) imports `math`, constructs the summaries, and checks the merge. It treats a fully masked output row as zero. A production kernel must follow its own API's specified behavior for that case.
+
 ## 5. Equality saturation
 
 A conventional rewrite pass applies a transformation and continues with the modified program. The order matters. A rewrite that increases the cost at one step may allow a later rewrite to reduce it.
@@ -271,7 +307,7 @@ An LLM could propose tile choices, rewrite schedules, or algorithm sketches. The
 
 Real-number algebra, floating-point execution, and model-quality preservation are different contracts.
 
-Reassociating a sum is valid over reals but can change floating-point results. Quantization changes represented values. Replacing softmax with a different normalization changes the model function. An e-class that requires bitwise equality must reject these changes unless a rule proves that they preserve the bits for the given inputs.
+Reassociating a sum preserves its real-number value. Floating-point execution can produce a different result because the intermediate sums round separately. Quantization changes represented values. Replacing softmax with a different normalization changes the model function. An e-class that requires bitwise equality must reject these changes unless a rule proves that they preserve the bits for the given inputs.
 
 A low-level rewrite must update every affected operation. When padding GEMM dimensions, mask the loads and crop the output. When changing an LDS stride, update the allocation and both producer and consumer address maps. Check these conditions even if the code compiles.
 
@@ -292,28 +328,32 @@ This would test whether the representation and rewrite rules can generate both a
 <details>
 <summary>What would break if softmax were moved across an arbitrary reshape as though it were elementwise?</summary>
 
-The reshape may change which elements share a normalization group. The map/reindex law requires the rewrite to preserve the primitive's target groups.
+Take the matrix `[[0, 1], [2, 3]]`. Row-wise softmax produces approximately `[[0.268941, 0.731059], [0.268941, 0.731059]]`. Flattening first and applying one softmax produces `[0.032059, 0.087144, 0.236883, 0.643914]`. Reshaping that vector back cannot recover the row-wise result.
+
+The first operation normalizes each row separately. The second normalizes all four values together. The map/reindex law requires the rewrite to preserve the primitive's target groups.
 
 </details>
 
 <details>
 <summary>Why must the first block's state be rescaled when a larger score arrives?</summary>
 
-The old sums use the previous maximum. Multiply both sums by the rescaling factor to express them relative to the new maximum. Their ratio stays the same.
+The old sums use the previous maximum. Multiply both sums by $\exp(m-m')$ to express them relative to the new maximum. Their ratio stays the same. If the new maximum rises from 1 to 3, the old numerator and denominator both receive the factor $e^{-2}$. Add the new block's contributions only after that conversion.
 
 </details>
 
 <details>
 <summary>What does factoring the GQA head axis reveal, and what does it leave undecided?</summary>
 
-K/V accesses are invariant over the group coordinate. The backend must still choose data placement, wave mapping, and how many query heads to process together.
+With eight query heads and two K/V heads, the group size is four. Query heads `0, 1, 2, 3` use K/V head 0; heads `4, 5, 6, 7` use K/V head 1. The map is `kv_head = query_head // 4`.
+
+K/V accesses are invariant over the within-group coordinate. The backend must still choose data placement, wave mapping, and how many query heads to process together. Expanding K/V with repeated copies can reproduce the values, but it gives up the compact representation that native grouped-head addressing preserves.
 
 </details>
 
 <details>
 <summary>Why can fewer HBM bytes still produce a slower extracted kernel?</summary>
 
-The schedule may increase register pressure, spills, synchronization, redundant computation, or occupancy loss. The cost model must account for these costs as well as memory traffic.
+A fused schedule can keep more values live at once. If the compiler spills those values, the kernel introduces extra memory accesses. A larger workgroup allocation can also reduce the number of resident workgroups. Compare compiler resource reports and measured latency for the same input; a source-level byte estimate cannot resolve either effect.
 
 </details>
 
@@ -334,7 +374,19 @@ The schedule may increase register pressure, spills, synchronization, redundant 
 
 At [pyncd `13c1de0`](https://github.com/mit-zardini-lab/pyncd/tree/13c1de0296120e07b959d4de23e4d1151abeb8d8), the documented pieces include algebraic terms, symbolic axes, graph conversion, serialization, rendering support, and conversion to PyTorch modules. This is the semantic foundation for the proposal; the algorithm-search layer and Triton/MLIR lowering described here are additional work.
 
-The proposed integration still needs an implementation and benchmarks.
+At EggEvolve commit `2d1c380`, the implemented e-graph contains tile-configuration tuples. Its evolution evaluator still uses synthetic candidate timings. The [EggEvolve implementation study](2026-09-13-eggvolve.md) traces those boundaries. Neither project currently establishes the complete compiler pipeline proposed here.
+
+## Run the examples
+
+Download [verify_examples.py](code/tensor-equations/verify_examples.py), or run it from this blog repository:
+
+```bash
+uv run --no-project python content/code/tensor-equations/verify_examples.py
+```
+
+The script uses Python's standard library. It checks pointwise reindexing, the reshape counterexample, grouped-head indexing, and the online summary. The tests compare direct attention with uneven streaming partitions and masks. They also check empty-state handling and two merge orders.
+
+The local CPU run passed all seven tests. The scalar attention example returned `6.305192592227569`. These tests exercise the equations and indexing in this article. They do not run pyncd export, compile a GPU kernel, or measure a speedup.
 
 ## References
 
@@ -349,5 +401,6 @@ The proposed integration still needs an implementation and benchmarks.
 
 - [Triton Linear Layouts](2025-06-22-linear-layouts.md): mapping logical tensor coordinates to GPU execution.
 - [CuTe Basics](2025-05-10-cute-basics.md): layouts, tensors, and composition.
+- [EggEvolve](2026-09-13-eggvolve.md): configuration search and the boundary between symbolic alternatives and measured kernels.
 
 _The diagrams are original schematics. The worked example uses double-precision arithmetic._

@@ -37,7 +37,7 @@ In practice, the gap between published algorithms and production kernels is ofte
 
 ![Timeline: Paper to Production](images/05_timeline_paper_to_production.svg)
 
-Consider Flash Attention, published in May 2022. It reduced attention's memory complexity from O(n²) to O(n). It took over 12 months before it was widely usable in production frameworks. Turning a paper into an optimized and deployable implementation typically requires:
+FlashAttention, published in May 2022, avoids materializing quadratic-size attention matrices while retaining dense attention's quadratic arithmetic. Turning an algorithm into a deployed kernel requires:
 
 1. **Deep understanding** of the algorithm's mathematical properties
 2. **Hardware expertise** spanning memory hierarchies, instruction sets, and parallelism models
@@ -63,7 +63,7 @@ Kernel optimization has a large configuration space. For a single GPU matrix mul
 
 ![Search Space Explosion](images/07_search_space_explosion.svg)
 
-Each parameter has multiple valid values. The product is often millions or billions of configurations. Most are slow; a few are good for specific shapes. Exhaustive search is infeasible. Random search wastes evaluations. Manual tuning does not scale.
+Each parameter has multiple choices, and their product can be large. Resource constraints exclude some combinations. Compare exhaustive, random, heuristic, and LLM-guided search under the same evaluation budget.
 
 ### The Vision: Self-Improving AI Infrastructure
 
@@ -135,7 +135,7 @@ The relative cost of operations constrains algorithm design:
 
 ![CPU Operation Latency](images/12_strassen_motivation.svg)
 
-On modern CPUs, a 64-bit integer multiplication takes approximately **20 cycles**. An addition? Just **1 cycle**. That's a 20× difference.
+The original illustration assigns multiplication a cost of **20 units** and addition **1 unit**. This is a toy cost model, not measured instruction latency on a specified CPU.
 
 ```
 An astute reader, Benoit Jacob who is the author of Eigen https://libeigen.gitlab.io/#credits,

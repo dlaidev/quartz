@@ -12,376 +12,213 @@ tags:
   - AI-Inference
   - Value-Dataflow-Analysis
   - Triton
-draft: true
+draft: false
 ---
 
-# Triton Value Dataflow
+A compiler needs different facts to remove an unused computation, move a load, or fuse two kernels. SSA use lists describe value dependencies. Memory effects and alias analysis constrain accesses to storage. Dataflow analysis propagates facts through branches and loops until those facts stop changing.
 
-## 1. Motivation & Goals
+This post develops reaching definitions and liveness with a CPU model, then maps them to MLIR and Triton. The Python model runs; the MLIR integration is a source guide.
 
-* Why Value Data‑flow Analysis (VDA) matters for AI accelerators.
-* What you’ll learn & build in this post.
+## Recorded fusion experiment
 
+The original H100 experiment compared two matrix-multiplication kernels with a fused implementation:
 
-The Hidden 100× Cost in AI Accelerators
+| Version | Kernel time (µs) | Speedup |
+| --- | ---: | ---: |
+| 2‑kernel (spills) | 470 | 1× |
+| Fused | 4.3 | 110× |
 
-Modern AI accelerators (H100, TPU‑v5e, Cerebras, etc.) chew through compute at ~100 TFLOP/s, but every time data spills from the on‑chip SRAM (★1–4 MB) out to HBM or DRAM, latency rockets from ~20 cycles to >2 000 cycles and energy per byte rises by two orders of magnitude. On real workloads we routinely measure a >100× throughput collapse when a kernel misses the scratch‑pad budget even once per loop.
+These are the original recorded values, including the rounded speedup. This revision did not rerun the experiment.
 
-```mermaid
-flowchart TD
-    SRAM[32 KiB SRAM<br/>~20 cycles<br/>80 GB/s @25W]
-    HBM[HBM/DRAM<br/>~2000 cycles<br/>800 GB/s @300W]
+| Schedule | Intermediate `%x` |
+| --- | --- |
+| Separate producer and consumer | Write `%x` to device memory, then reload it |
+| Fused producer and consumer | Consume partial results while they remain on-chip |
 
-    SRAM -- "100× latency ↑" --> HBM
-    HBM -- "100× latency ↓" --> SRAM
+The timing difference motivates dependency analysis. It does not establish that memory traffic alone caused the entire speedup.
+
+## SSA values and memory dependencies
+
+In MLIR, a value is an operation result or a block argument. An SSA value has one definition. A block argument receives a value from the incoming control-flow edge; MLIR uses block arguments for the role commonly served by phi nodes.[2]
+
+Consider this pseudocode:
+
+```text
+a = load A
+store A, c
+use a
 ```
 
-A Concrete Fusion Challenge
+The load produces a value. The later store changes the contents of `A`; it does not change the value already held in `a`. Moving the store above `use a` is therefore not, by itself, a write-after-read violation. Moving it above the **load** can change what the load observes.
 
-Consider a tiny transformer-like block:
+Memory dependencies concern potentially overlapping accesses:
 
-```
-// Pseudo‑code, two separate kernels (pre‑fusion)
-for each tile T {
-  %q  = load Q[T]      // round‑trip to DRAM
-  %k  = load K[T]
-  %v  = load V[T]
-%x  = matmul(%q, %k) // spills %x to DRAM  
-%y  = matmul(%x, %v) // reloads %x from DRAM  
-store Y[T], %y
-}
-```
+| Dependency              | Original order           | Unsafe change without further proof               |
+| ----------------------- | ------------------------ | ------------------------------------------------- |
+| Read after write (RAW)  | `store A; load A`        | Load before the store                             |
+| Write after read (WAR)  | `load A; store A`        | Store before the load                             |
+| Write after write (WAW) | `store A, x; store A, y` | Reverse the stores when the final contents matter |
 
-<span style="color: red;">%x  = matmul(%q, %k) // spills %x to DRAM  
-%y  = matmul(%x, %v) // reloads %x from DRAM  
-store Y[T], %y</span>
+These examples assume ordinary sequential accesses to the same location. With different pointers, an alias analysis must establish whether their byte ranges overlap. Atomics, barriers, asynchronous operations, and accesses from other threads add ordering requirements. A set of SSA definitions cannot establish those requirements.
 
-Both %x and %y exceed the 128 KB SRAM window, so %x bounces to DRAM and back – eating ~2 000 cycles per tile.
+SSA also changes what reaching definitions means. For an operand `%x`, its defining operation is already explicit. Collecting every SSA result seen earlier in a function adds little useful information and can include values outside the operand's scope. Useful value analyses instead ask whether `%x` is constant, divisible by an alignment, or known to have contiguous elements. Triton's `AxisInfoAnalysis` is an example of the latter approach.[3]
 
-With producer‑consumer fusion you pipeline the two matmuls, keeping partial results in registers/SRAM:
+## Reaching definitions on mutable variables
 
-```
-// After fusion (one kernel)
-for each tile T {
-  %q = load Q[T]
-  %k = load K[T]
-  %x = matmul(%q, %k)         // stays in SRAM
-  %v = load V[T]
-  %y = matmul(%x, %v)         // %x consumed immediately
-  store Y[T], %y
-}
-```
-<span style="color: green;">%x = matmul(%q, %k)         // stays in SRAM</span>
+Classical reaching definitions operates on assignments to variables that can be reassigned. A definition reaches a point if some control-flow path carries it there without an intervening assignment to the same variable. This is a **may** analysis: membership means possible, rather than guaranteed.
 
-  %v = load V[T]
+Use assignment labels to distinguish definitions:
 
-<span style="color: green;">%y = matmul(%x, %v)         // %x consumed immediately</span>
-
-  store Y[T], %y
-
-
-Measured on an H100:
-| Version            | Kernel time (µs) | Speedup |
-|--------------------|------------------|---------|
-| 2‑kernel (spills)  | 470              | 1×      |
-| Fused              | 4.3              | 110×    |
-
-The cost delta is 100 µs → 1 µs per tile – entirely dictated by the number of memory round‑trips.
-
-Why Fusion Is Hard
-Compiler cannot blindly fuse operations—doing so can violate dependencies:
-
-### Write‑after‑Read (WAR) – A later store clobbers a value still in use
-
-```
-    %a = load A      // read A
-    ...              // use %a
-    store B, %a      // write to B
-    store A, %c      // WAR hazard: write to A after reading it above
+```text
+entry: x0: x = 0; i0: i = 0
+       branch left or right
+left:  x1: x = 1; goto join
+right: x2: x = 2; goto join
+join:  y0: y = x; goto loop
+loop:  x3: x = x + i; i1: i = i + 1
+       branch loop or exit
+exit:  use(x, y)
+dead:  x_dead: x = 99; goto join   # no path from entry
 ```
 
-**WAR dependency:**  
-If the `store A, %c` is moved above the use of `%a`, it overwrites A before `%a` is read, breaking correctness.
+At `join`, either `x1` or `x2` may supply `x`. At the next iteration of `loop`, `x3` may supply it. The unreachable block must not contribute `x_dead`, even though it has an edge to `join`.
 
-#### Dependency Diagram
+Let $D$ be the finite set of definition labels in reachable blocks. For block $B$:
 
-```mermaid
-flowchart TD
-    A1[load A → %a] --> U1[use %a]
-    U1 --> S1[store B, %a]
-    A1 -.-> S2[store A, %c]
-    S2 -. WAR hazard .-> A1
-```
+- $GEN_B$ contains the last definition of each variable assigned within the block.
+- $KILL_B$ contains definitions of variables assigned within the block.
+- $IN_B$ and $OUT_B$ describe the state immediately before and after the block.
 
-- `load A → %a` reads from A and produces `%a`
-- `%a` is used and then stored to B
-- `store A, %c` writes to A
-- If `store A, %c` occurs before `%a` is used, the original value of A is lost (**WAR hazard**)
+Our implementation includes the generated definitions in `KILL`; the union with `GEN` restores them. The equations are:
 
-Illustrates why fusion must respect data dependencies—moving stores above prior reads can break program correctness.
+$$
+IN_B = \bigcup_{P \in pred(B)} OUT_P
+$$
 
+$$
+OUT_B = GEN_B \cup (IN_B \setminus KILL_B)
+$$
 
-Read‑after‑Write (RAW) – A hoisted load bypasses a needed producer.
+Initialize every state to the empty set. The entry boundary is empty because this example has no incoming definitions. A model of function parameters or externally initialized variables would need explicit boundary definitions.
 
-To decide whether two ops are safely movable we must know, at every program point, which definitions of a value may reach which uses.
+The state space is the powerset lattice $\mathcal{P}(D)$ ordered by inclusion. Bottom is the empty set, top is $D$, and the least upper bound, or join, is union. The transfer function is monotone: adding an incoming definition cannot remove an outgoing definition. Although `KILL` removes facts while transferring across a block, it does not cause successive solver states to shrink when iteration starts at bottom.
 
-#### Dependency Diagram
+A worklist revisits successors when a forward state changes. Loops require revisits because information can return along a backedge. Finite lattice height and monotone updates guarantee termination here. Infinite domains, such as unbounded intervals, may need widening or another convergence rule. The fixed point conservatively includes paths through both sides of every branch; it does not prove that a particular path is feasible.
 
-```mermaid
-flowchart TD
-    S1[store A, %c] --> L1[load A → %a]
-    L1 --> U1[use %a]
-```
+## Liveness runs backward
 
-- `store A, %c` writes to A (producer)
-- `load A → %a` reads from A (consumer)
-- If `load A → %a` is moved above `store A, %c`, it may read a stale value (**RAW hazard**)
+A variable is live before an instruction if a later instruction may read its current value before another assignment replaces it. Define $USE_B$ as variables read before their first definition within $B$, and $DEF_B$ as variables assigned in $B$.
 
-This illustrates why fusion must respect RAW dependencies—moving loads above their producers can break program correctness.
+$$
+LIVEOUT_B = \bigcup_{S \in succ(B)} LIVEIN_S
+$$
 
-Enter Value Data‑flow Analysis
+$$
+LIVEIN_B = USE_B \cup (LIVEOUT_B \setminus DEF_B)
+$$
 
-Value Data‑flow Analysis (VDA) computes that very relation – reaching definitions, liveness, available expressions, constant propagation – as a lattice‑fixed‑point over the CFG.  Armed with VDA we can:
+The join uses **successors**. When a live-in state changes, predecessors need revisiting. The exit boundary is empty unless the surrounding environment requires particular variables after the function returns.
 
-Prove the fused schedule preserves semantics.
+Instruction order matters when building `USE`. In `x = x + i`, the right-hand `x` is a use of the old value. It remains upward-exposed even though the instruction also defines `x`. In `x = 1; use(x)`, the use does not make `x` live at block entry.
 
-Eliminate dead stores created by the fusion.
+Reaching definitions tracks assignment identities; this liveness analysis tracks variable names. In SSA, liveness tracks individual SSA values and must handle block arguments and their incoming operands on the appropriate edges. Joining every incoming operand into every predecessor would invent live ranges on paths that never use those operands.
 
-Keep tensors in registers/SRAM only for their true live range.
+## Run the CPU example
 
-This is why we need VDA: without it, the cost of a single mistaken memory round‑trip can erase the entire throughput advantage of state‑of‑the‑art AI hardware.
+Download [dataflow.py](code/triton-analysis/dataflow.py), [linear_layout.py](code/triton-analysis/linear_layout.py), and [test_analysis.py](code/triton-analysis/test_analysis.py) into one directory. The tests cover both this post and [Triton Linear Layouts](2025-06-22-linear-layouts.md). Python 3 and its standard library are sufficient.
 
-In the remainder of this post you’ll implement a minimal VDA pass in MLIR/Triton, test it on the fusion scenario above, and learn how to extend it to liveness and constant‑prop for more aggressive kernel scheduling.
-
-## 2. Prerequisites
-
-* Hardware & OS
-* Software versions (LLVM/MLIR commit, Triton hash, Clang/LLVM tooling).
-* Suggested reading links.
-
-## 3. Environment Setup
-
-1. Clone LLVM‑project & build with MLIR enabled.
-2. Clone Triton, point it to your local LLVM.
-3. Configure CMake flags for custom passes.
-4. Verify `triton-opt` and `triton-translate` run.
-
-## 4. Data‑flow Analysis in MLIR: A 10‑min Tour
-
-* `mlir::dataflow` namespace overview.
-* Key classes: `AbstractState`, `Lattice`, `DataFlowAnalysis`.
-* Forward vs backward analyses.
-
-## 5. Designing a Reaching‑Definitions Analysis
-
-* Lattice definition (Set of defining ops per Value).
-* Meet function (union).
-* Transfer function design.
-
-## 6. Implementation Walkthrough – Reaching Definitions (Forward)
-
-We will implement **Reaching Definitions** because it is:
-
-1. The canonical "hello‑world" of forward data‑flow.
-2. SSA‑friendly (no explicit KILL sets).
-3. Immediately useful for later passes (dead‑store elimination, vectorization legality).
-
-Below is a *complete*, buildable MLIR pass that you can drop into `lib/Analysis` inside Triton.  It fits in \~150 lines and relies **only** on upstream MLIR headers.
-
-```cpp
-//===- ReachingDefs.cpp ---------------------------------------*- C++ -*-===//
-//  A tiny forward data‑flow analysis that computes, for each block, the set
-//  of SSA values that can reach it (Reaching Definitions).
-//  Compile with:  add_library(ReachingDefsPass MODULE ReachingDefs.cpp)
-//  Usage:        triton-opt --reaching-defs <file>.mlir
-//===----------------------------------------------------------------------===//
-#include "mlir/Analysis/DataFlowAnalysis.h"
-#include "mlir/IR/Block.h"
-#include "mlir/IR/BuiltinOps.h"
-#include "mlir/Pass/Pass.h"
-#include "llvm/ADT/BitVector.h"
-#include "llvm/ADT/DenseMap.h"
-#include "llvm/Support/Debug.h"
-
-#define DEBUG_TYPE "reaching-defs"
-
-using namespace mlir;
-using dataflow::AbstractDenseLattice;
-using dataflow::DataFlowAnalysis;
-
-/// Utility: assign each SSA value a dense integer ID.
-class ValueNumbering {
-public:
-  unsigned number(Value v) {
-    auto [it, inserted] = map.try_emplace(v, map.size());
-    return it->second;
-  }
-  unsigned size() const { return map.size(); }
-private:
-  llvm::DenseMap<Value, unsigned> map;
-};
-
-/// Lattice element: a bit‑vector of reaching definitions.
-class RDState : public AbstractDenseLattice {
-public:
-  RDState(unsigned nVals = 0) : defs(nVals) {}
-
-  /// Meet = union.
-  ChangeResult join(const AbstractDenseLattice &rhs) override {
-    const auto &other = static_cast<const RDState &>(rhs);
-    auto before = defs;
-    defs |= other.defs;
-    return defs != before ? ChangeResult::Changed : ChangeResult::NoChange;
-  }
-
-  llvm::BitVector defs; // 1 bit per SSA value
-};
-
-/// The analysis itself (forward).
-class ReachingDefsAnalysis : public DataFlowAnalysis<RDState> {
-public:
-  using DataFlowAnalysis::DataFlowAnalysis;
-
-  LogicalResult initialize(Operation *op) override {
-    // Number every SSA value once at setup.
-    op->walk([&](Value v) { numbers.number(v); });
-    return success();
-  }
-
-  /// ⊥  (entry state) = empty set.
-  void setToEntryState(RDState *lattice) override { lattice->defs.reset(); }
-
-  /// Transfer: add defs generated by this op.
-  void visitOperation(Operation *op, RDState *state) override {
-    if (state->defs.size() < numbers.size())
-      state->defs.resize(numbers.size());
-    for (Value res : op->getResults())
-      state->defs.set(numbers.number(res)); // GEN
-  }
-private:
-  ValueNumbering numbers;
-};
-
-/// Pass driver that runs the analysis and pretty‑prints IN/OUT per block.
-struct ReachingDefsPass : public PassWrapper<ReachingDefsPass, OperationPass<ModuleOp>> {
-  MLIR_DEFINE_EXPLICIT_INTERNAL_INLINE_TYPE_ID(ReachingDefsPass)
-
-  StringRef getArgument() const final { return "reaching-defs"; }
-  StringRef getDescription() const final { return "Compute reaching definitions per block"; }
-
-  void runOnOperation() override {
-    ModuleOp module = getOperation();
-    auto &analysis = getAnalysis<ReachingDefsAnalysis>();
-    if (failed(analysis.initialize(module))) return signalPassFailure();
-    analysis.run();
-
-    LLVM_DEBUG({
-      module.walk([&](Block *bb) {
-        if (auto *state = analysis.lookupState(bb))
-          llvm::dbgs() << "[Block] " << *bb << "
-  RD bitset = " << state->defs << "
-";
-      });
-    });
-  }
-};
-
-/// Factory for the pass (used by C++ code) & command‑line registration.
-std::unique_ptr<Pass> createReachingDefsPass() { return std::make_unique<ReachingDefsPass>(); }
-static PassRegistration<ReachingDefsPass> pass;
-```
-
-**Build integration** (append to Triton’s `CMakeLists.txt` under `lib/Analysis`):
-
-```cmake
-add_mlir_library(ReachingDefsPass
-  ReachingDefs.cpp
-  LINK_LIBS PUBLIC
-    MLIRIR
-    MLIRDataFlowAnalysis
-)
-```
-
-Re‑run Ninja, then test:
+From the repository root:
 
 ```bash
-triton-opt test_kernel.mlir --reaching-defs -debug-only=reaching-defs
+uv run --no-project python -B content/code/triton-analysis/dataflow.py
+uv run --no-project python -B -m unittest discover -s content/code/triton-analysis -v
 ```
 
-(Use `MLIR_ENABLE_EXECUTION_ENGINE=OFF` in CMake to trim link time if you only need analysis.)
+The forward update in the companion is:
 
-### 6.1 What to watch for
-
-| Edge case               | Handling                                                           |
-| ----------------------- | ------------------------------------------------------------------ |
-| **Growing value space** | `visitOperation` resizes the bit‑vector lazily after `initialize`. |
-| **Unreachable blocks**  | MLIR framework keeps their lattice at ⊥.                           |
-| **Nested regions**      | Analysis automatically descends; SSA ensures unique defs.          |
-
-### 6.2 Next exercise – Liveness (Backward)
-
-1. Derive `BackwardDataFlowAnalysis<LiveState>`.
-2. Lattice holds `BitVector live`.
-3. For each op: `KILL = defs`, `GEN = uses`.
-4. Meet = union of predecessor OUT sets.
-
----
-
-## 7. Testing with FileCheck
-
-```mlir
-// RUN: triton-opt %s --reaching-defs -debug-only=reaching-defs | FileCheck %s
-module {
-  func.func @kernel(%arg0: f32) {
-    %c0 = arith.constant 0 : i32
-    scf.for %i = %c0 to %c0 step %c0 {
-      // CHECK: RD bitset =
-      tt.return
-    }
-    return
-  }
-}
+```python
+inside = set().union(*(outs[p] for p in pred[b]))
+out = gen[b] | (inside - kill[b])
 ```
 
-Testing with FileCheck
+The backward update is:
 
-```mlir
-// RUN: triton-opt %s --reaching-defs -debug-only=reaching-defs | FileCheck %s
-
-tt.func @simple(%arg0: !tt.ptr<f32>) {
-  %0 = tt.load %arg0 : !tt.ptr<f32> -> f32
-  %1 = tt.fadd %0, %0 : f32
-  tt.store %1, %arg0 : f32, !tt.ptr<f32>
-  tt.return
-}
-
-// CHECK: RD IN for block ^0: {}
-// CHECK: RD IN for block ^1: {0, 1}
+```python
+out = set().union(*(ins[s] for s in edges[b] if s in active))
+inside = use[b] | (out - defs[b])
 ```
 
-## 8. Extending to Liveness Analysis
+`active` comes from a reachability traversal starting at `entry`. The solver puts every active block on the initial worklist. A change adds dependent blocks back to the worklist without adding duplicate pending entries.
 
-* Reuse lattice.
-* Switch direction.
-* Extra trick: interference graph generation.
+Selected output from the executed program:
 
-## 9. Performance Considerations
+```text
+join: RD_IN={i0, x1, x2} RD_OUT={i0, x1, x2, y0} LIVE_IN={i, x} LIVE_OUT={i, x, y}
+loop: RD_IN={i0, i1, x1, x2, x3, y0} RD_OUT={i1, x3, y0} LIVE_IN={i, x, y} LIVE_OUT={i, x, y}
+exit: RD_IN={i1, x3, y0} RD_OUT={i1, x3, y0} LIVE_IN={x, y} LIVE_OUT={}
+dead: unreachable
+```
 
-* Sparse lattices vs bitset.
-* Block traversal order (RPO).
-* Scenarios with thousands of SSA values.
+`x1`, `x2`, and `x3` reach the loop entry through different paths. Only `x3` reaches its exit because the loop body always assigns `x`. `y` stays live through the loop despite having no use inside it: `exit` reads it.
 
-## 10. Integrating into Triton’s Pipeline
+The combined suite passed 11 tests. Dataflow tests check exact join and loop states, unreachable-block exclusion, instruction ordering, and independence from initial worklist order. They also recompute each final transfer instruction by instruction and check every fixed-point equation. This is a finite CFG model with explicit uses and definitions, without an MLIR parser, alias analysis, or GPU execution.
 
-* Where to plug before vectorization & register allocation.
-* Pass pipeline YAML fragment.
+## Dense and sparse analysis in MLIR
 
-## 11. Results & Debugging Tips
+Dense analysis attaches a state to program points, such as before and after an operation. It suits facts about the surrounding program state. Sparse analysis attaches facts to SSA values and propagates them through value dependencies. These names describe where the analysis stores and propagates state; they do not prescribe a dense bit vector or a sparse set container.[9][10]
 
-* CLI flags (`-debug-only=dataflow`).
-* Visualisation with `mlir-translate --mlir-to-dot`.
+| Analysis question                                       | Useful state placement                        |
+| ------------------------------------------------------- | --------------------------------------------- |
+| Which mutable-variable definitions reach this point?    | Dense state at program points                 |
+| What constant or alignment is known for this SSA value? | Sparse lattice on values                      |
+| Which variables may be used after this block?           | Backward state at CFG boundaries in our model |
 
-## 12. Conclusion & Further Work
+Constant propagation often uses a domain with bottom, individual constants, and an overdefined state. Joining the same constant retains it; joining different constants yields overdefined. Bottom, an empty set of reaching definitions, and an unreachable block are not interchangeable concepts. Their meanings depend on the analysis domain and execution model. MLIR's tutorial introduces lattices, but its illustrated `ForwardDataFlowAnalysis` API differs from the source revision used below.[1][8]
 
-* Follow‑up passes (SCCP, memory dependence).
-* How to upstream or share the pass.
+## Integration with Triton: source guide, not a plugin
+
+The source references use Triton **v3.3.1**, commit `d654e0f2d91f07496454e0fcbec2a9b97df37d47`. Its `cmake/llvm-hash.txt` selects LLVM commit `a66376b0dc3b2ea8a84fda26faca287980986f78`; the MLIR header citations below use that exact revision.[4] This avoids combining an arbitrary LLVM release with Triton's expected API.
+
+In those headers:
+
+- `mlir::DataFlowSolver` owns analyses and their states. `load<AnalysisT>()` constructs an analysis; `initializeAndRun(Operation *)` initializes it and runs to a fixed point.[8]
+- `mlir::dataflow::DenseForwardDataFlowAnalysis<LatticeT>` operates on a subclass of `AbstractDenseLattice`. Its operation hook receives the state before an operation and a mutable state after it.[9]
+- `mlir::dataflow::SparseForwardDataFlowAnalysis<StateT>` operates on sparse lattices. Its operation hook receives operand lattices and result lattices. `dataflow::Lattice<T>` supplies a typed sparse lattice wrapper.[10]
+
+The dense operation hook at this revision has this signature. This is an API excerpt, not a complete implementation:
+
+```cpp
+LogicalResult visitOperation(Operation *op,
+                             const LatticeT &before,
+                             LatticeT *after) override;
+```
+
+A transfer implementation must report and propagate state changes through the framework. Updating a container without notifying dependents can leave downstream facts stale. Entry-state hooks must conservatively handle externally supplied values. Region branches, calls, and executable edges require the appropriate interfaces, transfer rules, and supporting analyses; recursively walking operations is insufficient to model their control flow.[8][9][10]
+
+Triton's `AxisInfo.cpp` supplies a concrete integration reference. `AxisInfoAnalysis` derives from `SparseForwardDataFlowAnalysis<dataflow::Lattice<AxisInfo>>`. `ModuleAxisInfoAnalysis::initialize` obtains a solver through `createDataFlowSolver`, loads the analysis, and calls `initializeAndRun` on isolated operations during its walk. Read that implementation and its solver helper when adding a related analysis.[3]
+
+For a custom pass, first choose the fact domain and the IR level where the needed information exists. Implement and test transfer rules against the checkout's headers. Then link the implementation into the intended tool, register the pass, and add it explicitly to the pipeline. Adding a CMake library alone does not make a command-line pass available. A version-specific out-of-tree plugin also needs compatible registration, linkage, and loading support. This post has not compiled or tested either integration path.
+
+Use valid IR fixtures for diamonds, backedges, block arguments, unreachable regions, calls, and unknown operations. Print deterministic analysis results through a test pass and check them with FileCheck. Debug-only logging can go to a different stream and can depend on build configuration; it should not be the sole testing interface. Recompute or invalidate analysis states after transforming the IR.[8]
+
+## What the facts permit
+
+Liveness can expose a short-lived intermediate, but it does not promise that fusion will keep the intermediate in registers. A fused schedule may increase live storage, require shared-memory exchange, reduce occupancy, or change synchronization. Layout and lowering also determine how many physical registers a tensor value requires.
+
+Dead-store elimination requires proof that no relevant read can observe the store before an overwrite or the end of the storage lifetime. Dead-value elimination requires checking operation effects as well as unused results. Fusion needs memory-dependence and synchronization reasoning in addition to SSA dependencies. The CPU analysis establishes its set equations; it makes no latency, register-allocation, or kernel-speedup claim.
+
+## Sources
+
+[1] https://mlir.llvm.org/docs/Tutorials/DataFlowAnalysis — MLIR dataflow tutorial
+
+[2] https://mlir.llvm.org/docs/LangRef — MLIR language reference
+
+[3] https://raw.githubusercontent.com/triton-lang/triton/d654e0f2d91f07496454e0fcbec2a9b97df37d47/lib/Analysis/AxisInfo.cpp — lib/Analysis/AxisInfo.cpp
+
+[4] https://raw.githubusercontent.com/triton-lang/triton/d654e0f2d91f07496454e0fcbec2a9b97df37d47/cmake/llvm-hash.txt — cmake/llvm-hash.txt
+
+[8] https://raw.githubusercontent.com/llvm/llvm-project/a66376b0dc3b2ea8a84fda26faca287980986f78/mlir/include/mlir/Analysis/DataFlowFramework.h — mlir/include/mlir/Analysis/DataFlowFramework.h
+
+[9] https://raw.githubusercontent.com/llvm/llvm-project/a66376b0dc3b2ea8a84fda26faca287980986f78/mlir/include/mlir/Analysis/DataFlow/DenseAnalysis.h — mlir/include/mlir/Analysis/DataFlow/DenseAnalysis.h
+
+[10] https://raw.githubusercontent.com/llvm/llvm-project/a66376b0dc3b2ea8a84fda26faca287980986f78/mlir/include/mlir/Analysis/DataFlow/SparseAnalysis.h — mlir/include/mlir/Analysis/DataFlow/SparseAnalysis.h
